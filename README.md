@@ -49,7 +49,7 @@ The links below will take you to the exercise notebooks for the experiences you 
 
 
 | HoLs  | Work to do |   Effort Estimate |
-|---------------|------------|
+|---------------|------------|---------|
 |SQLDI V12 * 2 | Re-work 2022 Labs | 1 day |
 |SQLDI V13 * 2 | Adapt 2022 Labs | 1 day |
 |ZCX Open Source AI Tools * 2 | New Work | 2 days |
