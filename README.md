@@ -1,4 +1,4 @@
-# collidingworlds
+# Colliding Worlds
 documentation repository for colliding worlds workshops
 
 Colliding Worlds is a collection of practical examples of using a z/OS environment to deploy and use AI technologies with z/OS.
