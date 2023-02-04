@@ -20,13 +20,10 @@ This exercise has 10 activities, as follows
 3. Establish RACF artefacts needed to support the scenario
 4. Establish ...
 
-|-------------------------------------------|--------------------------------------------------------|
-|Who this exercise is aimed at ?             | Any coold dude                                        |
-|-------------------------------------------|--------------------------------------------------------|
+
+|Who this exercise is aimed at ?             | Any cool dude                                        |
 |What you will accomplish by doing the exercise  |                                                   |
-|-------------------------------------------|--------------------------------------------------------|
-Skill Level to follow the exercise in this environment
-|-------------------------------------------|--------------------------------------------------------|
+|Skill Level to follow the exercise in this environment |                                                   |
 |Skill Level needed to adapt this exercise to another environment |                                  |
-|-------------------------------------------|--------------------------------------------------------|
+
 
