@@ -25,27 +25,58 @@ This exercise has 10 activities, as follows
 
 ## Step 1: Understand the deployment scenario
 
-blah blah
+In Step #1 we will xxxxxxxxxxxx
+
+Content for Step #1 
+
+In Step #1 we did XXXXXXXXXX. 
 
 
 ## Step 2: Connect to the ZVA System
 
-blah blah
+In Step #1 we will xxxxxxxxxxxx
+
+Content for Step #1 
+
+In Step #1 we did XXXXXXXXXX. 
+
 
 ## Step 3: Establish RACF artefacts needed to support the scenario
 
-blah blah
+In Step #1 we will xxxxxxxxxxxx
+
+Content for Step #1 
+
+In Step #1 we did XXXXXXXXXX. 
+
 
 ## Step 4: Establish ...
 
-blah blah
+In Step #1 we will xxxxxxxxxxxx
+
+Content for Step #1 
+
+In Step #1 we did XXXXXXXXXX. 
+
+
+## Conclusion of Exercise
+
+Hopefully you have succeeded in XXXXXXXXXXX
+
+
 
 
 
 markdown constructs examples.
 
 
+Links to other markdown documents in the same folder
 
 [1. Environment for CDC Worked Examples.](C001_environment.md) 
+
+Links to images in another folder of the same repository 
+
+![CDC Capture Sources](images/cdc/cdc_landscapeC.PNG)
+
 
 
