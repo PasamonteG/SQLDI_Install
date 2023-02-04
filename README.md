@@ -1,7 +1,7 @@
 # Colliding Worlds
-documentation repository for colliding worlds workshops
+IBM Z16 brings together the worlds of Enterprise-Scale Transaction Workloads, with Machine Learning and AI.
 
-Colliding Worlds is a collection of practical examples of using a z/OS environment to deploy and use AI technologies with z/OS.
+"Colliding Worlds" is a collection of practical examples of using a z/OS environment to deploy and use AI technologies with z/OS.
 
 ## IBM Z16 Context
 The IBM Z16 introduced the Telum processor, with the AIU processing unit to support AI workloads.
