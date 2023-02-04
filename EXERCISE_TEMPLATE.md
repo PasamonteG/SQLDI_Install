@@ -22,8 +22,8 @@ This exercise has 10 activities, as follows
 
 
 |Who this exercise is aimed at ?             | Any cool dude                                        |
-|What you will accomplish by doing the exercise  |                                                   |
-|Skill Level to follow the exercise in this environment |                                                   |
-|Skill Level needed to adapt this exercise to another environment |                                  |
+|What you will accomplish by doing the exercise  | awesome stuff           |
+|Skill Level to follow the exercise in this environment | pretty low                                                  |
+|Skill Level needed to adapt this exercise to another environment |     pretty high                             |
 
 
