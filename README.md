@@ -17,5 +17,26 @@ Hands-On Learning exercises are provided for two categories of experience.
 * Using AI on Z - aimed at the IT and Data Science users. (ie after the software environment has been built)
 * Deploying AI software on Z - aimed at the IT specialists who will have to deploy all the software.
 
+You will need to request the correct ZVA Image for the exercises you wish to do.
+
+
 The links below will take you to the exercise notebooks for the experiences you wish to make use of.
+
+## Deployment Exercises ( using ZVA Image "Colliding Worlds Deployment Exercises" )
+
+1. Deploy SQL Data Insights V12 Technology Preview against Db2 z/OS V12
+2. Deploy SQL Data Insights feature of Db2 z/OS V13
+3. Deploy Open Source Data Science Tools and Libraries in z/OS Container Extensions
+4. Deploy Watson Machine Learning for z/OS Community Edition in z/OS Container Extensions
+5. Deploy Watson Machine Learning for z/OS 
+
+## Usage Exercises ( using ZVA Image "Colliding Worlds Usage Exercises" )
+
+1. Using SQL Data Insights V12 Technology Preview against Db2 z/OS V12
+2. Using SQL Data Insights feature of Db2 z/OS V13
+3. Using Open Source Data Science Tools and Libraries in z/OS Container Extensions
+4. Using Watson Machine Learning for z/OS Community Edition in z/OS Container Extensions
+5. Using Watson Machine Learning for z/OS  
+6. Using CDC Solutions to replicate IMS, VSAM and Db2 data from z/OS to Kafka or Postgres
+7. Using SQL and REST APIs to Access Data in-situ on z/OS from Anywhere 
 
