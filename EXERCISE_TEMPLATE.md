@@ -3,13 +3,13 @@ Brief conceptual introduction
 
 ## About this Exercise
 
-Who this exercise is aimed at ?
 
-What you will accomplish by doing the exercise
-
-Skill Level to follow the exercise in this environment
-
-Skill Level needed to adapt this exercise to another environment 
+| Question        | Answer      |
+| --- | --- |
+| Who this exercise is aimed at ?  | Somebody that wants to know how to deploy XXXX  |
+| What you will accomplish by doing the exercise  | Start with a base z/OS system, unpack the smarties, unpack the pax files, deploy a USS Server, confogure WMLM and Create UDFs pointg to load libraries in a PDS, confogure network ports nad certificates for SSH, and fire the whole thing up.  |
+| Skill Level to follow the exercise in this environment | pretty low                                                  |
+| Skill Level needed to adapt this exercise to another environment |     pretty high                             |
 
 ## Exercise Contents
 
@@ -20,12 +20,6 @@ This exercise has 10 activities, as follows
 3. Establish RACF artefacts needed to support the scenario
 4. Establish ...
 
-| Question        | Answer      |
-| --- | --- |
-| Who this exercise is aimed at ?  | Any cool dude  |
-| What you will accomplish by doing the exercise  | awesome stuff  |
-| Skill Level to follow the exercise in this environment | pretty low                                                  |
-| Skill Level needed to adapt this exercise to another environment |     pretty high                             |
 
 
 
