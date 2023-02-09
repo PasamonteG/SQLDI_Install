@@ -104,10 +104,42 @@ Transfer the CBPDO to ZFS
 C:\000\7312889728_000010_PROD>pscp -P 65522 -r * ibmuser@192.168.1.171:/u/ibmuser/smpe/STP63159
 ```
 
-Perform SMPE Receive 
+Unpack the RIMLIB
 
 ```
-???
+//IBMUSERJ JOB  (FB3),'RIMLIB EXTR',CLASS=A,MSGCLASS=H,               
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                          
+//********************************************************************
+//*                                                                  *
+//* UNPACK SAMPLE JOBS FOR SQLDIV13                                  *
+//*                                                                  *
+//********************************************************************
+//UNZIP    EXEC PGM=GIMUNZIP,REGION=0M,PARM='HASH=NO'                 
+//SYSUT3   DD UNIT=SYSALLDA,SPACE=(CYL,(5,1))                         
+//SYSUT4   DD UNIT=SYSALLDA,SPACE=(CYL,(5,1))                         
+//SMPJHOME DD PATH='/usr/lpp/java/J7.1'                               
+//SMPCPATH DD PATH='/usr/lpp/smp/classes/'                            
+//SMPOUT   DD SYSOUT=*                                                
+//SYSPRINT DD SYSOUT=*                                                
+//SMPDIR   DD PATH='/u/ibmuser/smpe/STP63159/SMPRELF',                
+//            PATHDISP=KEEP                                           
+//SYSIN    DD *                                                       
+<GIMUNZIP>                                                            
+<ARCHDEF                                                              
+name="CBCACHE.IBM.HDBDD18.F2.pax.Z"                                   
+volume="USER0A"                                                       
+newname="IBMUSER.SDIV13.RIMLIB">                                      
+</ARCHDEF>                                                            
+</GIMUNZIP>                                                           
+/*                                                                    
+```
+
+SMP Receive Process
+
+```
+RCVPDO
+
+
 ```
 
 
