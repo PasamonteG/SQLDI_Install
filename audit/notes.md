@@ -126,7 +126,7 @@ Unpack the RIMLIB
 //SYSIN    DD *                                                       
 <GIMUNZIP>                                                            
 <ARCHDEF                                                              
-name="CBCACHE.IBM.HDBDD18.F2.pax.Z"                                   
+name="CBCACHE.IBM.HDBDD18.F1.pax.Z"                                   
 volume="USER0A"                                                       
 newname="IBMUSER.SDIV13.RIMLIB">                                      
 </ARCHDEF>                                                            
