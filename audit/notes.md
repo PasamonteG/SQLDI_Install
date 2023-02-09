@@ -69,7 +69,8 @@ DA('IBMUSER.SDIV12.AIDBSAMP')
 
 ## SQLDI V13 
 
-Create SMPE CSI for the FMID
+Create SMPE CSI for the FMID HDBDD18
+
 
 ```
 IBMUSER.NEALEJCL(SMPALA)
@@ -77,6 +78,24 @@ IBMUSER.NEALEJCL(SMPALB)
 
 -> SDIV13.SMP**
 -> SDIV13.GLOBAL.CSI 
+
+SQL Data Insights installs in the DBS (P115) SREL
+
+Pre-Requisites
+
+5698-DB2 IBM Db2 13 for z/OS plus APAR PH45358
+
+5650-ZOS z/OS 2.4 or 2.5, with z/OS Supervisor APAR OA62728
+
+5655-DGH IBM 64-bit SDK for z/OS Java Technology Edition Version 8 SR7, FP11 or higher
+
+Any one of the following:
+5650-ZOS z/OS 2.4 with APARs OA62489, OA62886 and OA62887 (for IBM Z Deep Neural Network
+Library, including IBM Z AI Optimization Library and IBM Z AI Data Embedding Library)
+
+5650-ZOS z/OS 2.5 with APARs OA62901, OA62902 and OA62903 (for IBM Z Deep Neural Network
+Library, including IBM Z AI Optimization Library and IBM Z AI Data Embedding Library)
+
 ```
 
 
