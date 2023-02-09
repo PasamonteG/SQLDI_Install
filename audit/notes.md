@@ -98,6 +98,17 @@ Library, including IBM Z AI Optimization Library and IBM Z AI Data Embedding Lib
 
 ```
 
+Transfer the CBPDO to ZFS
+
+```
+C:\000\7312889728_000010_PROD>pscp -P 65522 -r * ibmuser@192.168.1.171:/u/ibmuser/smpe/STP63159
+```
+
+Perform SMPE Receive 
+
+```
+???
+```
 
 
 ## ZCX deploy containers 
