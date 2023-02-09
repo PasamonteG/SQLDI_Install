@@ -69,6 +69,17 @@ DA('IBMUSER.SDIV12.AIDBSAMP')
 
 ## SQLDI V13 
 
+Create SMPE CSI for the FMID
+
+```
+IBMUSER.NEALEJCL(SMPALA)
+IBMUSER.NEALEJCL(SMPALB)
+
+-> SDIV13.SMP**
+-> SDIV13.GLOBAL.CSI 
+```
+
+
 
 ## ZCX deploy containers 
 
