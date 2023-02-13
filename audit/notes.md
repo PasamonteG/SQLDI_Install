@@ -27,6 +27,93 @@ Performance
 * ZCX 10 - 15 mins high CPU
 * Settles down to ~ 30% CPU
 
+
+Accessing containers from IBM
+
+
+https://ibm.github.io/ibm-z-oss-hub/main/main.html 
+
+Get from IBM Could Account, your apikey.json login file
+```
+{
+	"name": "zvazcx",
+	"description": "API Key for access to IBM Z and Linux One Container Registry",
+	"createdAt": "2023-02-12T21:10+0000",
+	"apikey": "GDbj5_GqG8h0IFcgTXPxs-l5A41RWn60EAkUH_saIEpM"
+}
+```
+
+
+Logon to ZCX
+
+```
+ssh ibmuser@192.168.1.171 -p 65522 
+
+su - ZCXADM1 
+PWD SYS1 
+
+ssh admin@192.168.1.172 -p 8022
+
+
+> docker login -u iamapikey icr.io
+Password:             <-Paste the text of your apikey here
+Login Succeeded
+
+> docker pull icr.io/ibmz/kafka@sha256:4419e017475e4082f8a03574f2b74195a689650c3f1ed8962874783e3dd4bf4a
+
+Notes for Jupyter-notebook 
+docker run --rm -it -p 8888:8888 icr.io/ibmz/jupyter-notebook:6.4.5
+
+Mapping ports - like I did in CDC Kafka
+docker run -idt -v cdcvol:/cdcinstance/ -p 11701:11701 zcdckafka 
+
+
+docker run --rm -d -p 9080:8888 icr.io/ibmz/jupyter-notebook:6.4.12   
+
+
+docker ps -a 
+
+docker images 
+
+docker rm ****
+
+docker stop **** 
+
+
+admin@S0W1-ZCXBT01:~$ docker run --rm -it -p 8888:8888 icr.io/ibmz/jupyter-notebook:6.4.5
+Unable to find image 'icr.io/ibmz/jupyter-notebook:6.4.5' locally
+6.4.5: Pulling from ibmz/jupyter-notebook
+3cf1497b05fd: Pull complete
+7668e4250dea: Pull complete
+75c1ec87b783: Pull complete
+686ef0793758: Pull complete
+c82b3159ebd1: Pull complete
+598280b39250: Pull complete
+239d65a3902d: Pull complete
+8d7f866e4276: Pull complete
+1096179d4c9f: Pull complete
+b036dda467ae: Pull complete
+411b8ef9cb63: Pull complete
+Digest: sha256:1a2835af7c850455e52a6f53b9e83a53d4864ee4f5ff17bad3596e37698b2452
+Status: Downloaded newer image for icr.io/ibmz/jupyter-notebook:6.4.5
+[I 21:28:28.980 NotebookApp] Writing notebook server cookie secret to /home/jovyan/.local/share/jupyter/runtime/notebook_cookie_secret
+[I 21:28:34.148 NotebookApp] Serving notebooks from local directory: /
+[I 21:28:34.149 NotebookApp] Jupyter Notebook 6.4.5 is running at:
+[I 21:28:34.150 NotebookApp] http://localhost:8888/?token=c187ccb3ef0711c08be33a98b47922fdad17532ada3e83ca
+[I 21:28:34.151 NotebookApp]  or http://127.0.0.1:8888/?token=c187ccb3ef0711c08be33a98b47922fdad17532ada3e83ca
+[I 21:28:34.152 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[W 21:28:34.262 NotebookApp] No web browser found: could not locate runnable browser.
+[C 21:28:34.271 NotebookApp]
+
+    To access the notebook, open this file in a browser:
+        file:///home/jovyan/.local/share/jupyter/runtime/nbserver-7-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/?token=c187ccb3ef0711c08be33a98b47922fdad17532ada3e83ca
+     or http://127.0.0.1:8888/?token=c187ccb3ef0711c08be33a98b47922fdad17532ada3e83ca  
+     
+     
+```
+
 ## SQLDI V12 TP 
 
 Mount a ZFS at /u/ibmuser/CODE 
