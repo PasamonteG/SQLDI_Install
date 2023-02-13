@@ -1,5 +1,12 @@
 # Build Notes
 
+## ZCX Port PD
+
+
+https://towardsdatascience.com/how-to-run-jupyter-notebook-on-docker-7c9748ed209f 
+
+
+
 ## Ben's ZPDT Image with ZCX 
 
 ```
