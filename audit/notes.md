@@ -362,9 +362,41 @@ http://192.168.1.172:8888/tree?token=f1e2a6f1e1dafc732e92fab59d11457522c2a8360b3
 
 ### Tensorflow Serving container
 
+IBM Registry
+```
+https://ibm.github.io/ibm-z-oss-hub/containers/index.html
+
+[https://ibm.github.io/ibm-z-oss-hub/containers/jupyter-notebook.html](https://ibm.github.io/ibm-z-oss-hub/containers/tensorflow-serving.html)
+
+docker pull icr.io/ibmz/tensorflow-serving@sha256:d232a0532342a29ed49d9cd61957793af07da6e8fba4d4c1da808124bb5909b7
+	
+working with v2.4.0
+```
+
+download for this container is sloooow ( ~ 600 MB )
 
 
+Prepping the container. Both IBM and Tensorflow docco show cloning the sample models to the container hosting platform, and referencing that as a mounted disk volume. However, I had already copied the samples repository to a volume ( tfmodels ). So I am trying to modify the supplied docker run command to reference that. Whether it succeeds or not, I will attempt the example method afterwards.
 
+Planned Execution
 
+```
+docker run -it --rm -p 8501:8501 -v tfmodels:/models/saved_model_half_plus_two_cpu -e MODEL_NAME=half_plus_two <image_id> &
 
+curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/half_plus_two:predict
+
+Returns => { "predictions": [2.5, 3.0, 4.5] }
+```
+
+Alternate Execution
+
+```
+TESTDATA="/home/admin/tensorflow/tensorflow_serving/servables/tensorflow/"
+
+docker run -it --rm -p 8501:8501 -v "$TESTDATA/saved_model_half_plus_two_cpu:/models/half_plus_two" -e MODEL_NAME=half_plus_two <image_id> &
+
+curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/half_plus_two:predict
+
+Returns => { "predictions": [2.5, 3.0, 4.5] }
+```
 
