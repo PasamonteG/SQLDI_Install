@@ -239,6 +239,83 @@ RCVPDO
 
 ## ZCX deploy containers 
 
+### Basic Access 
+
+Commands to get into ZCX & Containers
+
+```
+ssh ibmuser@192.168.1.171
+
+su - ZCXADM1
+
+ssh admin@192.168.1.172 -p 8022
+
+docker run hello-world 
+```
+
+Commands to operate ZCX & Containers
+
+```
+docker ps -a
+
+docker images
+
+docker stop <imageid>
+
+docker rmi <imageid> 
+```
+
+Commands to get inside a container and do stuff.
+
+```
+docker exec –it <cont_id> /bin/bash
+```
+
+Commands to move data between the outside world, USS, ZCX and a container.
+
+```
+
+git clone <blah blah ... IBM Z Australia Github>
+- brings stuff to /global/tensorflow
+
+Now move from USS ZFS to ZCX with sshd
+Ensure SSHD is running on port 22 rather than 65522
+edit /etc/ssh/sshd_config
+
+logged on as zcxadm1 ( with the .ssh subdirectory and keys )
+
+sftp -P 8022 admin@192.168.1.172
+
+cd /home/admin/tensorflow
+lcd /global/tensorflow
+put -r *
+
+Finally use docker cp commands to copy into an actove container
+
+docker run -d --name jupytercpy -v tfmodels:/models:rw -p 8888:8888 e7b441088e73 --ip=0.0.0.0 --allow-root
+
+docker cp /home/admin/tensorflow/tensorflow_serving/servables/tensorflow/testdata jupytercpy:/models
+
+```
+
+
+### Useful URLs 
+
+IBM ICR page for Tensorflow
+
+https://ibm.github.io/ibm-z-oss-hub/containers/tensorflow-serving.html
+
+Tensorflow Website
+
+https://github.com/tensorflow/serving
+
+Andrew Sica Guide 
+
+https://ibm.github.io/ai-on-z-101/ai-on-z-samples/tf-zcx-zos/
+
+
+
+
 ### Accessing containers from the IBM Z & LinuxONE COntainer Registry.
 
 Must be logged on the IBM Cloud
@@ -258,6 +335,7 @@ Login Succeeded
 GDbj5_GqG8h0IFcgTXPxs-l5A41RWn60EAkUH_saIEpM 
 ```
 
+### Jupyter-notebook container
 
 
 
