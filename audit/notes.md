@@ -239,6 +239,29 @@ RCVPDO
 
 ## ZCX deploy containers 
 
+### Accessing containers from the IBM Z & LinuxONE COntainer Registry.
+
+Must be logged on the IBM Cloud
+
+
+ssh from USS (as zcxadm1) into ZCX 
+```
+ssh admin@192.168.1.172 -p 8022
+```
+
+Perform login
+```
+> docker login -u iamapikey icr.io
+Password:             <-Paste the text of your apikey here
+Login Succeeded
+
+GDbj5_GqG8h0IFcgTXPxs-l5A41RWn60EAkUH_saIEpM 
+```
+
+
+
+
+
 
 
 
