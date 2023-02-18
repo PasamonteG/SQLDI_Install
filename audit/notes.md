@@ -337,6 +337,31 @@ GDbj5_GqG8h0IFcgTXPxs-l5A41RWn60EAkUH_saIEpM
 
 ### Jupyter-notebook container
 
+IBM Registry
+```
+https://ibm.github.io/ibm-z-oss-hub/containers/index.html
+
+https://ibm.github.io/ibm-z-oss-hub/containers/jupyter-notebook.html
+
+docker pull icr.io/ibmz/jupyter-notebook@sha256:1a2835af7c850455e52a6f53b9e83a53d4864ee4f5ff17bad3596e37698b2452
+	
+6.4.5 works ; v7.0.0a definitely does not.
+```
+
+If you pull the container - you can refer to the image_id ( e7b441088e73 ; 9d29acbb437e ) in the docker run command.
+```
+docker run -it --name jupyter172 -v jupyter-data:/home/notebooks:rw -e NBDIR=/home/notebooks -p 8888:8888 9d29acbb437e --ip=0.0.0.0 --allow-root
+```
+
+and then open browser pointing at the container (using the token spat out by the docker run command output).
+
+```
+http://192.168.1.172:8888/tree?token=f1e2a6f1e1dafc732e92fab59d11457522c2a8360b3f9d4e
+```
+
+
+### Tensorflow Serving container
+
 
 
 
