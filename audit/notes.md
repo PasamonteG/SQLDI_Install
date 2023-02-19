@@ -381,7 +381,7 @@ Prepping the container. Both IBM and Tensorflow docco show cloning the sample mo
 Planned Execution
 
 ```
-docker run -it --rm -p 8501:8501 -v tfmodels:/models/saved_model_half_plus_two_cpu -e MODEL_NAME=half_plus_two <image_id> &
+docker run -it --rm -p 8501:8501 -v tfmodels:/models/saved_model_half_plus_two_cpu -e MODEL_NAME=half_plus_two 27d0d64d5b2a &
 
 curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/half_plus_two:predict
 
@@ -398,5 +398,18 @@ docker run -it --rm -p 8501:8501 -v "$TESTDATA/saved_model_half_plus_two_cpu:/mo
 curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/half_plus_two:predict
 
 Returns => { "predictions": [2.5, 3.0, 4.5] }
+```
+
+Actual Result : Auth error
+
+```
+admin@S0W1-ZCXBT01:~$ echo $TESTDATA
+/home/admin/tensorflow_serving/servables/tensorflow/testdata
+admin@S0W1-ZCXBT01:~$ docker run -it --rm -p 8501:8501 -v "$TESTDATA/saved_model_half_plus_two_cpu:/models/half_plus_two" -e MODEL_NAME=half_plus_two 27d0d64d5b2a
+docker: Error response from daemon: authorization denied by plugin zcxauthplugin: Request to bind mount the path '/home/admin/tensorflow_serving/servables/tensorflow/testdata/saved_model_half_plus_two_cpu' with rw mode is disabled for Docker running on IBM zCX appliance instance.
+See 'docker run --help'.
+
+chmod 777 ***/tensorflow
+same authentication failure.
 ```
 
