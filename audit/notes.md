@@ -459,6 +459,9 @@ chmod: cannot access '/models/half_plus_two': No such file or directory
 2023-02-19 02:07:44.283889: I tensorflow_serving/model_servers/server.cc:391] Exporting HTTP/REST API at:localhost:8501 ...
 
 
+The core requirement is that the model folders must be accessible directly under /models
+But presumably there is a command switch for tensorflow serving to specify a different model directory.
+
 from zCX
 
 curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/saved_model_half_plus_two_cpu:predict
@@ -468,7 +471,6 @@ admin@S0W1-ZCXBT01:~$ curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://19
     "predictions": [2.5, 3.0, 4.5
     ]
 }admin@S0W1-ZCXBT01:~$
-
 
 
 works from USS ( any user )
