@@ -413,3 +413,77 @@ chmod 777 ***/tensorflow
 same authentication failure.
 ```
 
+### Final Successful Path
+
+
+```
+docker volume create mymodel
+
+docker volume list
+
+docker run -d --name jupytercpy -v mymodel:/models:rw -p 8888:8888 e7b441088e73 --ip=0.0.0.0 --allow-root
+
+docker cp /home/admin/tensorflow/tensorflow_serving/servables/tensorflow/testdata/saved_model_half_plus_two_cpu jupytercpy:/models
+
+All the contents of ~/saved_model_half_plus_two_cpu are on volume mymodel, currently mounted at /models in this container.
+
+
+
+
+docker run -it --rm -p 8501:8501 -v mymodel:/models -e MODEL_NAME=saved_model_half_plus_two_cpu 27d0d64d5b2a &
+
+curl -d -g '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/saved_model_half_plus_two_cpu:predict
+
+
+
+admin@S0W1-ZCXBT01:~/tensorflow/tensorflow_serving/servables/tensorflow/testdata$ docker run -it --rm -p 8501:8501 -v mymodel:/models -e MODEL_NAME=saved_model_half_plus_two_cpu 27d0d64d5b2a
+chmod: cannot access '/models/half_plus_two': No such file or directory
+2023-02-19 02:07:42.367636: I tensorflow_serving/model_servers/server.cc:88] Building single TensorFlow model file config:  model_name: saved_model_half_plus_two_cpu model_base_path: /models/saved_model_half_plus_two_cpu
+2023-02-19 02:07:42.371099: I tensorflow_serving/model_servers/server_core.cc:464] Adding/updating models.
+2023-02-19 02:07:42.374979: I tensorflow_serving/model_servers/server_core.cc:587]  (Re-)adding model: saved_model_half_plus_two_cpu
+2023-02-19 02:07:42.492285: I tensorflow_serving/core/basic_manager.cc:740] Successfully reserved resources to load servable {name: saved_model_half_plus_two_cpu version: 123}
+2023-02-19 02:07:42.493170: I tensorflow_serving/core/loader_harness.cc:66] Approving load for servable version {name: saved_model_half_plus_two_cpu version: 123}
+2023-02-19 02:07:42.495798: I tensorflow_serving/core/loader_harness.cc:74] Loading servable version {name: saved_model_half_plus_two_cpu version: 123}
+2023-02-19 02:07:42.498396: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:32] Reading SavedModel from: /models/saved_model_half_plus_two_cpu/00000123
+2023-02-19 02:07:42.540804: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:55] Reading meta graph with tags { serve }
+2023-02-19 02:07:42.541966: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:93] Reading SavedModel debug info (if present) from: /models/saved_model_half_plus_two_cpu/00000123
+2023-02-19 02:07:43.492432: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:206] Restoring SavedModel bundle.
+2023-02-19 02:07:43.527631: I external/org_tensorflow/tensorflow/core/platform/profile_utils/cpu_utils.cc:112] CPU Frequency: 113000000 Hz
+2023-02-19 02:07:43.988820: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:190] Running initialization op on SavedModel bundle at path: /models/saved_model_half_plus_two_cpu/00000123
+2023-02-19 02:07:44.193371: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:277] SavedModel load for tags { serve }; Status: success: OK. Took 1694984 microseconds.
+2023-02-19 02:07:44.196559: I tensorflow_serving/servables/tensorflow/saved_model_warmup_util.cc:59] No warmup data file found at /models/saved_model_half_plus_two_cpu/00000123/assets.extra/tf_serving_warmup_requests
+2023-02-19 02:07:44.208809: I tensorflow_serving/core/loader_harness.cc:87] Successfully loaded servable version {name: saved_model_half_plus_two_cpu version: 123}
+2023-02-19 02:07:44.249620: I tensorflow_serving/model_servers/server.cc:371] Running gRPC ModelServer at 0.0.0.0:8500 ...
+[warn] getaddrinfo: address family for nodename not supported
+[evhttp_server.cc : 238] NET_LOG: Entering the event loop ...
+2023-02-19 02:07:44.283889: I tensorflow_serving/model_servers/server.cc:391] Exporting HTTP/REST API at:localhost:8501 ...
+
+
+from zCX
+
+curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/saved_model_half_plus_two_cpu:predict
+
+admin@S0W1-ZCXBT01:~$ curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/saved_model_half_plus_two_cpu:predict
+{
+    "predictions": [2.5, 3.0, 4.5
+    ]
+}admin@S0W1-ZCXBT01:~$
+
+
+
+works from USS ( any user )
+
+
+Fails from Windows
+
+C:\Users\neale>curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.1.172:8501/v1/models/saved_model_half_plus_two_cpu:predict
+curl: (3) bad range in URL position 2:
+[1.0,
+ ^
+
+
+
+
+
+
+```
