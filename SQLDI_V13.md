@@ -693,67 +693,103 @@ SQLDI is running under user AIDBADM, which was prepared specifically for that pu
 
 ![spqldi_signon](sqldiimages/sqldi01.JPG)
 
-Click to Add a Connection
+***Click to Add a Connection***
 
 ![spqldi_addconn](sqldiimages/sqldi02.JPG)
 
-Enter the connection details for Db2 V13
+***Enter the connection details for Db2 V13***
 
 ![spqldi_dallasd](sqldiimages/sqldi03.JPG)
 
-List the existing AI-Enabled Objects
+***List the existing AI-Enabled Objects***
 
 ![spqldi_list](sqldiimages/sqldi04.JPG)
 
-Click on "Add Object"
+***Click on "Add Object"***
 
 ![spqldi_addobj](sqldiimages/sqldi05.JPG)
 
-Filter by Schema (DSNAIDB) and Press the search icon
+***Filter by Schema (DSNAIDB) and Press the search icon***
 
 ![spqldi_seacrh](sqldiimages/sqldi06.JPG)
 
-Tick DSNAIDB.CHURN and Press the "Enable AI" Button
+***Tick DSNAIDB.CHURN and Press the "Enable AI" Button***
 
 ![spqldi_enable](sqldiimages/sqldi07.JPG)
 
-Select all columns, change the column type of "CustomerID" to "Key", and press "Next".
+***Select all columns, change the column type of "CustomerID" to "Key", and press "Next".***
 
 ![spqldi_columns](sqldiimages/sqldi08.JPG)
 
-This time, don't apply any column filters. Push "Enable".
+***This time, don't apply any column filters. Push "Enable".***
 
 ![spqldi_enable](sqldiimages/sqldi09.JPG)
 
-See the status of the table change to "Enabling".
+***See the status of the table change to "Enabling".***
 
 ![spqldi_enabling](sqldiimages/sqldi10.JPG)
 
-Check the Spark Web UI to see the tasks in progress. It should take 3 - 5 minutes on this small demo system without a Telum processor.
+***Check the Spark Web UI to see the tasks in progress. It should take 3 - 5 minutes on this small demo system without a Telum processor.***
 
 ![spqldi_sparkwebui](sqldiimages/sqldi11.JPG)
 
-Check back to the SQLDI UI to check the model was trained. Then press "Run Query"
+***Check back to the SQLDI UI to check the model was trained. Then press "Run Query"***
 
 ![spqldi_finished](sqldiimages/sqldi12.JPG)
 
-Use the drop down to retrieve one of the template SQL queries. Choose "Semantic Similarity"
+***Use the drop down to retrieve one of the template SQL queries. Choose "Semantic Similarity"***
 
 ![spqldi_sqltemplate](sqldiimages/sqldi13.JPG)
 
-The template SQL statements are just plain text based on the ICP table (DSNAIDB.CHURN). Review the Query and Press "Run".
+***The template SQL statements are just plain text based on the ICP table (DSNAIDB.CHURN). Review the Query and Press "Run".***
 
 ![spqldi_run](sqldiimages/sqldi14.JPG)
 
-Let the query complete and review the results. This query lists the top 20 clients that are most similar to CUSTOMERID '3668-QPYBK'
+***Let the query complete and review the results. This query lists the top 20 clients that are most similar to CUSTOMERID '3668-QPYBK'***
 
 ![spqldi_results](sqldiimages/sqldi15.JPG)
+
+***Analyze Data. Return to the AI Objects, select "Analyze Data"***
+
+![spqldi_analyze](sqldiimages/sqldi16.JPG)
+
+***Check Out the Data Statistics***
+
+![spqldi_datastats](sqldiimages/sqldi17.JPG)
+
+***Check Out the Column Influences***
+
+![spqldi_datastats](sqldiimages/sqldi17.JPG)
+
+That completes a basic installation verification test.
 
 
 ## 7. Usage Scenarios ( Tables, Views and Aliases )
 
+You can now experiment with a number of usage scenarios
+
+1. Query from any SQL client. (SPUFI, DB2 Connect, etc... )
+2. Experiment with all four of the SQL AI template queries
+3. Experiment with DB2 Views
+4. Experiment with DVM Views
+5. Load your own data science datasets and explore.
+
+### 7.1 Query from any SQL client. (SPUFI, DB2 Connect, etc... )
+
+
+### 7.2 Experiment with all four of the SQL AI template queries
+
+### 7.3 Experiment with DB2 Views
+
+### 7.4 Experiment with DVM Views
+
+### 7.5 Load your own data science datasets and explore.
 
 ## 8. Usage Considerations
+
+Like any AI model, SQLDI models need to be updated for a couple of reasons.
+
+1. 
 
 order of columns.
 
