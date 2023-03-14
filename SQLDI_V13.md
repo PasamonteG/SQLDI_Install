@@ -673,6 +673,15 @@ The screenshot below captures the execution of the ***sqldi.sh create*** command
 
 ![sqldicreate](sqldiimages/sqldicreate.JPG)
 
+Once SQLDI is started, you will want to open a browser against the two SQLDI user interfaces.
+
+***The Spark Web UI*** located at http://wg31.wqashington.ibm.com:8080
+
+![sparkui](sqldiimages/sparkui.JPG)
+
+***The SQLDI UI*** located at https://wg31.wqashington.ibm.com:15001
+
+![spqldiui](sqldiimages/sqldiui.JPG)
 
 ## 6. Installation Verification Test
 
