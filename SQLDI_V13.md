@@ -27,7 +27,9 @@ The core concept of SQL Data Insights is to build and train a neural network mod
 
 ![sqldi_concept](sqldiimages/sqldi_concept.JPG)
 
-Using a simple SQL query, you can find and rank clients who are most similar to your most profitable clients. Or you can find clients who have similar patterns to previous clients who closed their accounts.
+Using a simple SQL query, you can do things like
+- find and rank clients who are most similar to your most profitable clients. 
+- find clients who have similar patterns to previous clients who closed their accounts.
 
 
 
