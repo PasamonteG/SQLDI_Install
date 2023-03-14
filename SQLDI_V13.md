@@ -101,11 +101,27 @@ The goal of this document is provide an easy-to-consume worked example, which wi
 
 ![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
-Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie
+Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie.
+You should expect to find 5 sub-directories, each with contents provided from the installation of the z/OS PTFs.
 
-You should expect to find the following paths and contents.
+```
+ /usr/lpp/IBM/aie >ls -al
+total 112
+drwxr-xr-x   7 OMVSKERN OMVSGRP     8192 Mar  7 00:00 .
+drwxr-xr-x  52 OMVSKERN OMVSGRP     8192 Mar  6 23:20 ..
+drwxr-xr-x   2 OMVSKERN OMVSGRP     8192 Jun  8  2022 IBM
+drwxr-xr-x   5 OMVSKERN OMVSGRP     8192 Mar  7 00:01 blas
+drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 May  6  2022 zade
+drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 May 17  2022 zaio
+drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 Mar 15  2022 zdnn
+
+```
 
 ![duck2](sqldiimages/duck2.JPG)  **Setup RACF userid and group**
+
+All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
+![sdisetup](sqldiimages/sdisetup.JPG)
+
 
 Create a RACF userid as the SQLDI Instance Owner. (AIDBADM)
 Ensure the RACF userid has an omvs segment, with some large allowances.
