@@ -59,9 +59,14 @@ There are several pre-requisites that you should resolve before ordering SQLDI. 
 
 ## 4. Planning for SQLDI deployment
 
-When Planning for SQLDI deeloyment, it is very helpful to consider an architecture diagram of all the moving parts.
+When Planning for SQLDI deployment, it is very helpful to consider an architecture diagram of all the moving parts.
 
 ![sqldi_arch](sqldiimages/sqldi_arch.JPG)
+
+Most of SQLDI runs in USS ( z/OS Unix Systems Services ). However it needs a few integration points with Db2 z/OS and RACF. The notes below explain the diagram.
+
+* The AI libraries (shipped as z/OS PTFs) are installed by z/OS convention to the following USS path ( /usr/lpp/IBM/aie )
+* The SQLDI product code is provided as a ZFS during the SMPE install process, which must be mounted at /usr/lpp/IBM/db2sqldi/v1r1
 
 ## 5. Deploying an SQLDI instance
 
