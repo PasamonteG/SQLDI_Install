@@ -24,7 +24,7 @@ However, this document is written in a generic way, so that it can be helpful to
 
 The core concept of 
 
-![SQLDI_Architecture](images/sqldi/test.JPG)
+![SQLDI_Architecture](sqldiimages/test.JPG)
 
 
 
