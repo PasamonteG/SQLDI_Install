@@ -72,7 +72,7 @@ The model training process has 3 main stages
 
 SQLDI needs a few integration points with Db2 z/OS and RACF. The notes below explain the diagram.
 
-**The USS Side (reading top down)**
+***The USS Side (reading top down)***
 
 * The AI libraries (shipped as z/OS PTFs) are installed by z/OS convention to the following USS path: /usr/lpp/IBM/aie  
 * The SQLDI product code is provided as a ZFS during the SMPE install process, which must be mounted at /usr/lpp/IBM/db2sqldi/v1r1
@@ -93,6 +93,12 @@ SQLDI needs a few integration points with Db2 z/OS and RACF. The notes below exp
 Keep this architecture diagram in you mind as you review the SQLDI Instance Deployment notes below.
 
 ## 5. Deploying an SQLDI instance
+
+Deploying an SQLDI instance takes about 5 minutes. The hard work is lining up all the ducks in a row!
+
+The comprehensive guide is found in the Db2 z/OS V13 Knowledge Centre [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-installing-configuring-sql-di).
+The goal of this document is provide an easy-to-consume worked example, which will help you understand the Knowledge Centre.
+
 
 
 ## 6. Installation Verification Test
