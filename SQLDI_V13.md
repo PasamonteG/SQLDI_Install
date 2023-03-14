@@ -63,14 +63,18 @@ When Planning for SQLDI deployment, it is very helpful to consider an architectu
 
 ![sqldi_arch](sqldiimages/sqldi_arch.JPG)
 
+SQLDI only needs to be running when you are training new models. Once the models are trained, and loaded into the model tables, SQLDI can be stopped, and Db2 z/OS will continue to serve AI-enabled queries.
+
 Most of SQLDI runs in USS ( z/OS Unix Systems Services ). However it needs a few integration points with Db2 z/OS and RACF. The notes below explain the diagram.
 
-** The USS Side (reading top down) **
+**The USS Side (reading top down)**
 
 * The AI libraries (shipped as z/OS PTFs) are installed by z/OS convention to the following USS path ( /usr/lpp/IBM/aie )
 * The SQLDI product code is provided as a ZFS during the SMPE install process, which must be mounted at /usr/lpp/IBM/db2sqldi/v1r1
+* The SQLDI deployment process create an instance of SQLDI which needs to be mounted on a large ZFS. (4GB minimum, 100GB recommended)
+* Once the SQLDI instance is started there are multiple services running, to perform the model training
 
-** The z/OS Side **
+**The z/OS Side (reading top down)**
 
 
 ## 5. Deploying an SQLDI instance
@@ -84,7 +88,10 @@ Most of SQLDI runs in USS ( z/OS Unix Systems Services ). However it needs a few
 
 ## 8. Usage Considerations
 
-ccc
+order of columns.
+
+keeping model tables updated.
+
 
 ## 9. References and Further Reading
 
