@@ -26,6 +26,8 @@ The core concept of SQL Data Insights is to build and train a neural network mod
 
 ![sqldi_concept](sqldiimages/sqldi_concept.JPG)
 
+The model used by SQLDI is the Bag of Words model, which is described by many places on the web such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model)
+
 Using a simple SQL query, you can do things like
 - find and rank clients who are most similar to your most profitable clients. 
 - find clients who have similar patterns to previous clients who closed their accounts.
@@ -776,27 +778,68 @@ You can now experiment with a number of usage scenarios
 
 ### 7.1 Query from any SQL client. (SPUFI, DB2 Connect, etc... )
 
+You can stop the SQLDI instance, and still execute AI queries, from anywhere ( SPUFI, DB2 Connect etc... ).
+Paste a Query into SPUFI to try it out.
+
+Alternatively open the Db2 Connect Command Line Processor from the desktop and run an AI query from Windows.
+
+```
+db2 connect to DALLASD user IBMUSER using SYS1
+
+db2 -tvf sqldi.sql
+```
+
+![spqldi_db2clp](sqldiimages/db2clp.JPG)
+
+Paste your SQL queries into a file within C:\Program Files\IBM\SQLLIB\BIN> and submit them.
 
 ### 7.2 Experiment with all four of the SQL AI template queries
 
+Review the documentation on each of the functions, and review the template SQL, and execute it.
+
+[ai_similarity scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-similarity)
+
+[ai_semantic cluster scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-semantic-cluster)
+
+[ai_analogy scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-analogy)
+
+
 ### 7.3 Experiment with DB2 Views
+
+Views are probably most useful when the data fields that you wish to model are stored in different tables, and an SQL view can bring them together.
+
+You can verify the function of views by creating a View against the DSNAIDB.CHURN table. Then Enable AI for the View. A future version of this workshop will include datasets spread across different tables.
+
 
 ### 7.4 Experiment with DVM Views
 
+DVM is a z/OS data virtualisation server that provides SQL connectivity to non-Db2 sources (IMS, VSAM, Syslog etc...). You can create Db2 aliases against DVM objects.
+A future version of this workshop will include DVM examples.
+
 ### 7.5 Load your own data science datasets and explore.
+
+A future version of this workshop will include a wider range of datasets to work with.
 
 ## 8. Usage Considerations
 
+### 8.1 Model retraining
 Like any AI model, SQLDI models need to be updated for a couple of reasons.
 
-1. 
+1. When rows are inserted or deleted from the base table, there will be a discrepency between the base table and the model table.
+2. When rows are updated in the base table, the vectors in the model table will be stale
 
-order of columns.
+A procedure to retrain model tables on a suitable frequency should be established.
 
-keeping model tables updated.
+### 8.2 Order of columns.
+
+### 8.3 More ...
 
 
 ## 9. References and Further Reading
 
-ccc
+The Db2 z/OS V13 knowledge center contains a large section about SQLDI [here}(https://www.ibm.com/docs/en/db2-for-zos/13?topic=running-ai-queries-sql-data-insights)
+
+IBM Developer Article about SQLDI [here](https://developer.ibm.com/articles/use-ibm-db2-sql-data-insights-to-uncover-hidden-relationships-in-your-data/) 
+
+Video and Presentation about SQLDI [here](https://www.worldofdb2.com/videos/ibm-db2-sql-data-insights-uncover-insights-based-on-hidden-relati)
 
