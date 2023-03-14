@@ -44,8 +44,16 @@ SQLDI is a no charge feature of Db2 z/OS V13, but you do need to order this feat
 
 ![sqldi_shopz](sqldiimages/sqldi_shopz.JPG)
 
+If you already have Db2 z/OS V13 installed, you can order SQL Data Insights as a CBPDO for it's own SMPE CSI, or to add to the Db2 SMPE CSI.
 
 ## 3. Installation with SMPE
+
+SQLDI is a standard SMPE installation.
+
+There are several pre-requisites that you should resolve before ordering SQLDI. As always, you should refer to the current page in the Db2 z/OS knowledge centre to get the latest information.
+
+[title](https://www.ibm.com/docs/en/db2-for-zos/13?topic=di-preparing-sql-installation)
+
 
 
 ## 4. Planning for SQLDI deployment
