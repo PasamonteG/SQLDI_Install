@@ -99,6 +99,10 @@ Deploying an SQLDI instance takes about 5 minutes. The hard work is lining up al
 The comprehensive guide is found in the Db2 z/OS V13 Knowledge Centre [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-installing-configuring-sql-di).
 The goal of this document is provide an easy-to-consume worked example, which will help you consume the Knowledge Centre.
 
+All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
+![sdisetup](sqldiimages/sdisetup.JPG)
+
+
 ![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
 Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie.
@@ -119,13 +123,70 @@ drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 Mar 15  2022 zdnn
 
 ![duck2](sqldiimages/duck2.JPG)  **Setup RACF userid and group**
 
-All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
-![sdisetup](sqldiimages/sdisetup.JPG)
+A RACF userid is required to be the SQLDI instance owner.
+* It must have an omvs segment with minimum values for CPUTIMEMAX(86400), MEMLIMIT(32G) ASSIZEMAX(1200000000)
+* Ideally it should default to the bash shell PROGRAM(/bin/bash)
+* The home directory HOME(/u/aidbadm) will need a .profile that sets many USS environment variables 
 
+The job below was used to create the AIDBADM userid.
 
-Create a RACF userid as the SQLDI Instance Owner. (AIDBADM)
-Ensure the RACF userid has an omvs segment, with some large allowances.
+***IBMUSER.SDISETUP(SDIUSCRT)***
+```
+//IBMUSERJ JOB  (USR),'ADD USER',CLASS=A,MSGCLASS=H,                    
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                        
+//********************************************************************  
+//*                                                                  *  
+//* CREATE SQDLI USERIDS                                             *  
+//*                                                                  *  
+//********************************************************************  
+//NEWID    EXEC PGM=IKJEFT01,DYNAMNBR=75,TIME=100,REGION=6M             
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSTERM  DD DUMMY                                                     
+//SYSUADS  DD DSN=SYS1.UADS,DISP=SHR                                    
+//SYSLBC   DD DSN=SYS1.BRODCAST,DISP=SHR                                
+//SYSTSIN  DD *                                                         
+  AU AIDBADM NAME('AIDBADM') PASSWORD(SYS1)             -               
+   OWNER(SYS1) DFLTGRP(SYS1) UACC(READ) OPERATIONS SPECIAL   -          
+   TSO(ACCTNUM(ACCT#) PROC(DBSPROCD) JOBCLASS(A) MSGCLASS(X) -          
+      HOLDCLASS(X) SYSOUTCLASS(X) SIZE(4048) MAXSIZE(0))     -          
+    OMVS(HOME(/u/aidbadm) PROGRAM(/bin/bash) CPUTIMEMAX(86400) -        
+    MEMLIMIT(32G) ASSIZEMAX(1200000000) AUTOUID)                        
+  PERMIT ACCT#     CLASS(ACCTNUM) ID(AIDBADM)                           
+  PERMIT ISPFPROC  CLASS(TSOPROC) ID(AIDBADM)                           
+  PERMIT DBSPROC   CLASS(TSOPROC) ID(AIDBADM)                           
+  PERMIT JCL       CLASS(TSOAUTH) ID(AIDBADM)                           
+  PERMIT OPER      CLASS(TSOAUTH) ID(AIDBADM)                           
+  PERMIT ACCT      CLASS(TSOAUTH) ID(AIDBADM)                           
+  PERMIT MOUNT     CLASS(TSOAUTH) ID(AIDBADM)                           
+  AD 'AIDBADM.*'  OWNER(AIDBADM) UACC(READ) GENERIC                     
+```
 
+Additionally, the SQLDI instance owner (and any other userids that will use SQLDI model training) ***must*** be a member of RACF group SQLDIGRP.
+
+***IBMUSER.SDISETUP(SDIRACFG)***
+```
+//IBMUSERJ JOB  (FB3),'INIT 3380 DASD',CLASS=A,MSGCLASS=H, 
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),              
+//             REGION=0M,COND=(4,LT)                       
+//S1       EXEC PGM=IKJEFT01                               
+                                                           
+//SYSTSPRT DD SYSOUT=*                                     
+                                                           
+//SYSPRINT DD SYSOUT=*                                     
+                                                           
+//SYSTSIN  DD *                                            
+                                                           
+ADDGROUP SQLDIGRP OMVS(AUTOGID) OWNER(IBMUSER)             
+                                                           
+CONNECT (AIDBADM)  GROUP(SQLDIGRP) OWNER(IBMUSER)          
+                                                           
+CONNECT (IBMUSER) GROUP(SQLDIGRP) OWNER(IBMUSER)           
+                                                           
+SETROPTS RACLIST(FACILITY) REFRESH                         
+                                                           
+/*                                                         
+```
 
 ![duck3](sqldiimages/duck3.JPG) **USS environment variables** 
 
