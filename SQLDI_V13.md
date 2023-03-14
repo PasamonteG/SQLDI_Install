@@ -105,15 +105,27 @@ Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie
 
 You should expect to find the following paths and contents.
 
-![duck1](sqldiimages/duck1.JPG)  **Setup RACF userid and group**
+![duck2](sqldiimages/duck2.JPG)  **Setup RACF userid and group**
 
 Create a RACF userid as the SQLDI Instance Owner. (AIDBADM)
 Ensure the RACF userid has an omvs segment, with some large allowances.
 
 
-### Duck #3: USS environment variables 
+![duck3](sqldiimages/duck3.JPG) **USS environment variables** 
 
-![duck1](sqldiimages/duck1.JPG) 
+![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
+
+![duck5](sqldiimages/duck5.JPG) **USS environment variables** 
+
+![duck6](sqldiimages/duck6.JPG) **USS environment variables** 
+
+![duck7](sqldiimages/duck7.JPG) **USS environment variables** 
+
+![duck8](sqldiimages/duck8.JPG) **USS environment variables** 
+
+![duck9](sqldiimages/duck9.JPG) **USS environment variables** 
+
+![duck10](sqldiimages/duck10.JPG) **USS environment variables** 
 
 
 
