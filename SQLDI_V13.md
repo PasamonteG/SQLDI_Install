@@ -11,7 +11,7 @@ However, this document is written in a generic way, so that it can be helpful to
 ## Contents
 
 1. SQL Data Insights Overview
-2. Ordering
+2. Ordering SQLDI
 3. Installation with SMPE
 4. Planning for SQLDI deployment
 5. Deploying an SQLDI instance
@@ -24,14 +24,25 @@ However, this document is written in a generic way, so that it can be helpful to
 
 The core concept of SQL Data Insights is to build and train a neural network model for a Db2 table or view, load it into a model table that is associated with the base table, so that a range of Db2 BIFs (built-in-functions) can used within SQL queries for find patterns in the data. For example, if you have a table containing a list of clients and their important characteristics, you can discover which clients are most similar to a chosen client or cluster of clients.
 
+![sqldi_concept](sqldiimages/sqldi_concept.JPG)
 
-![sqldi_concept](sqldi_concept/test.JPG)
+Using a simple SQL query, you can do things like
+- find and rank clients who are most similar to your most profitable clients. 
+- find clients who have similar patterns to previous clients who closed their accounts.
+- see which data items are most influential towards certain outcomes
 
-Using a simple SQL query, you can find and rank clients who are most similar to your most profitable clients. Or you can find clients who have similar patterns to previous clients who closed their accounts.
+SQLDI can operate against Db2 views, or even external data sources like IMS and VSAM.
 
+Two of the most likely use cases for SQLDI are
+1. Business Analytics Users.
+2. Data Scientists who are charged with developing more targetted machine learning scoring models.
 
 
 ## 2. Ordering SQLDI
+
+SQLDI is a no charge feature of Db2 z/OS V13, but you do need to order this feature explicitly in order to get it. The screenshot below is from ShopZ, showing two separate items to order, each with the same Product ID.
+
+![sqldi_shopz](sqldiimages/sqldi_shopz.JPG)
 
 
 ## 3. Installation with SMPE
