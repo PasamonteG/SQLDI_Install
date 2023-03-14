@@ -83,7 +83,7 @@ SQLDI needs a few integration points with Db2 z/OS and RACF. The notes below exp
 1. The SQLDI Service is the primary administration interface, for training new models.
 2. The Spark service
 
-*The z/OS Side (reading top down)*
+***The z/OS Side (reading top down)***
 
 * A RACF userid must be created as the SQLDI owner. It must be a member of RACF Group SQLDIGRP.
 * A keyring, with a signed certificate is needed for authentication of the SQLDI instance to RACF.
