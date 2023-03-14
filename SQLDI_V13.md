@@ -48,16 +48,22 @@ If you already have Db2 z/OS V13 installed, you can order SQL Data Insights as a
 
 ## 3. Installation with SMPE
 
-SQLDI is a standard SMPE installation.
+SQLDI is a standard SMPE installation, which will not be addressed in this document.
 
 There are several pre-requisites that you should resolve before ordering SQLDI. As always, you should refer to the current page in the Db2 z/OS knowledge centre to get the latest information.
 
-[title](https://www.ibm.com/docs/en/db2-for-zos/13?topic=di-preparing-sql-installation)
+[SQLDI Pre-Requisites](https://www.ibm.com/docs/en/db2-for-zos/13?topic=di-preparing-sql-installation)
 
+* z/OS ( V2.4 or V2.5 ) requires several PTFs to be applied to provide the pre-requisite AI libraries.
+* Db2 needs the fix for APAR PH49781
+* z/OS OpenSSH and the IBM 64-bit JDK are also needed.
 
 
 ## 4. Planning for SQLDI deployment
 
+When Planning for SQLDI deeloyment, it is very helpful to consider an architecture diagram of all the moving parts.
+
+![sqldi_arch](sqldiimages/sqldi_arch.JPG)
 
 ## 5. Deploying an SQLDI instance
 
