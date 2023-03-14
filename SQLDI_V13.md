@@ -99,9 +99,14 @@ Deploying an SQLDI instance takes about 5 minutes. The hard work is lining up al
 The comprehensive guide is found in the Db2 z/OS V13 Knowledge Centre [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-installing-configuring-sql-di).
 The goal of this document is provide an easy-to-consume worked example, which will help you consume the Knowledge Centre.
 
+All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
+![sdisetup](sqldiimages/sdisetup.JPG)
+
+
 ![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
-Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie.
+Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie
+
 You should expect to find 5 sub-directories, each with contents provided from the installation of the z/OS PTFs.
 
 ```
@@ -117,23 +122,364 @@ drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 Mar 15  2022 zdnn
 
 ```
 
-![duck2](sqldiimages/duck2.JPG)  **Setup RACF userid and group**
+![duck2](sqldiimages/duck2.JPG) **Verify the SQLDI libraries are mounted at the right path.**
 
-All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
-![sdisetup](sqldiimages/sdisetup.JPG)
+Open an ssh session into USS, and navigate to /usr/lpp/IBM/db2sqldi/v1r1
+
+You should expect to find 5 sub-directories, each with contents provided from the installation of SQLDI.
+
+```
+ /usr/lpp/IBM/db2sqldi/v1r1 >ls -al
+total 176
+drwxr-xr-x   7 OMVSKERN SYS1        8192 Mar  6 23:29 .
+drwxr-xr-x   3 OMVSKERN OMVSGRP     8192 Mar  6 23:20 ..
+drwxr-xr-x   2 OMVSKERN SYS1        8192 Mar  6 23:29 IBM
+-rw-r--r--   2 OMVSKERN SYS1       17940 Mar  6 23:29 NOTICE
+-rw-r--r--   2 OMVSKERN SYS1         203 Mar  6 23:29 README
+drwxr-xr-x  12 OMVSKERN SYS1        8192 Feb 23  2022 spark24x
+drwxr-xr-x   6 OMVSKERN SYS1        8192 May 18  2022 sql-data-insights
+drwxr-xr-x   3 OMVSKERN SYS1        8192 May 17  2022 templates
+drwxr-xr-x   3 OMVSKERN SYS1        8192 May 17  2022 tools
+```
+
+* IBM contains binaries
+* spark24x contains the an embedded copy of spark
+* sql-data-insights contains the code for SQLDI
+* templates contains sample templates for the .profile settings for the SQLDI userid and JCL to operate the SQLDI components
+* tools contains a copy of the bash shell, which you could copy to /bin/bash if you wanted.
 
 
-Create a RACF userid as the SQLDI Instance Owner. (AIDBADM)
-Ensure the RACF userid has an omvs segment, with some large allowances.
+![duck3](sqldiimages/duck3.JPG)  **Setup RACF userid and group**
 
+A RACF userid is required to be the SQLDI instance owner.
+* It must have an omvs segment with minimum values for CPUTIMEMAX(86400), MEMLIMIT(32G) ASSIZEMAX(1200000000)
+* Ideally it should default to the bash shell PROGRAM(/bin/bash)
+* The home directory HOME(/u/aidbadm) will need a .profile that sets many USS environment variables 
 
-![duck3](sqldiimages/duck3.JPG) **USS environment variables** 
+The job below was used to create the AIDBADM userid.
+
+***IBMUSER.SDISETUP(SDIUSCRT)***
+```
+//IBMUSERJ JOB  (USR),'ADD USER',CLASS=A,MSGCLASS=H,                    
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                        
+//********************************************************************  
+//*                                                                  *  
+//* CREATE SQDLI USERIDS                                             *  
+//*                                                                  *  
+//********************************************************************  
+//NEWID    EXEC PGM=IKJEFT01,DYNAMNBR=75,TIME=100,REGION=6M             
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSTERM  DD DUMMY                                                     
+//SYSUADS  DD DSN=SYS1.UADS,DISP=SHR                                    
+//SYSLBC   DD DSN=SYS1.BRODCAST,DISP=SHR                                
+//SYSTSIN  DD *                                                         
+  AU AIDBADM NAME('AIDBADM') PASSWORD(SYS1)             -               
+   OWNER(SYS1) DFLTGRP(SYS1) UACC(READ) OPERATIONS SPECIAL   -          
+   TSO(ACCTNUM(ACCT#) PROC(DBSPROCD) JOBCLASS(A) MSGCLASS(X) -          
+      HOLDCLASS(X) SYSOUTCLASS(X) SIZE(4048) MAXSIZE(0))     -          
+    OMVS(HOME(/u/aidbadm) PROGRAM(/bin/bash) CPUTIMEMAX(86400) -        
+    MEMLIMIT(32G) ASSIZEMAX(1200000000) AUTOUID)                        
+  PERMIT ACCT#     CLASS(ACCTNUM) ID(AIDBADM)                           
+  PERMIT ISPFPROC  CLASS(TSOPROC) ID(AIDBADM)                           
+  PERMIT DBSPROC   CLASS(TSOPROC) ID(AIDBADM)                           
+  PERMIT JCL       CLASS(TSOAUTH) ID(AIDBADM)                           
+  PERMIT OPER      CLASS(TSOAUTH) ID(AIDBADM)                           
+  PERMIT ACCT      CLASS(TSOAUTH) ID(AIDBADM)                           
+  PERMIT MOUNT     CLASS(TSOAUTH) ID(AIDBADM)                           
+  AD 'AIDBADM.*'  OWNER(AIDBADM) UACC(READ) GENERIC                     
+```
+
+Additionally, the SQLDI instance owner (and any other userids that will use SQLDI model training) ***must*** be a member of RACF group SQLDIGRP.
+
+***IBMUSER.SDISETUP(SDIRACFG)***
+```
+//IBMUSERJ JOB  (FB3),'INIT 3380 DASD',CLASS=A,MSGCLASS=H, 
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),              
+//             REGION=0M,COND=(4,LT)                       
+//S1       EXEC PGM=IKJEFT01                               
+                                                           
+//SYSTSPRT DD SYSOUT=*                                     
+                                                           
+//SYSPRINT DD SYSOUT=*                                     
+                                                           
+//SYSTSIN  DD *                                            
+                                                           
+ADDGROUP SQLDIGRP OMVS(AUTOGID) OWNER(IBMUSER)             
+                                                           
+CONNECT (AIDBADM)  GROUP(SQLDIGRP) OWNER(IBMUSER)          
+                                                           
+CONNECT (IBMUSER) GROUP(SQLDIGRP) OWNER(IBMUSER)           
+                                                           
+SETROPTS RACLIST(FACILITY) REFRESH                         
+                                                           
+/*                                                         
+```
 
 ![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
 
-![duck5](sqldiimages/duck5.JPG) **USS environment variables** 
+The SQLDI userid must have several USS environment variables correctly set, so that the binaries and libraries of SQLDI can be found at runtime. The .profile file for user AIDBADM has been edited ( from # SQLDI Setup onwards ) to set the correct paths and variables.
 
-![duck6](sqldiimages/duck6.JPG) **USS environment variables** 
+***/u/aidbadm/.profile***
+```
+# JAVA                                                                  
+export JAVA_HOME=/usr/lpp/java/J8.0_64                                  
+export PATH=$PATH:/apps/zospt/bin:/usr/lpp/java/J8.0_64/bin             
+# ZOAU REQUIREMENTS                                                     
+export _BPXK_AUTOCVT=ON                                                 
+export ZOAU_HOME=/usr/lpp/IBM/zoautil                                   
+export PATH=${ZOAU_HOME}/bin:$PATH                                      
+# ZOAU MAN PAGE REQS (OPTIONAL)                                         
+export MANPATH=${ZOAU_HOME}/docs/%L:$MANPATH                            
+export CLASSPATH=${ZOAU_HOME}/lib/*:${CLASSPATH}                        
+export LIBPATH=${ZOAU_HOME}/lib:${LIBPATH}                              
+# IBM Python - Ansible supported                                        
+export PATH=/usr/lpp/IBM/cyp/v3r9/pyz/bin:$PATH                         
+export PYTHONPATH=/usr/lpp/IBM/cyp/v3r9/pyz                             
+export PYTHONPATH=${PYTHONPATH}:${ZOAU_HOME}/lib                        
+# Rocket Ported Git                                                     
+export _CEE_RUNOPTS='FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)'                
+export PATH=/usr/lpp/Rocket/rsusr/ported/bin:$PATH  
+
+# SQLDI Setup                                                           
+export SQLDI_INSTALL_DIR=/usr/lpp/IBM/db2sqldi/v1r1                     
+export ZADE_INSTALL_DIR=/usr/lpp/IBM/aie/zade                           
+export ZAIE_INSTALL_DIR=/usr/lpp/IBM/aie                                
+export BLAS_INSTALL_DIR=/usr/lpp/IBM/aie/blas                           
+export SPARK_HOME=$SQLDI_INSTALL_DIR/spark24x                           
+# SQLDI PATH                                                            
+PATH=/bin:$PATH                                                         
+PATH=$SQLDI_INSTALL_DIR/sql-data-insights/bin:$PATH                     
+PATH=$SQLDI_INSTALL_DIR/tools/bin:$PATH                                 
+PATH=$ZADE_INSTALL_DIR/bin:$PATH                                        
+PATH=$PATH:$JAVA_HOME/bin                                               
+export PATH=$PATH                                                       
+# SQLDI LIBPATH                                                         
+LIBPATH=/lib:/usr/lib                                                   
+LIBPATH=$LIBPATH:$JAVA_HOME/bin/classic                                 
+LIBPATH=$LIBPATH:$JAVA_HOME/bin/j9vm                                    
+LIBPATH=$LIBPATH:$JAVA_HOME/lib/s390x                                   
+LIBPATH=$LIBPATH:$SPARK_HOME/lib                                        
+LIBPATH=$BLAS_INSTALL_DIR/lib:$LIBPATH                                  
+LIBPATH=$ZAIE_INSTALL_DIR/zade/lib:$LIBPATH                             
+LIBPATH=$ZAIE_INSTALL_DIR/zdnn/lib:$LIBPATH                             
+LIBPATH=$ZAIE_INSTALL_DIR/zaio/lib:$LIBPATH                             
+export LIBPATH=$LIBPATH                                                 
+# SQLDI OTHER                                                           
+export IBM_JAVA_OPTIONS="-Dfile.encoding=UTF-8"                         
+export _BPXK_AUTOCVT=ON                                                 
+export _BPX_SHAREAS=NO                                                  
+export _ENCODE_FILE_NEW=ISO8859-1                                       
+export _ENCODE_FILE_EXISTING=UNTAGGED                                   
+export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"                
+export TERM=xterm                                                       
+alias vi1='vi -W filecodeset=utf-8'                                     
+alias vi2='vi -W filecodeset=iso8859-1'                                 
+alias ll='ls -ltcpa'                                                    
+export PS1=' ${PWD} >'                                                  
+```
+
+
+![duck5](sqldiimages/duck5.JPG) **RACF Certificate and Keyring** 
+
+A RACF certificate is required for SQLDI to authenticate with RACF when it interacts with Db2. 
+In this worked example we use a self-signed certificate and connect it to a keyring. 
+
+The steps in the job below perform the following functions
+* Create a Keyring (WMLZRING)
+* Create a Certificate Authority cert
+* Create a Certificate signed by the CA Cert.
+* Connect both the CACert and the Certificate to the keyring
+* Permit user AIDBADM and IBMUSER read access to cerificates owned by AIDBADM
+* Refresh RACF
+
+***IBMUSER.SDISETUP(RACFKEYR)***
+```
+//IBMUSERJ JOB  (USR),'ADD USER',CLASS=A,MSGCLASS=H,                  
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* CREATE RACF KEYRING FOR SQLDI V12                                *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD   SYSOUT=*                                              
+//SYSPRINT DD   SYSOUT=*                                              
+//SYSTSIN  DD   *                                                     
+RACDCERT ADDRING(WMLZRING) ID(AIDBADM)                                
+                                                                      
+RACDCERT GENCERT CERTAUTH +                                           
+SUBJECTSDN( +                                                         
+      CN('STLAB41') +                                                 
+      C('US') +                                                       
+      SP('CA') +                                                      
+      L('SAN JOSE') +                                                 
+      O('IBM') +                                                      
+      OU('WMLZ') +                                                    
+) +                                                                   
+ALTNAME( +                                                            
+      EMAIL('nmarion@us.ibm.com') +                                   
+) +                                                                   
+WITHLABEL('WMLZCACert') +                                             
+NOTAFTER(DATE(2025/01/01))                                            
+                                                                      
+RACDCERT GENCERT ID(AIDBADM) +                                        
+SUBJECTSDN( +                                                         
+      CN('STLAB41') +                                                 
+      C('US') +                                                       
+      SP('CA') +                                                      
+      L('SAN JOSE') +                                                 
+      O('IBM') +                                                      
+      OU('WMLZ') +                                                    
+) +                                                                   
+ALTNAME( +                                                            
+      EMAIL('nmarion@us.ibm.com') +                                   
+) +                                                                   
+WITHLABEL('WMLZCert_WMLZID') +                                        
+SIGNWITH(CERTAUTH LABEL('WMLZCACert')) +                              
+NOTAFTER(DATE(2025/01/01))                                            
+                                                                      
+RACDCERT ID(AIDBADM) CONNECT(CERTAUTH LABEL('WMLZCACert') +           
+RING(WMLZRING))                                                       
+                                                                      
+RACDCERT ID(AIDBADM) CONNECT(ID(AIDBADM) LABEL('WMLZCert_WMLZID') +   
+RING(WMLZRING) USAGE(PERSONAL))                                       
+                                                                      
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(AIDBADM) ACCESS(READ) 
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(IBMUSER) ACCESS(READ) 
+                                                                      
+SETROPTS RACLIST(FACILITY) REFRESH                                    
+                                                                      
+/*                                                                          
+```
+
+**Note** The RACF jobs are case-sensitive. You must use CAPS-OFF when editing these PDS members to ensure that the RACF artefacts are created correctly. Otherwise you risk the SQLDI instance creation failing if it can't find the RACF certificates and keyring.
+
+Verify the succesful creation of certificates and connection to the keyring with this job. (case-sensitive again).
+
+***IBMUSER.SDISETUP(RACFCHK)***
+```
+//IBMUSERJ JOB  (USR),'ADD USER',CLASS=A,MSGCLASS=H,                  
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* CHECK  RACF KEYRING FOR SQLDI V12                                *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD SYSOUT=*                                                
+//SYSPRINT DD SYSOUT=*                                                
+//SYSTSIN  DD *                                                       
+                                                                      
+RACDCERT LISTRING(WMLZRING) ID(AIDBADM)                               
+                                                                      
+RACDCERT CERTAUTH LIST(LABEL('WMLZCACert'))                           
+                                                                      
+RACDCERT LIST(LABEL('WMLZCert_WMLZID')) ID(AIDBADM)                   
+                                                                      
+/*                                                                    
+```
+
+**Note** a Return code of 0 from this job does not necessarily mean that the objects were found as expected. You must explicitly check the job joutput, as in the screenshot below.
+
+![racfchk](sqldiimages/racfchk.JPG)
+
+
+![duck6](sqldiimages/duck6.JPG) **Create a HUGE ZFS** 
+
+SQLDI model training can take up a lot of disk space. You need to prepare a ZFS for the SQLDI instance which is at least 4GB in size, or the SQLDI instance creation will fail. In a real-world environment where you are training models on large volumes of data, the disk space may need to be much larger.
+
+In this worked example a ZFS called IBMUSER.SDI13.ZFS is created and mounted at /u/sqldi13
+
+***IBMUSER.SDISETUP(CRTZFS)***
+```
+//IBMUSERJ JOB  (SDI),'CREATE ZFS',CLASS=A,MSGCLASS=H,                
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                          
+//********************************************************************
+//*                                                                  *
+//* PURPOSE: CREATE ZFS DATASET AND MOUNTPOINT                       *
+//*                                                                  *
+//********************************************************************
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                  
+//SYSPRINT DD SYSOUT=*                                                
+//SYSIN    DD *                                                       
+  DEFINE -                                                            
+       CLUSTER -                                                      
+         ( -                                                          
+             NAME(IBMUSER.SDI13.ZFS) -                                
+             LINEAR -                                                 
+             CYL(4000 1000) VOLUME(USER0A) -                          
+             DATACLASS(DCEXTEAV) -                                    
+             SHAREOPTIONS(3) -                                        
+         )                                                            
+/*                                                                    
+//*                                                                   
+// SET ZFSDSN='IBMUSER.SDI13.ZFS'                                       
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                     
+// PARM='-aggregate &ZFSDSN -compat'                                    
+//SYSPRINT DD SYSOUT=*                                                  
+//STDOUT   DD SYSOUT=*                                                  
+//STDERR   DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=*                                                  
+//CEEDUMP  DD SYSOUT=*                                                  
+//*                                                                     
+//*                                                                     
+//* Mount the dataset at the mountpoint directory                       
+//*                                                                     
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)          
+//SYSTSPRT  DD SYSOUT=*                                                 
+//SYSTSIN   DD *                                                        
+  PROFILE MSGID WTPMSG                                                  
+  MOUNT TYPE(ZFS) +                                                     
+    MODE(RDWR) +                                                        
+    MOUNTPOINT('/u/sqldi13') +                                          
+    FILESYSTEM('IBMUSER.SDI13.ZFS')                                     
+/*                                                                      
+```
+
+Once you have created and mounted the ZFS, there are a couple more things to do.
+
+Permenantly mount the ZFS in a PARMLIB member
+
+***USER.Z25C.PARMLIB(BPXPRMZZ)***
+```
+/* Neale's CODE */                               
+MOUNT FILESYSTEM('IBMUSER.SDI13.ZFS')            
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/u/sqldi13')                   
+/* Neale's CODE */                               
+MOUNT FILESYSTEM('SDI.V1R1.ZFS')                 
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/db2sqldi/v1r1')   
+```
+
+Grow the ZFS to ensure that it is over 4GB in size. This can be done from USS using the following commands
+
+***Command to determine the size of the ZFS (in KB)***
+```
+IBMUSER:/u: >df -k /u/sqldi13
+
+Mounted on     Filesystem                Avail/Total    Files      Status
+/u/sqldi13     (SQLDI.V13.ZFS)           2488135/2880000 4294966001 Available
+```
+
+***Command togrow the ZFS***
+```
+zfsadm grow -aggregate SQLDI.V12.ZFS -size 5000000
+```
+
+***Command to verify the increased size of the ZFS (in KB)***
+```
+IBMUSER:/u: >df -k /u/sqldi13
+
+Mounted on     Filesystem                Avail/Total    Files      Status
+/u/sqldi13     (SQLDI.V13.ZFS)           4608239/5000400 4294966001 Available
+```
+
 
 ![duck7](sqldiimages/duck7.JPG) **USS environment variables** 
 
