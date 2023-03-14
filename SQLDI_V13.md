@@ -63,19 +63,34 @@ When Planning for SQLDI deployment, it is very helpful to consider an architectu
 
 ![sqldi_arch](sqldiimages/sqldi_arch.JPG)
 
-SQLDI only needs to be running when you are training new models. Once the models are trained, and loaded into the model tables, SQLDI can be stopped, and Db2 z/OS will continue to serve AI-enabled queries.
+SQLDI runs in USS ( z/OS Unix Systems Services ). It only needs to be running when you are training new models. Once the models are trained, and loaded into the model tables, SQLDI can be stopped, and Db2 z/OS will continue to serve AI-enabled queries.
 
-Most of SQLDI runs in USS ( z/OS Unix Systems Services ). However it needs a few integration points with Db2 z/OS and RACF. The notes below explain the diagram.
+The model training process has 3 main stages
+1. Select the contents of the Subject table/view, and fetch the contents into USS
+2. Use a Spark cluster (in USS) to train the model
+3. Call the DSNUTILU stored procedure to load the model table in in Db2.
+
+SQLDI needs a few integration points with Db2 z/OS and RACF. The notes below explain the diagram.
 
 **The USS Side (reading top down)**
 
-* The AI libraries (shipped as z/OS PTFs) are installed by z/OS convention to the following USS path ( /usr/lpp/IBM/aie )
+* The AI libraries (shipped as z/OS PTFs) are installed by z/OS convention to the following USS path: /usr/lpp/IBM/aie  
 * The SQLDI product code is provided as a ZFS during the SMPE install process, which must be mounted at /usr/lpp/IBM/db2sqldi/v1r1
-* The SQLDI deployment process create an instance of SQLDI which needs to be mounted on a large ZFS. (4GB minimum, 100GB recommended)
-* Once the SQLDI instance is started there are multiple services running, to perform the model training
+* The SQLDI deployment process creates an instance of SQLDI which needs to be mounted on a large ZFS. (4GB minimum, 100GB recommended)
+* Once the SQLDI instance is started there are multiple services running, to perform the model training.
+* SQLDI provides two helpful user interfaces, both accessible via browser.
+
+1. The SQLDI Service is the primary administration interface, for training new models.
+2. The Spark service
 
 **The z/OS Side (reading top down)**
 
+* A RACF userid must be created as the SQLDI owner. It must be a member of RACF Group SQLDIGRP.
+* A keyring, with a signed certificate is needed for authentication of the SQLDI instance to RACF.
+* The Db2-supplied stored procedures and the WLM environments that they run in must be correctly installed
+* An SQLDI Catalog must be created for Db2 z/OS to keep track of the AI-Enabled objects and model tables
+
+Keep this architecture diagram in you mind as you review the SQLDI Instance Deployment notes below.
 
 ## 5. Deploying an SQLDI instance
 
