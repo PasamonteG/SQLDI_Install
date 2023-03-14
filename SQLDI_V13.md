@@ -105,7 +105,8 @@ All the jobs used for deployment of SDI in this worked example were saved to PDS
 
 ![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
-Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie.
+Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie
+
 You should expect to find 5 sub-directories, each with contents provided from the installation of the z/OS PTFs.
 
 ```
@@ -120,6 +121,33 @@ drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 May 17  2022 zaio
 drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 Mar 15  2022 zdnn
 
 ```
+
+![duck2](sqldiimages/duck2.JPG) **Verify the SQLDI libraries are mounted at the right path.**
+
+Open an ssh session into USS, and navigate to /usr/lpp/IBM/db2sqldi/v1r1
+
+You should expect to find 5 sub-directories, each with contents provided from the installation of SQLDI.
+
+```
+ /usr/lpp/IBM/db2sqldi/v1r1 >ls -al
+total 176
+drwxr-xr-x   7 OMVSKERN SYS1        8192 Mar  6 23:29 .
+drwxr-xr-x   3 OMVSKERN OMVSGRP     8192 Mar  6 23:20 ..
+drwxr-xr-x   2 OMVSKERN SYS1        8192 Mar  6 23:29 IBM
+-rw-r--r--   2 OMVSKERN SYS1       17940 Mar  6 23:29 NOTICE
+-rw-r--r--   2 OMVSKERN SYS1         203 Mar  6 23:29 README
+drwxr-xr-x  12 OMVSKERN SYS1        8192 Feb 23  2022 spark24x
+drwxr-xr-x   6 OMVSKERN SYS1        8192 May 18  2022 sql-data-insights
+drwxr-xr-x   3 OMVSKERN SYS1        8192 May 17  2022 templates
+drwxr-xr-x   3 OMVSKERN SYS1        8192 May 17  2022 tools
+```
+
+* IBM contains binaries
+* spark24x contains the an embedded copy of spark
+* sql-data-insights contains the code for SQLDI
+* templates contains sample templates for the .profile settings for the SQLDI userid and JCL to operate the SQLDI components
+* tools contains a copy of the bash shell, which you could copy to /bin/bash if you wanted.
+
 
 ![duck2](sqldiimages/duck2.JPG)  **Setup RACF userid and group**
 
@@ -189,6 +217,67 @@ SETROPTS RACLIST(FACILITY) REFRESH
 ```
 
 ![duck3](sqldiimages/duck3.JPG) **USS environment variables** 
+
+The SQLDI userid must have several USS environment variables correctly set, so that the binaries and libraries of SQLDI can be found at runtime. The .profile file for user AIDBADM has been edited ( from # SQLDI Setup onwards ) to set the correct paths and variables.
+
+***/u/aidbadm/.profile***
+```
+# JAVA                                                                  
+export JAVA_HOME=/usr/lpp/java/J8.0_64                                  
+export PATH=$PATH:/apps/zospt/bin:/usr/lpp/java/J8.0_64/bin             
+# ZOAU REQUIREMENTS                                                     
+export _BPXK_AUTOCVT=ON                                                 
+export ZOAU_HOME=/usr/lpp/IBM/zoautil                                   
+export PATH=${ZOAU_HOME}/bin:$PATH                                      
+# ZOAU MAN PAGE REQS (OPTIONAL)                                         
+export MANPATH=${ZOAU_HOME}/docs/%L:$MANPATH                            
+export CLASSPATH=${ZOAU_HOME}/lib/*:${CLASSPATH}                        
+export LIBPATH=${ZOAU_HOME}/lib:${LIBPATH}                              
+# IBM Python - Ansible supported                                        
+export PATH=/usr/lpp/IBM/cyp/v3r9/pyz/bin:$PATH                         
+export PYTHONPATH=/usr/lpp/IBM/cyp/v3r9/pyz                             
+export PYTHONPATH=${PYTHONPATH}:${ZOAU_HOME}/lib                        
+# Rocket Ported Git                                                     
+export _CEE_RUNOPTS='FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)'                
+export PATH=/usr/lpp/Rocket/rsusr/ported/bin:$PATH  
+
+# SQLDI Setup                                                           
+export SQLDI_INSTALL_DIR=/usr/lpp/IBM/db2sqldi/v1r1                     
+export ZADE_INSTALL_DIR=/usr/lpp/IBM/aie/zade                           
+export ZAIE_INSTALL_DIR=/usr/lpp/IBM/aie                                
+export BLAS_INSTALL_DIR=/usr/lpp/IBM/aie/blas                           
+export SPARK_HOME=$SQLDI_INSTALL_DIR/spark24x                           
+# SQLDI PATH                                                            
+PATH=/bin:$PATH                                                         
+PATH=$SQLDI_INSTALL_DIR/sql-data-insights/bin:$PATH                     
+PATH=$SQLDI_INSTALL_DIR/tools/bin:$PATH                                 
+PATH=$ZADE_INSTALL_DIR/bin:$PATH                                        
+PATH=$PATH:$JAVA_HOME/bin                                               
+export PATH=$PATH                                                       
+# SQLDI LIBPATH                                                         
+LIBPATH=/lib:/usr/lib                                                   
+LIBPATH=$LIBPATH:$JAVA_HOME/bin/classic                                 
+LIBPATH=$LIBPATH:$JAVA_HOME/bin/j9vm                                    
+LIBPATH=$LIBPATH:$JAVA_HOME/lib/s390x                                   
+LIBPATH=$LIBPATH:$SPARK_HOME/lib                                        
+LIBPATH=$BLAS_INSTALL_DIR/lib:$LIBPATH                                  
+LIBPATH=$ZAIE_INSTALL_DIR/zade/lib:$LIBPATH                             
+LIBPATH=$ZAIE_INSTALL_DIR/zdnn/lib:$LIBPATH                             
+LIBPATH=$ZAIE_INSTALL_DIR/zaio/lib:$LIBPATH                             
+export LIBPATH=$LIBPATH                                                 
+# SQLDI OTHER                                                           
+export IBM_JAVA_OPTIONS="-Dfile.encoding=UTF-8"                         
+export _BPXK_AUTOCVT=ON                                                 
+export _BPX_SHAREAS=NO                                                  
+export _ENCODE_FILE_NEW=ISO8859-1                                       
+export _ENCODE_FILE_EXISTING=UNTAGGED                                   
+export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"                
+export TERM=xterm                                                       
+alias vi1='vi -W filecodeset=utf-8'                                     
+alias vi2='vi -W filecodeset=iso8859-1'                                 
+alias ll='ls -ltcpa'                                                    
+export PS1=' ${PWD} >'                                                  
+```
 
 ![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
 
