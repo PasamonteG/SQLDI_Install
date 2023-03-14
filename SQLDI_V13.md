@@ -11,7 +11,7 @@ However, this document is written in a generic way, so that it can be helpful to
 ## Contents
 
 1. SQL Data Insights Overview
-2. Ordering
+2. Ordering SQLDI
 3. Installation with SMPE
 4. Planning for SQLDI deployment
 5. Deploying an SQLDI instance
