@@ -97,7 +97,24 @@ Keep this architecture diagram in you mind as you review the SQLDI Instance Depl
 Deploying an SQLDI instance takes about 5 minutes. The hard work is lining up all the ducks in a row!
 
 The comprehensive guide is found in the Db2 z/OS V13 Knowledge Centre [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-installing-configuring-sql-di).
-The goal of this document is provide an easy-to-consume worked example, which will help you understand the Knowledge Centre.
+The goal of this document is provide an easy-to-consume worked example, which will help you consume the Knowledge Centre.
+
+### Duck #1: Verify the AI libraries are mounted at the right path.
+
+Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie
+
+You should expect to find the following paths and contents.
+
+### Duck #2: RACF userid and group.
+
+Create a RACF userid as the SQLDI Instance Owner. (AIDBADM)
+Ensure the RACF userid has an omvs segment, with some large allowances.
+
+
+### Duck #3: USS environment variables 
+
+![duck1](sqldiimages/duck1.JPG) 
+
 
 
 
