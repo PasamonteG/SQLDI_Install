@@ -353,7 +353,133 @@ SETROPTS RACLIST(FACILITY) REFRESH
 /*                                                                          
 ```
 
-![duck6](sqldiimages/duck6.JPG) **USS environment variables** 
+**Note** The RACF jobs are case-sensitive. You must use CAPS-OFF when editing these PDS members to ensure that the RACF artefacts are created correctly. Otherwise you risk the SQLDI instance creation failing if it can't find the RACF certificates and keyring.
+
+Verify the succesful creation of certificates and connection to the keyring with this job. (case-sensitive again).
+
+***IBMUSER.SDISETUP(RACFCHK)***
+```
+//IBMUSERJ JOB  (USR),'ADD USER',CLASS=A,MSGCLASS=H,                  
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* CHECK  RACF KEYRING FOR SQLDI V12                                *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD SYSOUT=*                                                
+//SYSPRINT DD SYSOUT=*                                                
+//SYSTSIN  DD *                                                       
+                                                                      
+RACDCERT LISTRING(WMLZRING) ID(AIDBADM)                               
+                                                                      
+RACDCERT CERTAUTH LIST(LABEL('WMLZCACert'))                           
+                                                                      
+RACDCERT LIST(LABEL('WMLZCert_WMLZID')) ID(AIDBADM)                   
+                                                                      
+/*                                                                    
+```
+
+**Note** a Return code of 0 from this job does not necessarily mean that the objects were found as expected. You must explicitly check the job joutput, as in the screenshot below.
+
+![racfchk](sqldiimages/racfchk.JPG)
+
+
+![duck6](sqldiimages/duck6.JPG) **Create a HUGE ZFS** 
+
+SQLDI model training can take up a lot of disk space. You need to prepare a ZFS for the SQLDI instance which is at least 4GB in size, or the SQLDI instance creation will fail. In a real-world environment where you are training models on large volumes of data, the disk space may need to be much larger.
+
+In this worked example a ZFS called IBMUSER.SDI13.ZFS is created and mounted at /u/sqldi13
+
+***IBMUSER.SDISETUP(CRTZFS)***
+```
+//IBMUSERJ JOB  (SDI),'CREATE ZFS',CLASS=A,MSGCLASS=H,                
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                          
+//********************************************************************
+//*                                                                  *
+//* PURPOSE: CREATE ZFS DATASET AND MOUNTPOINT                       *
+//*                                                                  *
+//********************************************************************
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                  
+//SYSPRINT DD SYSOUT=*                                                
+//SYSIN    DD *                                                       
+  DEFINE -                                                            
+       CLUSTER -                                                      
+         ( -                                                          
+             NAME(IBMUSER.SDI13.ZFS) -                                
+             LINEAR -                                                 
+             CYL(4000 1000) VOLUME(USER0A) -                          
+             DATACLASS(DCEXTEAV) -                                    
+             SHAREOPTIONS(3) -                                        
+         )                                                            
+/*                                                                    
+//*                                                                   
+// SET ZFSDSN='IBMUSER.SDI13.ZFS'                                       
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                     
+// PARM='-aggregate &ZFSDSN -compat'                                    
+//SYSPRINT DD SYSOUT=*                                                  
+//STDOUT   DD SYSOUT=*                                                  
+//STDERR   DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=*                                                  
+//CEEDUMP  DD SYSOUT=*                                                  
+//*                                                                     
+//*                                                                     
+//* Mount the dataset at the mountpoint directory                       
+//*                                                                     
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)          
+//SYSTSPRT  DD SYSOUT=*                                                 
+//SYSTSIN   DD *                                                        
+  PROFILE MSGID WTPMSG                                                  
+  MOUNT TYPE(ZFS) +                                                     
+    MODE(RDWR) +                                                        
+    MOUNTPOINT('/u/sqldi13') +                                          
+    FILESYSTEM('IBMUSER.SDI13.ZFS')                                     
+/*                                                                      
+```
+
+Once you have created and mounted the ZFS, there are a couple more things to do.
+
+Permenantly mount the ZFS in a PARMLIB member
+
+***USER.Z25C.PARMLIB(BPXPRMZZ)***
+```
+/* Neale's CODE */                               
+MOUNT FILESYSTEM('IBMUSER.SDI13.ZFS')            
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/u/sqldi13')                   
+/* Neale's CODE */                               
+MOUNT FILESYSTEM('SDI.V1R1.ZFS')                 
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/db2sqldi/v1r1')   
+```
+
+Grow the ZFS to ensure that it is over 4GB in size. This can be done from USS using the following commands
+
+***Command to determine the size of the ZFS (in KB)***
+```
+IBMUSER:/u: >df -k /u/sqldi13
+
+Mounted on     Filesystem                Avail/Total    Files      Status
+/u/sqldi13     (SQLDI.V13.ZFS)           2488135/2880000 4294966001 Available
+```
+
+***Command togrow the ZFS***
+```
+zfsadm grow -aggregate SQLDI.V12.ZFS -size 5000000
+```
+
+***Command to verify the increased size of the ZFS (in KB)***
+```
+IBMUSER:/u: >df -k /u/sqldi13
+
+Mounted on     Filesystem                Avail/Total    Files      Status
+/u/sqldi13     (SQLDI.V13.ZFS)           4608239/5000400 4294966001 Available
+```
+
 
 ![duck7](sqldiimages/duck7.JPG) **USS environment variables** 
 
