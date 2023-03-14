@@ -5,6 +5,9 @@ This document provides a step-by-step worked example of how to deploy it and use
 The worked example is based on a z/OS V2.5 system image that IBM can provision for clients for demonstrations and skills transfer.
 However, this document is written in a generic way, so that it can be helpful to clients deploying SQLDI in their own systems.
 
+**Note** This document is a worked example, written as a simple "getting started" scenario. It should be used in conjunction with the official Db2 z/OS product documentation, which is referenced at the end of this document.
+
+
 ## Contents
 
 1. SQL Data Insights Overview
@@ -15,9 +18,14 @@ However, this document is written in a generic way, so that it can be helpful to
 6. Installation Verification Test
 7. Usage Scenarios ( Tables, Views and Aliases )
 8. Usage Considerations
-
+9. References and Further Reading
 
 ## 1. SQL Data Insights Overview 
+
+The core concept of 
+
+![SQLDI_Architecture](images/sqldi/sqldiarch.jpg)
+
 
 
 ## 2. Ordering SQLDI
@@ -41,3 +49,8 @@ However, this document is written in a generic way, so that it can be helpful to
 ## 8. Usage Considerations
 
 ccc
+
+## 9. References and Further Reading
+
+ccc
+
