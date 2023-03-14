@@ -481,15 +481,197 @@ Mounted on     Filesystem                Avail/Total    Files      Status
 ```
 
 
-![duck7](sqldiimages/duck7.JPG) **USS environment variables** 
+![duck7](sqldiimages/duck7.JPG) **Create SQLDI Pseudo Catalog** 
 
-![duck8](sqldiimages/duck8.JPG) **USS environment variables** 
+Db2 z/OS V13 provides job DSNTIJAI in SDSNSAMP to create the SQLDI Pseudo Catalog. For this worked example, DSNTIJAI was copied to IBMUSER.SDISETUP for customisation and execution. The job is too long to embed inline within this document, but the code snippet below provides the pseudo-code for the job.
 
-![duck9](sqldiimages/duck9.JPG) **USS environment variables** 
+***IBMUSER.SDISETUP(DSNTIJAI)***
+```
+//IBMUSERJ  JOB  (SDI),'SDI CSI ALA',CLASS=A,MSGCLASS=H,                
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1)                                  
+//********************************************************************* 
+//* JOB NAME = DSNTIJAI                                                 
+//*                                                                     
+//* DESCRIPTIVE NAME = INSTALLATION JOB STREAM                          
+//*                                                                     
+//*    Licensed Materials - Property of IBM                             
+//*    5698-DB2                                                         
+//*    COPYRIGHT IBM Corp 2022                                          
+//*                                                                     
+//*    STATUS = Version 13                                              
+//*                                                                     
+//* FUNCTION = CREATE AI-POWERED SQL PSEUDOCATALOG AND PROCEDURES       
+//*                                                                     
+//* PSEUDOCODE =                                                        
+//*   DSNTICU  STEP     Optional: DROP all objects created in this job  
+//*   DSNTIAI1 STEP     Create the SQL Data Insights pseudo-catalog     
+//*   DSNTIAI2 STEP     Create the database for model tables            
+//*   DSNTIAI3 STEP     Create procedures used by SQL Data Insights     
+//*   DSNTIAI4 STEP     Grant authorities to users of SQL Data Insights 
+//*                                                                     
+//* DEPENDENCIES = None                                                 
+```
 
-![duck10](sqldiimages/duck10.JPG) **USS environment variables** 
+A Query against SYSIBM.SYSTABLES (where DBNAME like 'DSNAI%') should yield the following
+```
+CREATOR      NAME                                DBNAME
+------------ ----------------------------------- ------------
+SYSAIDB      SYSAICONFIGURATIONS                 DSNAIDB1
+SYSAIDB      SYSAICOLUMNCONFIG                   DSNAIDB1
+SYSAIDB      SYSAIOBJECTS                        DSNAIDB1
+SYSAIDB      SYSAIMODELS                         DSNAIDB1
+DSNAIDB      AIDB_DSNAIDB_CHURN                  DSNAIDB2
+DSNAIDB      CHURN                               DSNAIDB3
+SYSAIDB      SYSAITRAININGJOBS                   DSNAIDB1
+SYSAIDB      SYSAICOLUMNCENTERS                  DSNAIDB1
+SYSAIDB      SYSAIMODELS_METRICS_AUX             DSNAIDB1
+SYSAIDB      SYSAIMODELS_INTERPRETABILITY_AUX    DSNAIDB1
+SYSAIDB      SYSAITRAININGJOBS_MESSAGES_AUX      DSNAIDB1
+
+  11 record(s) selected.
+```
+![duck8](sqldiimages/duck8.JPG) **Create Sample CHURN Table** 
+
+Db2 z/OS V13 provides job DSNTIJAV in SDSNSAMP to create the SQLDI Pseudo Catalog. For this worked example, DSNTIJAV was copied to IBMUSER.SDISETUP for customisation and execution. The job is too long to embed inline within this document, but the code snippet below provides the pseudo-code for the job.
+
+***IBMUSER.SDISETUP(DSNTIJAV)***
+```
+//IBMUSERJ  JOB  (SDI),'SDI CSI ALA',CLASS=A,MSGCLASS=H,                
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1)                                  
+//********************************************************************* 
+//* JOB NAME = DSNTIJAV                                                 
+//*                                                                     
+//* DESCRIPTIVE NAME = SQL DATA INSIGHTS INSTALL VERIFICATION SAMPLE    
+//*                                                                     
+//*    Licensed Materials - Property of IBM                             
+//*    5698-DB2                                                         
+//*    COPYRIGHT IBM CORP 2022.                                         
+//*                                                                     
+//*    STATUS = Version 13                                              
+//*                                                                     
+//* FUNCTION = CREATE SQL DATA INSIGHTS INSTALL VERIFICATION SAMPLE     
+//*                                                                     
+//* PSEUDOCODE =                                                        
+//*   DSNTIAV0 STEP     Optional: DROP objects created in this job      
+//*   DSNTIAV1 STEP     Create the sample objects                       
+//*   DSNTIAV2 STEP     Insert data into the sample objects             
+//*                                                                     
+//* DEPENDENCIES = None                                                 
+//*                                                                     
+```
+
+The DDL from IBMUSER.SDISETUP(DSNTIJAV) for the Sample table is shown below. Essentially it stores details of CLients' Telco accounts, and identifies those accounts which have been terminated (CHURN).
+
+```
+CREATE TABLE DSNAIDB.CHURN              
+  (                                     
+    CUSTOMERID            VARCHAR(30),  
+    GENDER                VARCHAR(10),  
+    SENIORCITIZEN         VARCHAR(10),  
+    PARTNER               VARCHAR(10),  
+    DEPENDENTS            VARCHAR(10),  
+    TENURE                INTEGER,      
+    PHONESERVICE          VARCHAR(10),  
+    MULTIPLELINES         VARCHAR(20),  
+    INTERNETSERVICE       VARCHAR(30),  
+    ONLINESECURITY        VARCHAR(30),  
+    ONLINEBACKUP          VARCHAR(30),  
+    DEVICEPROTECTION      VARCHAR(30),  
+    TECHSUPPORT           VARCHAR(30),  
+    STREAMINGTV           VARCHAR(30),  
+    STREAMINGMOVIES       VARCHAR(20),  
+    CONTRACT              VARCHAR(20),  
+    PAPERLESSBILLING      VARCHAR(10),  
+    PAYMENTMETHOD         VARCHAR(30),  
+    MONTHLYCHARGES        DECIMAL(10,2),
+    TOTALCHARGES          DECIMAL(10,2),
+    CHURN                 VARCHAR(10)   
+  ) IN DSNAIDB3.DSNAITS1;               
+                                        
+ CREATE UNIQUE INDEX DSNAIDB.CHURNIX    
+   ON DSNAIDB.CHURN                     
+   (CUSTOMERID);                        
+                                        
+COMMIT;                                 
+                                        
+GRANT SELECT ON DSNAIDB.CHURN TO PUBLIC;
+                                        
+```
+![duck9](sqldiimages/duck9.JPG) **TCPIP ports** 
+
+SQLDI makes use of several TCPIP ports for communication between the various Spark and SQLDI components. You can control the values of all of these ports during the SQLDI instance create process if you need to. 
+The default ports (which can all be over-ridden) are documented [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=di-configuring-network-ports-sql).
+
+From TSO option 6 you can use the ***netstat portlist*** command to see what ports are already in use. If there are any clashes you need to decide which SQLDI ports need to be changed from their defaults, and enter that information when you run the ***sqldi.sh create*** script to create the SQLDI instance.
+
+![netstat](sqldiimages/netstat.JPG)  
+.
 
 
+![duck10](sqldiimages/duck10.JPG) **Create the SQLDI Instance** 
+
+**Pause and Review:** Take a fresh look at the SQLDI architecture diagram. The architecture is fairly simple, but there is quite a bit of legwork to get right before you are ready to create an SQLDI instance. If you don't have ***all*** the steps above implemented correctly, the SQLDI instance creation will fail.
+
+![sqldi_arch](sqldiimages/sqldi_arch.JPG)
+The SQLDI instance creation, and operation, is controlled by the **sqldi.sh** script located in /usr/lpp/IBM/db2sqldi/v1r1/sql-data-insights/bin 
+
+You need to be the intended instance owner (AIDBADM) to create the SQLDI instance, because the .profile and the RACF pre-requisites were created around this userid.
+
+Open an ssh session into USS, and type in "sqldi.sh". You can do this from any USS path because the folder is in the PATH. It will feedback to you the command options supported by the script.
+
+```
+ /u/aidbadm >sqldi.sh
+
+This script installs, starts, and stops SQL Data Insights. Before running the script, make sure
+that you allocate a minimum of 4GB disk space to your zFS file system and meet other system requirements.
+In case of an error, resolve the error and then rerun the script.
+
+Usage:
+  sqldi.sh [action] [-Xms <value>] [-Xmx <value>]
+
+Action:
+  create             Installs the SQL Data Insights application.
+  start              Starts the SQL Data Insights application.
+  stop               Stops the SQL Data Insights application.
+  start_spark        Starts the embedded Spark cluster.
+  stop_spark         Stops the embedded Spark cluster.
+
+JVM Options:
+  -Xms ''            Specifies the initial memory allocation for JVM in the format of [0-9]*[M,G],
+                            e.g. 512M (Optional).
+  -Xmx ''            Specifies the maximum memory allocation for JVM in the format of [0-9]*[M,G],
+                            e.g. 1G (Optional).
+
+Examples:
+  ./sqldi.sh create
+  ./sqldi.sh create -Xms 512M -Xmx 1024M
+  ./sqldi.sh start
+  ./sqldi.sh stop
+  ./sqldi.sh start_spark
+  ./sqldi.sh stop_spark
+
+```
+
+You can stop and start spark independently, but that is not necessary because when you stop and start SQLDI the script will automatically check the status of spark for you. So the basic set of operations to be used are
+
+* sqldi.sh create
+* sqldi.sh start
+* sqldi.sh stop
+
+OK, so you run the ***sqldi.sh create*** command script, and you need to be prepared to answer a number of questions.
+
+For this worked example, the data entry values that I need to have to hand are
+* USS path to store the SQLDI instance
+* hostname or IP address of the z/OS (wg31.washington.ibm.com)
+* multiple port numbers, including 15001 for the SQLDI instance, and 8080 for the Spark console
+* the name of the keyring holding the certificate (WMLZRING)
+* the owner of the keyring (AIDBADM)
+* The label of the certificate (WMLZCert_WMLZID)
+* hostname or IP address of the Spark master (wg31.washington.ibm.com)
+
+The screenshot below captures the execution of the ***sqldi.sh create*** command script. If everything works fine it even offers to start the SQLDI instance for you.
+
+![sqldicreate](sqldiimages/sqldicreate.JPG)
 
 
 ## 6. Installation Verification Test
