@@ -149,7 +149,7 @@ drwxr-xr-x   3 OMVSKERN SYS1        8192 May 17  2022 tools
 * tools contains a copy of the bash shell, which you could copy to /bin/bash if you wanted.
 
 
-![duck2](sqldiimages/duck2.JPG)  **Setup RACF userid and group**
+![duck3](sqldiimages/duck3.JPG)  **Setup RACF userid and group**
 
 A RACF userid is required to be the SQLDI instance owner.
 * It must have an omvs segment with minimum values for CPUTIMEMAX(86400), MEMLIMIT(32G) ASSIZEMAX(1200000000)
@@ -216,7 +216,7 @@ SETROPTS RACLIST(FACILITY) REFRESH
 /*                                                         
 ```
 
-![duck3](sqldiimages/duck3.JPG) **USS environment variables** 
+![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
 
 The SQLDI userid must have several USS environment variables correctly set, so that the binaries and libraries of SQLDI can be found at runtime. The .profile file for user AIDBADM has been edited ( from # SQLDI Setup onwards ) to set the correct paths and variables.
 
@@ -279,9 +279,79 @@ alias ll='ls -ltcpa'
 export PS1=' ${PWD} >'                                                  
 ```
 
-![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
 
-![duck5](sqldiimages/duck5.JPG) **USS environment variables** 
+![duck5](sqldiimages/duck5.JPG) **RACF Certificate and Keyring** 
+
+A RACF certificate is required for SQLDI to authenticate with RACF when it interacts with Db2. 
+In this worked example we use a self-signed certificate and connect it to a keyring. 
+
+The steps in the job below perform the following functions
+* Create a Keyring (WMLZRING)
+* Create a Certificate Authority cert
+* Create a Certificate signed by the CA Cert.
+* Connect both the CACert and the Certificate to the keyring
+* Permit user AIDBADM and IBMUSER read access to cerificates owned by AIDBADM
+* Refresh RACF
+
+***IBMUSER.SDISETUP(RACFKEYR)***
+```
+//IBMUSERJ JOB  (USR),'ADD USER',CLASS=A,MSGCLASS=H,                  
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* CREATE RACF KEYRING FOR SQLDI V12                                *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD   SYSOUT=*                                              
+//SYSPRINT DD   SYSOUT=*                                              
+//SYSTSIN  DD   *                                                     
+RACDCERT ADDRING(WMLZRING) ID(AIDBADM)                                
+                                                                      
+RACDCERT GENCERT CERTAUTH +                                           
+SUBJECTSDN( +                                                         
+      CN('STLAB41') +                                                 
+      C('US') +                                                       
+      SP('CA') +                                                      
+      L('SAN JOSE') +                                                 
+      O('IBM') +                                                      
+      OU('WMLZ') +                                                    
+) +                                                                   
+ALTNAME( +                                                            
+      EMAIL('nmarion@us.ibm.com') +                                   
+) +                                                                   
+WITHLABEL('WMLZCACert') +                                             
+NOTAFTER(DATE(2025/01/01))                                            
+                                                                      
+RACDCERT GENCERT ID(AIDBADM) +                                        
+SUBJECTSDN( +                                                         
+      CN('STLAB41') +                                                 
+      C('US') +                                                       
+      SP('CA') +                                                      
+      L('SAN JOSE') +                                                 
+      O('IBM') +                                                      
+      OU('WMLZ') +                                                    
+) +                                                                   
+ALTNAME( +                                                            
+      EMAIL('nmarion@us.ibm.com') +                                   
+) +                                                                   
+WITHLABEL('WMLZCert_WMLZID') +                                        
+SIGNWITH(CERTAUTH LABEL('WMLZCACert')) +                              
+NOTAFTER(DATE(2025/01/01))                                            
+                                                                      
+RACDCERT ID(AIDBADM) CONNECT(CERTAUTH LABEL('WMLZCACert') +           
+RING(WMLZRING))                                                       
+                                                                      
+RACDCERT ID(AIDBADM) CONNECT(ID(AIDBADM) LABEL('WMLZCert_WMLZID') +   
+RING(WMLZRING) USAGE(PERSONAL))                                       
+                                                                      
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(AIDBADM) ACCESS(READ) 
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(IBMUSER) ACCESS(READ) 
+                                                                      
+SETROPTS RACLIST(FACILITY) REFRESH                                    
+                                                                      
+/*                                                                          
+```
 
 ![duck6](sqldiimages/duck6.JPG) **USS environment variables** 
 
