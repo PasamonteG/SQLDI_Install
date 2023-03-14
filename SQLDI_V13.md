@@ -40,6 +40,10 @@ Two of the most likely use cases for SQLDI are
 
 ## 2. Ordering SQLDI
 
+SQLDI is a no charge feature of Db2 z/OS V13, but you do need to order this feature explicitly in order to get it. The screenshot below is from ShopZ, showing two separate items to order, each with the same Product ID.
+
+![sqldi_shopz](sqldiimages/sqldi_shopz.JPG)
+
 
 ## 3. Installation with SMPE
 
