@@ -65,8 +65,12 @@ When Planning for SQLDI deployment, it is very helpful to consider an architectu
 
 Most of SQLDI runs in USS ( z/OS Unix Systems Services ). However it needs a few integration points with Db2 z/OS and RACF. The notes below explain the diagram.
 
+** The USS Side **
 * The AI libraries (shipped as z/OS PTFs) are installed by z/OS convention to the following USS path ( /usr/lpp/IBM/aie )
 * The SQLDI product code is provided as a ZFS during the SMPE install process, which must be mounted at /usr/lpp/IBM/db2sqldi/v1r1
+
+** The z/OS Side **
+
 
 ## 5. Deploying an SQLDI instance
 
