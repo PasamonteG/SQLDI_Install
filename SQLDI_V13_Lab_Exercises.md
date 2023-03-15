@@ -1,6 +1,16 @@
 # SQL Data Insights V13 Lab Exercises
 
 
+
+## Two Documents
+
+There are two documents covering SQL Data Insights V13
+
+1. The [SQLDI_V13_Deployment](https://github.com/zeditor01/collidingworlds/edit/main/SQLDI_V13.md) document, which is an audit trail of how to deploy SQL Data Insights V13
+2. ***This*** [Lab_Exercises](https://github.com/zeditor01/collidingworlds/blob/main/SQLDI_V13_Lab_Exercises.md) document, which should be used in conjunction with the ZVA-provisioned image for taking and SQLDI test drive.
+
+
+## Start
 Starting Point
 connection info
 SQLDI built, but not running
