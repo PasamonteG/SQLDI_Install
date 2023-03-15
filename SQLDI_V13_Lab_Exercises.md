@@ -1,5 +1,6 @@
 # SQL Data Insights V13 Lab Exercises
 
+This document is to formally written today
 
 
 ## Two Documents
