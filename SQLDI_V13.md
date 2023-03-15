@@ -7,6 +7,13 @@ However, this document is written in a generic way, so that it can be helpful to
 
 **Note** This document is a worked example, written as a simple "getting started" scenario. It should be used in conjunction with the official Db2 z/OS product documentation, which is referenced at the end of this document.
 
+## Two Documents
+
+There are two documents covering SQL Data Insights V13
+
+1. [This](https://github.com/zeditor01/collidingworlds/edit/main/SQLDI_V13.md) document, which is an audit trail of how to deploy SQL Data Insights V13
+2. The [Lab_Exercises](https://github.com/zeditor01/collidingworlds/blob/main/SQLDI_V13_Lab_Exercises.md) document, which should be used in conjunction with the ZVA-provisioned image for taking and SQLDI test drive.
+
 
 ## Contents
 
