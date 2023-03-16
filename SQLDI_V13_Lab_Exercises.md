@@ -29,10 +29,15 @@ This lab environment is a ZVA image for learning how to use the SQL Data Insight
 
 When you receive your signon creditials, they will look something like this.
 
-|URL|User ID for Web browser|IP Address for Remote Desktop|User ID for Remote Desktop|Password|
-| --- | --- | --- | --- | --- | 	 	 	 
-|https://T-2428-130-198-93-170.ibmztrialmachines.com/	|Administrator	|T-2428-130-198-93-170.ibmztrialmachines.com	|w-2428-k\Administrator	|qufG2d4LiCJG8xvg1B7W!|
+|URL|User ID for Web browser|Password|
+| --- | --- | --- | 	 	 	 
+|https://T-2428-130-198-93-170.ibmztrialmachines.com/	|Administrator	|qufG2d4LiCJG8xvg1B7W!|
 
+or this
+
+|IP Address for Remote Desktop|User ID for Remote Desktop|Password|
+| --- | --- | --- | 	 	 
+|T-2428-130-198-93-170.ibmztrialmachines.com	|w-2428-k\Administrator	|qufG2d4LiCJG8xvg1B7W!|
 
 
 
