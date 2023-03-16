@@ -223,16 +223,20 @@ FETCH FIRST 3 ROWS ONLY
 
 
 
-### 2.3.2 AI_CLUSTER_SIMILARITY
+### 2.3.2 AI_SEMANTIC_CLUSTER
 
 
 The semantic clustering BIF is documented here: [ai_semantic cluster scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-semantic-cluster)
+
+AI_SEMANTIC_CLUSTER determines a similarity score of a cluster of 3 records. It can smooth out some of the peculiarities of a single record. At this point it is based on a cluster of specifically 3 records.
 
 ![semanticcluster](sqldiimages/semanticcluster.png)
 
 
 
 ### 2.3.3 AI_ANALOGY
+
+AI_ANALOGY gives a score for the analogy between one record and an outcome (CHURN='YES') and compares it with other records and another outcome from that same column (eg CHURN='NO'). Of course, the outcome column might n=have more than two values in your data.
 
 The semantic analogy BIF is documented here: 
 [ai_analogy scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-analogy)
@@ -241,12 +245,13 @@ The semantic analogy BIF is documented here:
 
 
 
-
-
-
-
-
 ## Lab #3 Follow the process to AI-Enable another table
+
+The Churn table was already AI-enabled when you connected to the system. Lets walk through the process of AI-enabling another table in the Db2 subsystem.
+
+In further versions of this system, there will be additional data science datasets loaded into Db2 tables to explore. In this instance we will just pick a simple sample table and walk through the process to "Enable AI"
+
+
 
 
 ## Lab #4 Define a View against the sample table, and AI-Enable the view
