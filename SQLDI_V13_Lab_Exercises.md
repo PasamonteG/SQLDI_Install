@@ -133,12 +133,34 @@ Connect to Db2 subsystem DBDG, and then List AI objects. You should see DSNAIDB.
 ![spqldi_finished](sqldiimages/sqldi12.JPG)
 
 
+If you have completed all the steps above, then you have verified that SQLDI and DB2 are started and ready to receive your queries.
 
 
 
 ## Lab #2 Perform some AI-Enabled Queries against the sample table.
 
-Perform some AI-Enabled Queries against the sample table, to become familiar with the Build-In functions for AI provided by Db2
+In this lab we will perform some AI-Enabled Queries against the sample table, to become familiar with the Built-In functions for AI provided by Db2.
+
+***Press the "Run Query" button***
+
+![spqldi_finished](sqldiimages/sqldi12.JPG)
+
+***Use the drop down to retrieve one of the template SQL queries. Choose "Semantic Similarity"***
+
+![spqldi_sqltemplate](sqldiimages/sqldi13.JPG)
+
+***The template SQL statements are just plain text based on the ICP table (DSNAIDB.CHURN). Review the Query and Press "Run".***
+
+![spqldi_run](sqldiimages/sqldi14.JPG)
+
+***Let the query complete and review the results. This query lists the top 20 clients that are most similar to CUSTOMERID '3668-QPYBK'***
+
+![spqldi_results](sqldiimages/sqldi15.JPG)
+
+At this point, please pause and take some time to examine the results of the query.
+
+
+
 
 ## Lab #3 Follow the process to AI-Enable another table
 
@@ -150,25 +172,6 @@ Perform some AI-Enabled Queries against the sample table, to become familiar wit
 
 
 ## Lab #6 Delete the existing SQLDI instance, and perform the provisioning workflow yourself to deploy an SQLDI instance
-
-
-
-
-## Lab 1 - Use SQLDI
-
-putty - start SQLDI
-spark web ui
-sqldi web ui
-run quries 
-
-## Lab 2 - Train other objects
-
-Table (?)
-View ( against Churn )
-
-## Lab 3 Review Setup Steps
-
-## Lab 4 - Destroy instance, recreate
 
 
 
