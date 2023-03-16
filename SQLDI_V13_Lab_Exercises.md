@@ -244,6 +244,33 @@ The semantic analogy BIF is documented here:
 ![semanticanalogy](sqldiimages/semanticanalogy.png)
 
 
+### 2.3.4 Use any SQL client to run AI-Enabled Queries
+
+Once the Table is AI-enabled, SQLDI instance does not play any part in running AI-enabled queries. You can use SPUFI or DB2 Connect CLP to verify this.
+
+You can login to TSO to use SPUFI. 
+* Use PCOMM
+* Login as IBMUSER/SYS1
+* ISPF M.15 to access DB2I
+
+Edit your SQL in IBMUSER.SPUFI(TEST) ; Output to IBMUSER.SPUFIOUT.
+
+![spufi](sqldiimages/spufi.JPG)
+
+
+You can also use the DB2 Connect Command Line Processor (on the Windows desktop) if you like that interface.
+
+```
+db2 connect to DALLASD user IBMUSER using SYS1
+
+db2 -tvf sqldi.sql
+```
+
+![spqldi_db2clp](sqldiimages/db2clp.JPG)
+
+Paste your SQL queries into a file within C:\Program Files\IBM\SQLLIB\BIN> and submit them.
+
+
 
 ## Lab #3 Follow the process to AI-Enable another table
 
@@ -251,30 +278,56 @@ The Churn table was already AI-enabled when you connected to the system. Lets wa
 
 In further versions of this system, there will be additional data science datasets loaded into Db2 tables to explore. In this instance we will just pick a simple sample table and walk through the process to "Enable AI"
 
-
+***Return to the Database Connections Page, and List AI Objects***
 
 ![addtab01](sqldiimages/addtab01.png)  
 
+***Click on "Add Object", use the schema drop down to select a schema (Q), press the search button (magnifying glass on the right)***
+
 ![addtab02](sqldiimages/addtab02.png)  
+
+***Choose a table to train (eg: Q.SALES). Press "Enable AI Query"***
 
 ![addtab03](sqldiimages/addtab03.png)  
 
+***Select some or all of the columns. Optionally specify a key column. Press "Next***
+
 ![addtab04](sqldiimages/addtab04.png)  
+
+***Option to filter columns out. Press "Enable"***
 
 ![addtab05](sqldiimages/addtab05.png)  
 
+***Confirm "Enable"***
+
 ![addtab06](sqldiimages/addtab06.png)  
 
+***Observe the status of the table recorded as 'Enabling"***
 
 ![addtab07](sqldiimages/addtab07.png)  
 
+***Check the Spark Web UI, to see that the training job is running***
+
 ![addtab08](sqldiimages/addtab08.png)  
+
+***When finished, check the status of the table is "Enabled"
 
 ![addtab09](sqldiimages/addtab09.png)  
 
 
+Job Done. It's a simple process. The run time will depend on the volume of data, the processor speed, and whether your system is a Z16 with a Telum AIU. Be aware that the ZVA environment is a tiny emulated system for a functional demo without Telum, and times are not representative of what you will get on a real Z server.
+
+
 
 ## Lab #4 Define a View against the sample table, and AI-Enable the view
+
+Views and Aliases can also be AI-Enabled.
+
+Views are important, so that you can bring all the columns of interest into a single logical table for model training.
+
+Likewise, Aliases against remote objects (eg: VSAM or IMS data sources connected by Data Virtualisation Manager) can open up data that is often considered inaccessible for analytics purposes.
+
+Optional Exercise. Define a view against the DSNAIDB.CHURN table, and then enable AI Query against that view. Use SPUFI, Db2 Admin Tool or DB2CLP as you please.
 
 
 ## Lab #5 Review the underlying configuration that is required to support SQLDI
