@@ -126,7 +126,7 @@ The Db2 V13 database has already been defined to this SQLDI instance. You can cl
 
 ![spqldi_list](sqldiimages/sqldi04.JPG)
 
-![spqldiconnect](sqldiimages/sqldiconnect.JPG)
+![sqldiconnect](sqldiimages/sqldiconnect.png)
 
 ***DSNAIDB.CHURN is already AI-enabled***
 Connect to Db2 subsystem DBDG, and then List AI objects. You should see DSNAIDB.CHRUN in "Enabled" status
