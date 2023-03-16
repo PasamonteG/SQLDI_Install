@@ -94,8 +94,24 @@ Once you connect to the ZVA image, you will see a Windows desktop. You will be u
 
 ![desktop](sqldiimages/desktop.png)
 
+Double click on the putty icon to open an ssh session with z/OS USS. load the wg31 profile, and press "open"
 
-## Lab #2 Perform some AI-Enabled Queries against the sample table, to become familiar with the Build-In functions for AI provided by Db2
+![puttyconfig](sqldiimages/puttyconfig.png) 
+
+* Login as aidbadm ( password aidbadm ).
+* type bash, to enter the bash shell
+* type sqldi.sh start, to start SQL Data Insights
+
+
+![sqldistart](sqldiimages/sqldistart.png) 
+
+Double-click the Personal Communications icon, and logon to tso
+
+
+
+## Lab #2 Perform some AI-Enabled Queries against the sample table.
+
+Perform some AI-Enabled Queries against the sample table, to become familiar with the Build-In functions for AI provided by Db2
 
 ## Lab #3 Follow the process to AI-Enable another table
 
