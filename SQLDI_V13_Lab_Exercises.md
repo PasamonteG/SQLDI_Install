@@ -214,7 +214,7 @@ The semantic clustering BIF is documented here: [ai_semantic cluster scalar func
 The semantic analogy BIF is documented here: 
 [ai_analogy scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-analogy)
 
-![semanticanalogy](sqldiimages/semanticanalogy.JPG)
+![semanticanalogy](sqldiimages/semanticanalogy.png)
 
 
 
