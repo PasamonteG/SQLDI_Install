@@ -253,6 +253,26 @@ In further versions of this system, there will be additional data science datase
 
 
 
+![addtab01](sqldiimages/addtab01.png)  
+
+![addtab02](sqldiimages/addtab02.png)  
+
+![addtab03](sqldiimages/addtab03.png)  
+
+![addtab04](sqldiimages/addtab04.png)  
+
+![addtab05](sqldiimages/addtab05.png)  
+
+![addtab06](sqldiimages/addtab06.png)  
+
+
+![addtab07](sqldiimages/addtab07.png)  
+
+![addtab08](sqldiimages/addtab08.png)  
+
+![addtab09](sqldiimages/addtab09.png)  
+
+
 
 ## Lab #4 Define a View against the sample table, and AI-Enable the view
 
