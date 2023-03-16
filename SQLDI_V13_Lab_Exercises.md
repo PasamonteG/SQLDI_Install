@@ -104,6 +104,8 @@ Double click on the putty icon to open an ssh session with z/OS USS. load the wg
 
 ![sqldistart](sqldiimages/sqldistart.png) 
 
+![aidbadm](sqldiimages/aidbadmssh.png) 
+
 Open the Chrome Browser and check the spark web UI is showing healthy and active. (spark is deployed as part of the SQLDI instance, and is the environment used by SQLDI to train the models). The URL is bookmarked in the bookmark bar, and is http://wg31.washington.ibm.com:8080 
 
 ![sparkwebui](sqldiimages/sparkwebui.png) 
