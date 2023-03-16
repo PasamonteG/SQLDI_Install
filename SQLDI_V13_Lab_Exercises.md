@@ -175,9 +175,16 @@ So, let me ask you to write that piece of SQL in the second SQL tab, and see how
 
 When you think about it, the SQL would be very challenging if it was even possible, and it would require expert knowledge of the data in question. So how do those clever Built-in-Functions do it in such simple SQL syntax ?
 
-The answer is to understand what the SQLDI model is doing. When you push that "Enable AI" button to build and train a model, and then load it into the model table, you are training an unsupervised neural network. The link below explains the difference between "supervised" and "unsupervised" models.
+The answer is to understand what the SQLDI model is doing. When you push that "Enable AI" button to build and train a model, and then load it into the model table, you are training an unsupervised neural network. The important word is "unsupervised", because it reflects that their is no human interaction to provide expertise in the data subject or seek any particular outcomes. The link below explains the difference between "supervised" and "unsupervised" models.
 
 [supervised_or_unsupervised](https://www.ibm.com/cloud/blog/supervised-vs-unsupervised-learning)
+
+A supervised model is based on using historical labels (outcomes) to predict future outcomes. But an unsupervised model has no labels. It explores the data to discover patterns that exist. It is focussed on data insights. 
+
+The power of SQL Data Insights is that is a remarkably easy way to gain insights into data and data patterns, without needing subject matter expertise. It is a powerful adjunct to the subject matter expert ( or the data scientist ) because it finds similarities and differences in data records based on the values of data fields, and allows you to see which data fields are most significant by reviewing the results.
+
+
+
 
 
 
