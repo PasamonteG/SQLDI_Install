@@ -108,9 +108,16 @@ Open the Chrome Browser and check the spark web UI is showing healthy and active
 
 ![sparkwebui](sqldiimages/sparkwebui.png) 
 
-Open another Chrome tab and check the SQLDI portal. The URL is bookmarked in the bookmark bar, and is https://wg31.washington.ibm.com:15001 
+***Open another Chrome tab and check the SQLDI portal.*** 
+The URL is bookmarked in the bookmark bar, and is https://wg31.washington.ibm.com:15001 
+
 
 ![sqldiwebui](sqldiimages/sqldiwebui.png)  
+
+***Sign on to SQLDI.***
+User IBMUSER, password SYS1
+
+![spqldi_signon](sqldiimages/sqldi01.JPG)
 
 
 
