@@ -120,6 +120,20 @@ User IBMUSER, password SYS1
 ![spqldi_signon](sqldiimages/sqldi01.JPG)
 
 
+***Connect to DBDG***
+The Db2 V13 database has already been defined to this SQLDI instance. You can click on the "dots" icon and the right to connect to it, edit the connection parameters, list AI objects, or disconnect from it.
+
+![spqldi_list](sqldiimages/sqldi04.JPG)
+
+
+
+***DSNAIDB.CHURN is already AI-enabled***
+Connect to Db2 subsystem DBDG, and then List AI objects. You should see DSNAIDB.CHRUN in "Enabled" status
+
+![spqldi_finished](sqldiimages/sqldi12.JPG)
+
+
+
 
 
 ## Lab #2 Perform some AI-Enabled Queries against the sample table.
