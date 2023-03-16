@@ -102,10 +102,16 @@ Double click on the putty icon to open an ssh session with z/OS USS. load the wg
 * type bash, to enter the bash shell
 * type sqldi.sh start, to start SQL Data Insights
 
-
 ![sqldistart](sqldiimages/sqldistart.png) 
 
-Double-click the Personal Communications icon, and logon to tso
+Open the Chrome Browser and check the spark web UI is showing healthy and active. (spark is deployed as part of the SQLDI instance, and is the environment used by SQLDI to train the models). The URL is bookmarked in the bookmark bar, and is http://wg31.washington.ibm.com:8080 
+
+![sparkwebui](sqldiimages/sparkwebui.png) 
+
+Open another Chrome tab and check the SQLDI portal. The URL is bookmarked in the bookmark bar, and is https://wg31.washington.ibm.com:15001 
+
+![sqldiwebui](sqldiimages/sqldiwebui.png)  
+
 
 
 
