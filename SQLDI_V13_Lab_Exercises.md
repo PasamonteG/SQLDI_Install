@@ -157,8 +157,27 @@ In this lab we will perform some AI-Enabled Queries against the sample table, to
 
 ![spqldi_results](sqldiimages/sqldi15.JPG)
 
-At this point, please pause and take some time to examine the results of the query.
+If you've been following the bouncing ball to complete the lab tasks, this is the right point to ***PAUSE*** and take a moment to examine the results of the query and consider what really just happened.
 
+The essence of the SQL query was to list and rank the 20 customers who are most similar to CUSTOMERID '3668-QPYBK'. If you had tried to write that query with "normal" SQL how would you have done it ?
+
+You might react by saying something like this
+
+"Well, I would figure out which fields in the data are most significant to the nature of our clients, and then I would write a query with some predicates based on the values in those fields for all our other clients"
+
+So, let me ask you to write that piece of SQL in the second SQL tab, and see how easy it is. The challenges that you will face include
+
+1. whether you are confident enough to discount certain fields because you judge them to be unimportant
+2. how to write SQL expressions for the remaining fields for the difference between candidate clients and our reference client '3668-QPYBK'
+3. how to merge and weight all the different deviations of all the chosen fields
+4. how to design a numerical value that represents the "similarity" of different clients
+5. etc...
+
+When you think about it, the SQL would be very challenging if it was even possible, and it would require expert knowledge of the data in question. So how do those clever Built-in-Functions do it in such simple SQL syntax ?
+
+The answer is to understand what the SQLDI model is doing. When you push that "Enable AI" button to build and train a model, and then load it into the model table, you are training an unsupervised neural network. The link below explains the difference between "supervised" and "unsupervised" models.
+
+[supervised_or_unsupervised](https://www.ibm.com/cloud/blog/supervised-vs-unsupervised-learning)
 
 
 
