@@ -124,7 +124,6 @@ User IBMUSER, password SYS1
 ***Connect to DBDG***
 The Db2 V13 database has already been defined to this SQLDI instance. You can click on the "dots" icon and the right to connect to it, edit the connection parameters, list AI objects, or disconnect from it.
 
-![spqldi_list](sqldiimages/sqldi04.JPG)
 
 ![sqldiconnect](sqldiimages/sqldiconnect.png)
 
@@ -199,11 +198,27 @@ At this point, the SQLDI model is used to support 3 Db2 Built-in-Functions. Howe
 
 Review the documentation on each of the functions, and review the template SQL, and execute it.
 
+We've already run a semantic similarity query using AI_SIMILARITY. We can also change the SQL predicates to turn it into a dissimilarity. The documentation for this BIF is here: 
 [ai_similarity scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-similarity)
 
-[ai_semantic cluster scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-semantic-cluster)
+![semanticsimilarity](sqldiimages/semanticsimilarity.png)
 
+![semanticdissimilarity](sqldiimages/semanticdissimilarity.png)
+
+
+
+The semantic clustering BIF is documented here: [ai_semantic cluster scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-semantic-cluster)
+
+![semanticcluster](sqldiimages/semanticcluster.png)
+
+The semantic analogy BIF is documented here: 
 [ai_analogy scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-analogy)
+
+![semanticanalogy](sqldiimages/semanticanalogy.JPG)
+
+
+
+
 
 
 
