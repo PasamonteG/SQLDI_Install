@@ -203,6 +203,16 @@ We've already run a semantic similarity query using AI_SIMILARITY. We can also c
 
 ***Experiment with changes to the SQL template to get a feel for using the AI_Similarity BIF***
 
+Note that the ai_similarity function can used in different ways within SQL. The following example uses AI_SIMILARITY to score a relationship between a field (PAYMENTMETHOD) and an outcome (CHURN='YES'). Hence, even though the SQLDI model is unsupervised (i.e. no labels) you can use it to derivesimilarities between different columns and an outcome that is recorded as a column in the table.
+
+```
+SELECT DISTINCT AI_SIMILARITY(PAYMENTMETHOD, 'YES' USING MODEL COLUMN CHURN), 
+PAYMENTMETHOD
+FROM CHURN
+ORDER BY 1 DESC
+FETCH FIRST 3 ROWS ONLY
+```
+
 ![semanticsimilarity](sqldiimages/semanticsimilarity.png)
 
 ***Note the predicate against the ai_similarity function to flip the polarity of the SQL query.***
