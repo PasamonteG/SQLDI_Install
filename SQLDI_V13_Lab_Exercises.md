@@ -183,6 +183,11 @@ A supervised model is based on using historical labels (outcomes) to predict fut
 
 The power of SQL Data Insights is that is a remarkably easy way to gain insights into data and data patterns, without needing subject matter expertise. It is a powerful adjunct to the subject matter expert ( or the data scientist ) because it finds similarities and differences in data records based on the values of data fields, and allows you to see which data fields are most significant by reviewing the results.
 
+The existing model type is a "Bag of Words" model. If you want to explore the data science behind this model, there are many articles discussing this model type, such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model).
+
+At this point, the SQLDI model is used to support 3 Db2 Built-in-Functions. However, additional BIFs may be released in future function levels of Db2 z/OS to provide additional insight from this model.
+
+
 
 
 
