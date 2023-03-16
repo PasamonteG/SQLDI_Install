@@ -201,7 +201,11 @@ Review the documentation on each of the functions, and review the template SQL, 
 We've already run a semantic similarity query using AI_SIMILARITY. We can also change the SQL predicates to turn it into a dissimilarity. The documentation for this BIF is here: 
 [ai_similarity scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-similarity)
 
+***Experiment with changes to the SQL template to get a feel for using the AI_Similarity BIF***
+
 ![semanticsimilarity](sqldiimages/semanticsimilarity.png)
+
+***Note the predicate against the ai_similarity function to flip the polarity of the SQL query.***
 
 ![semanticdissimilarity](sqldiimages/semanticdissimilarity.png)
 
