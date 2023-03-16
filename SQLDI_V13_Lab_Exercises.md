@@ -1,6 +1,6 @@
 # SQL Data Insights V13 Lab Exercises
 
-This document contains the instructions for performing a hands-on lab exercise for using SQLDI V13.
+This document contains the instructions for performing a hands-on lab exercise for using SQLDI V13 using the IBM "Z Virtual Access" (ZVA) service for provisioning environments for demos and workshops.
 
 
 ## Two Documents
@@ -9,6 +9,25 @@ There are two documents covering SQL Data Insights V13
 
 1. The [SQLDI_V13_Deployment](https://github.com/zeditor01/collidingworlds/blob/main/SQLDI_V13.md) document, which is an audit trail of how to deploy SQL Data Insights V13
 2. ***This*** Lab_Exercises document, which should be used in conjunction with the ZVA-provisioned image for taking and SQLDI test drive.
+
+
+## A word about ZVA and zTrial.
+
+[zTrial](https://www.ibm.com/z/trials) is an internet-facing portal for clients to book demonstrations and test environments for z/OS software. The images in zTrial have been carefully designed to provide easy-to-use, well-structured, scripted environments as a self-serve experience. Any client can request a specific zTrial environment, and it will be provisioned in a day or so, and remain accessible for 4 days.
+
+ZVA is the IBM-internal development version of zTrial. It is the place where polished zTrial images are developed. IBMers can request ZVA images for use by either IBMers or clients. ZVA images can be used for hands-on-labs or demonstrations. IBMers can request ZVA images for customer workshops at the following URL within the IBM firewall. [ZVA_Portal](https://zva.wdc1a.cirrus.ibm.com/)
+
+Both ZVA and zTrial images consist of
+- a networked combination of a Windows Client and a z/OS server.
+- prepared with software and data for specified z Software fanmiliarisation.
+- and accessible over the internet, either from a web browser, or an RDP client.
+
+This lab environment is a ZVA image for learning how to use the SQL Data Insights feature of Db2 z/OS V13.
+
+
+## Access to the ZVA image for SQL Data Insights.
+
+The IBMer who 
 
 
 ## Start
