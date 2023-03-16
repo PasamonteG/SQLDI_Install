@@ -1,6 +1,6 @@
 # SQL Data Insights V13 Lab Exercises
 
-This document is to formally written today
+This document contains the instructions for performing a hands-on lab exercise for using SQLDI V13.
 
 
 ## Two Documents
