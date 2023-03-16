@@ -143,7 +143,7 @@ In this lab we will perform some AI-Enabled Queries against the sample table, to
 
 
 
-### Start with a Semantic Similarity Query
+### 2.1 Start with a basic Semantic Similarity Query
 
 
 ***Press the "Run Query" button***
@@ -161,6 +161,8 @@ In this lab we will perform some AI-Enabled Queries against the sample table, to
 ***Let the query complete and review the results. This query lists the top 20 clients that are most similar to CUSTOMERID '3668-QPYBK'***
 
 ![spqldi_results](sqldiimages/sqldi15.JPG)
+
+### 2.2 Pause and Think
 
 If you've been following the bouncing ball to complete the lab tasks, this is the right point to ***PAUSE*** and take a moment to examine the results of the query and consider what really just happened.
 
@@ -192,14 +194,14 @@ The existing model type is a "Bag of Words" model. If you want to explore the da
 
 At this point, the SQLDI model is used to support 3 Db2 Built-in-Functions. However, additional BIFs may be released in future function levels of Db2 z/OS to provide additional insight from this model.
 
-
-
-### Experiment with all four of the SQL AI template queries
+### 2.3 Experiment with all four of the SQL AI template queries
 
 Review the documentation on each of the functions, and review the template SQL, and execute it.
 
 We've already run a semantic similarity query using AI_SIMILARITY. We can also change the SQL predicates to turn it into a dissimilarity. The documentation for this BIF is here: 
 [ai_similarity scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-similarity)
+
+### 2.3.1 AI_SIMILARITY
 
 ***Experiment with changes to the SQL template to get a feel for using the AI_Similarity BIF***
 
@@ -221,9 +223,16 @@ FETCH FIRST 3 ROWS ONLY
 
 
 
+### 2.3.2 AI_CLUSTER_SIMILARITY
+
+
 The semantic clustering BIF is documented here: [ai_semantic cluster scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-semantic-cluster)
 
 ![semanticcluster](sqldiimages/semanticcluster.png)
+
+
+
+### 2.3.3 AI_ANALOGY
 
 The semantic analogy BIF is documented here: 
 [ai_analogy scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-analogy)
