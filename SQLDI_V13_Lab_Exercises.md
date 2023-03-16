@@ -28,11 +28,13 @@ This lab environment is a ZVA image for learning how to use the SQL Data Insight
 ## Access to the ZVA image for SQL Data Insights.
 
 When you receive your signon creditials, they will look something like this.
-________
+
 |URL|User ID for Web browser|IP Address for Remote Desktop|User ID for Remote Desktop|Password|
-________ 	 	 	 	 
+| --- | --- | --- | --- | --- | 	 	 	 
 |https://T-2428-130-198-93-170.ibmztrialmachines.com/	|Administrator	|T-2428-130-198-93-170.ibmztrialmachines.com	|w-2428-k\Administrator	|qufG2d4LiCJG8xvg1B7W!|
-________
+
+
+
 
 [image](https://user-images.githubusercontent.com/98128779/225498597-be16b745-3296-4e69-8fb6-802aabd222b0.png)
 
