@@ -141,6 +141,11 @@ If you have completed all the steps above, then you have verified that SQLDI and
 
 In this lab we will perform some AI-Enabled Queries against the sample table, to become familiar with the Built-In functions for AI provided by Db2.
 
+
+
+### Start with a Semantic Similarity Query
+
+
 ***Press the "Run Query" button***
 
 ![spqldi_finished](sqldiimages/sqldi12.JPG)
@@ -189,6 +194,15 @@ At this point, the SQLDI model is used to support 3 Db2 Built-in-Functions. Howe
 
 
 
+### Experiment with all four of the SQL AI template queries
+
+Review the documentation on each of the functions, and review the template SQL, and execute it.
+
+[ai_similarity scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-similarity)
+
+[ai_semantic cluster scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-semantic-cluster)
+
+[ai_analogy scalar function](https://www.ibm.com/docs/en/db2-for-zos/13?topic=functions-ai-analogy)
 
 
 
