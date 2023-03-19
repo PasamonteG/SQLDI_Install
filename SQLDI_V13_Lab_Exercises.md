@@ -103,9 +103,14 @@ Double click on the putty icon to open an ssh session with z/OS USS. Load the wg
 * type sqldi.sh start, to start SQL Data Insights
 
 
-![aidbadm](sqldiimages/aidbadmssh.png) 
+![aidbadmssh](sqldiimages/aidbadmssh.png) 
 
-Open the Chrome Browser and check the spark web UI is showing healthy and active. (spark is deployed as part of the SQLDI instance, and is the environment used by SQLDI to train the models). The URL is bookmarked in the bookmark bar, and is http://wg31.washington.ibm.com:8080 
+Open the Chrome Browser ***from inside the RDP-connected Windows system*** to access the Spark Web UI and the SQLDI web UI. The browsers on your desktop client will NOT connect through to the backend z/OS system. The Spark Web UI and the SQLDI Web UI are both bookmarked from Chrome.
+
+
+![bookmarks](sqldiimages/bookmarks.png) 
+
+You can check the spark web UI is showing healthy and active. (spark is deployed as part of the SQLDI instance, and is the environment used by SQLDI to train the models). The URL is bookmarked in the bookmark bar, and is http://wg31.washington.ibm.com:8080 
 
 ![sparkwebui](sqldiimages/sparkwebui.png) 
 
