@@ -344,6 +344,17 @@ Likewise, Aliases against remote objects (eg: VSAM or IMS data sources connected
 
 Optional Exercise. Define a view against the DSNAIDB.CHURN table, and then enable AI Query against that view. Use SPUFI, Db2 Admin Tool or DB2CLP as you please.
 
+```
+Potential view that you could create as user IBMUSER
+
+create view DSNAIDB.VCHURN01
+(customerid, tenure, contract, paymentmethod, totalcharges)
+as select
+customerid, tenure, contract, paymentmethod, totalcharges
+from DSNAIDB.CHURN ;
+
+```
+
 
 ## Lab #5 Review the underlying configuration that is required to support SQLDI
 
