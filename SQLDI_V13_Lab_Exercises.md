@@ -94,9 +94,9 @@ Once you connect to the ZVA image, you will see a Windows desktop. You will be u
 
 ![desktop](sqldiimages/desktop.png)
 
-Double click on the putty icon to open an ssh session with z/OS USS. load the wg31 profile, and press "open"
+Double click on the putty icon to open an ssh session with z/OS USS. Load the wg31 profile. Depending on your device, you will probably want to increase the default font size (16 point courier new is suggested). Press "open"
 
-![puttyconfig](sqldiimages/puttyconfig.png) 
+![puttyconfig](sqldiimages/setupputty.png) 
 
 * Login as aidbadm ( password aidbadm ).
 * type bash, to enter the bash shell
