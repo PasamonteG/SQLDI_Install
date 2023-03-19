@@ -129,7 +129,7 @@ User IBMUSER, password SYS1
 ***Connect to DBDG***
 The Db2 V13 database has already been defined to this SQLDI instance. You can click on the "dots" icon and the right to connect to it, edit the connection parameters, list AI objects, or disconnect from it.
 
-
+ 
 ![sqldiconnect](sqldiimages/sqldiconnect.png)
 
 ***DSNAIDB.CHURN is already AI-enabled***
