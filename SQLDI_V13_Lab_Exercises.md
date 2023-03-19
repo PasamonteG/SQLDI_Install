@@ -137,12 +137,15 @@ Connect to Db2 subsystem DBDG, and then List AI objects. You should see DSNAIDB.
 
 ![spqldi_finished](sqldiimages/sqldi12.JPG)
 
-    A word about stuff
-    kjhlku kh uoy; lh ;uh;oiu ;li uj hl
-    lkjh l;jh ;lhl;kh l;k j;lkj
-    And so forth
+Before we progress to Lab #2, it's worth taking a moment to look at the structure and contents of the DSNAIDB.CHURN table. It is a synthethic dataset listing the characteristics of the customers of a telecommunications company, plus a "labe" indicating whether the account has been lost (CHURN='YES') or whether it is still active (CHURN='NO').
 
+The DDL for the table is as follows
 
+![churnddl](sqldiimages/churnddl.png)
+
+The customer characteristics contain a mixture of information about personal status, scope of services provided, billing amount and billing method. A data scientist, or a business analyst might want to examine any patterns in this data to identify patterns that tend to lead to good or bad outcomes. A bad outcome might be whether the client cancelled their contract. A good outcome might be a higher than average billing revenue. 
+
+It's not the greatest data science dataset, but we are using it for this Lab exercise because it is the sample that is shipped with SQLDI.
 
 
 If you have completed all the steps above, then you have verified that SQLDI and DB2 are started and ready to receive your queries.
