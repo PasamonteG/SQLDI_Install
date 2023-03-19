@@ -137,6 +137,13 @@ Connect to Db2 subsystem DBDG, and then List AI objects. You should see DSNAIDB.
 
 ![spqldi_finished](sqldiimages/sqldi12.JPG)
 
+    A word about stuff
+    kjhlku kh uoy; lh ;uh;oiu ;li uj hl
+    lkjh l;jh ;lhl;kh l;k j;lkj
+    And so forth
+
+
+
 
 If you have completed all the steps above, then you have verified that SQLDI and DB2 are started and ready to receive your queries.
 
