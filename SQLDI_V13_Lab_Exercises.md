@@ -71,7 +71,7 @@ Db2 z/OS V13 will be started already. It's connection details are
 
 SQL Data Insights has already been installed, configured and tested. A Db2 z/OS table has been "AI-Enabled" already. SQLDI and Spark have not been started since IPL.
 
-The outline of the Lab Exercises in the rest of this document is as follows
+The outline of the Lab Exercises in the rest of this document is as follows 
 
 1. Start SQLDI, and view the Web User Interfaces for SQLDI and Spark
 2. Perform some AI-Enabled Queries against the sample table, to become familiar with the Build-In functions for AI provided by Db2
