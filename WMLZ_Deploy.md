@@ -83,6 +83,12 @@ Nothing to do, Good to go.
 
 ## Step 5	Installing WMLz, including the bundled IzODA (Spark, Anaconda, and MDS) (Sysprog with USS skills) 
 
+Review the [KC_Link](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-installing)
+
+The SMP/E program installs WMLz in the default /usr/lpp/IBM/aln/v2r4 directory, which is referred as $IML_INSTALL_DIR. The directory structure should look similar to the following example:
+
+![usspaths](sqldiimages/usspaths.JPG)
+
 ## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	 
 
 ## Step 7	Configuring additional user IDs	(Sysprog with USS & Security skills)
