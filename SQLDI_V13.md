@@ -7,6 +7,13 @@ However, this document is written in a generic way, so that it can be helpful to
 
 **Note** This document is a worked example, written as a simple "getting started" scenario. It should be used in conjunction with the official Db2 z/OS product documentation, which is referenced at the end of this document.
 
+## Two Documents
+
+There are two documents covering SQL Data Insights V13
+
+1. ***This*** document, the SQLDI_V13_Deployment document, which is an audit trail of how to deploy SQL Data Insights V13
+2. The [Lab_Exercises](https://github.com/zeditor01/collidingworlds/blob/main/SQLDI_V13_Lab_Exercises.md) document, which should be used in conjunction with the ZVA-provisioned image for taking and SQLDI test drive.
+
 
 ## Contents
 
@@ -101,13 +108,49 @@ Deploying an SQLDI instance takes about 5 minutes. The hard work is lining up al
 The comprehensive guide is found in the Db2 z/OS V13 Knowledge Centre [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-installing-configuring-sql-di).
 The goal of this document is provide an easy-to-consume worked example, which will help you consume the Knowledge Centre.
 
+This document breaks the SQLDI deployment process down into 10 steps, as follows
+1. Verify the z/OS AI libraries have beebn installed.
+2. Verify that the SQLDI SMPE installation was successful, and the code is mounted in USS.
+3. Setup a RACF userid and Grouop for the SQLDI instance owner
+4. Set the USS environment variables for the SQLDI instance owner
+5. Create a RACF Keyring and Certificate for authentication of the SQLDI instance
+6. Create a Huge ZFS for the SQLDI instance to be deployed in (bare minimum 4GB)
+7. Create the Catalog Tables and Procedures used by SQLDI
+8. Create the Sample Table for the installation verification test
+9. Check whether the SQLDI default ports are avaiable, or need to be changed
+10. Create the SQLDI instance
+
+
 All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
 ![sdisetup](sqldiimages/sdisetup.JPG)
 
 
 ![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
-Open an ssh session into USS, and navigate to /usr/lpp/IBM/aie
+You can use SMPE to check whether the following maintainance has been applied to the z/OS and Db2 CSI target zones.
+
+```
+IBM z/OS 2.5 or 2.4.
+
+Verify that data set SYS1.SIEALNKE and CEE.SCEERUN2 are APF authorized and accessible by Db2. See z/OS 2.5 program directory or z/OS 2.4 program directory for instructions.
+IBM Z Deep Neural Network Library (zDNN), including the Z AI Optimization Library (zAIO) and the Z AI Data Embedding Library (zADE), by applying the following APARs for z/OS:
+
+    For z/OS 2.5, apply OA62901, OA62902, and OA62903.
+    For z/OS 2.4, apply OA62849, OA62886, and OA62887.
+
+z/OS Supervisor with APAR OA62728 for both z/OS 2.5 and 2.4.
+IBM OpenBLAS by applying the following APARs for z/OS:
+
+    For z/OS 2.5, apply PH45672, PH44479, and PH46862.
+    For z/OS 2.4, apply PH45663, PH44479, and PH46862.
+
+IBM Db2 13 for z/OS (5698-DB2 or 5698-DBV) with APAR PH49781 applied.
+z/OS OpenSSH. See z/OS OpenSSH for instructions.
+IBM 64-bit SDK for z/OS Java™ Technology Edition Version 8 SR7 FP11 or later.
+```
+
+And you can eyeball whether the USS paths have been populated with the contents of that maintenance.
+Open an ssh session into USS (as IBMUSER/SYS1), and navigate to /usr/lpp/IBM/aie
 
 You should expect to find 5 sub-directories, each with contents provided from the installation of the z/OS PTFs.
 
