@@ -5,8 +5,11 @@ These are the WMLZ moving parts.
 ![wmlzarch](sqldiimages/wmlzarch.JPG)
 
 
-There are the 21 implementation steps for WMLZ V2.4  [link](https://user-images.githubusercontent.com/98128779/228740270-37b5dd22-03f1-41d8-9aa9-f0d849eb7eb3.png)
-.
+There are the 21 implementation steps for WMLZ V2.4  
+
+The [KC_Link](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=installation-roadmap) 
+
+
 
 ```
 Step 1	Preparing for WMLz installation	(Sysprog, WMLz user)	 
