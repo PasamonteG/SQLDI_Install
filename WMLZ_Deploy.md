@@ -79,6 +79,8 @@ Ordered WMLZ Portable Software Instance from ShopZ. Good to go.
 
 ## Step 4	Procuring, installing, and configuring prerequisites for WMLz (Sysprog with USS skills)	 
 
+Nothing to do, Good to go. 
+
 ## Step 5	Installing WMLz, including the bundled IzODA (Spark, Anaconda, and MDS) (Sysprog with USS skills) 
 
 ## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	 
