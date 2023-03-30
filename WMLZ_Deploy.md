@@ -41,9 +41,41 @@ So, Tally Ho, Lets get on with it.
 
 ## Step 1	Preparing for WMLz installation	(Sysprog, WMLz user)	
 
+[KC_pereqs_page](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-installing-prerequisites) 
+
+***System*** z16, z15™, z14, z13®, or zEnterprise® EC12 system. ( I've got ZVDT & ZPDT, which emulate these bad boys ).
+
+***z/OS*** z/OS 2.5 or 2.4. Bingo : z/OS V2.5 
+
+***PTFs*** For z/OS 2.5, apply PTFs UI64830, UI64837, and UI64940. (all applied for SQLDI)
+
+***zDNN*** For z/OS 2.5, apply APARs OA62901, OA62902, and OA62903. (all applied for SQLDI)
+ 
+***z/OS Integrated Cryptographic Service Facility (ICSF).*** Make sure that the ICSF component is properly configured and started. 
+Yup - standard part of ADCD.
+
+***z/OS OpenSSH***. See z/OS OpenSSH for instructions. Yup
+
+***IBM 64-bit SDK for z/OS Java*** Yup Version 8 SR6 FP25 or later.
+
+***Db2® 12 for z/OS*** or later. Yup V12 & V13
+
+***CICS TS for z/OS 5.6.0*** with PTFs UI77466, UI80396 and UI80397 or later only if you plan to configure and run a scoring service in a CICS region. Yup.
+
+***IBM z/OS Container Extensions 2.4*** with PTF OA59111 applied ( PTF not found in MVST )
+
+So, we're good to go for everything except zCX 
+
+
+
 ## Step 2	Planning system capacity for WMLz	(Sysprog, WMLz user)	
 
+***Planning system capacity*** Ha ha ( 4 zIIPs, 1 GCP, 100GB memory, 100GB DASD ). Can emulate everything except 100GB memory.
+Probably be OK.
+
 ## Step 3	Obtaining SMP/E image and PTFs for WMLz	z/OS (Sysprog)	 
+
+Ordered WMLZ Portable Software Instance from ShopZ. Good to go. 
 
 ## Step 4	Procuring, installing, and configuring prerequisites for WMLz (Sysprog with USS skills)	 
 
