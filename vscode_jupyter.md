@@ -28,10 +28,10 @@ Contents
 
 ## 1. Install Anaconda
 
-Install Anaconda
-[anaconda download](https://www.anaconda.com/)
+Install Anaconda from here [anaconda download](https://www.anaconda.com/)
 
-Open the anaonda prompt
+Open the anaonda prompt:
+
 ![Anaonda_Prompt_Start](/vscodeimages/anaconda_prompt.JPG)
 
 from the anaconda prompt, install the Jupyter kernel
@@ -59,7 +59,7 @@ conda env list
 
 Note: after re-booting your PC, the environment slips back to base
 
-~[condaenvlist](/vscodeimages/condaenvlist.JPG)
+![condaenvlist](/vscodeimages/condaenvlist.JPG)
 
 
 ## 2. Install ipykernel (Jupyter kernel)
