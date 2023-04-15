@@ -28,6 +28,40 @@ Contents
 
 ## 1. Install Anaconda
 
+Install Anaconda
+[anaconda download](https://www.anaconda.com/)
+
+Open the anaonda prompt
+![Anaonda_Prompt_Start](/vscodeimages/anaconda_prompt.JPG)
+
+from the anaconda prompt, install the Jupyter kernel
+
+```
+conda install ipykernel 
+```
+
+## 2. Setup conda environments
+
+You want to create different environments, with different library imports for different purposes. 
+The sequences of commands below lists the existing environments, creates a new one (cw01), and activates it.
+
+```
+conda --version
+
+conda env list
+
+conda create --name cw01
+
+conda activate cw01
+
+conda env list 
+```
+
+Note: after re-booting your PC, the environment slips back to base
+
+~[condaenvlist](/vscodeimages/condaenvlist.JPG)
+
+
 ## 2. Install ipykernel (Jupyter kernel)
 
 ## 3. Install VSCODE
@@ -40,9 +74,7 @@ Contents
 
 ## 6. installs, imports and constructs to access Db2
 
-Install Anaconda
-anaconda prompt:
-conda install ipykernel 
+
 
 code.visualstudio.com
 download & install
@@ -52,15 +84,6 @@ View - command pallette
 create new jupyter notebook
 
 
-conda --version
-
-conda env list
-
-conda create --name cw01
-
-conda activate cw01
-
-conda env list 
 
 
 
