@@ -24,7 +24,7 @@ Contents
 * The youtube video below covers the basic flow of running Jupyter in VSCODE
 * The correct mix of commands to work with Db2 are my own notes
 
-![youtube video](https://www.youtube.com/watch?v=h1sAzPojKMg)
+[youtube video](https://www.youtube.com/watch?v=h1sAzPojKMg)
 
 ## 1. Install Anaconda
 
