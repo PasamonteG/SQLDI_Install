@@ -7,6 +7,16 @@ The following datasets are currently being used for Colliding Worlds demonstrati
 3. Penguins (A Classical data science sample data)
 4. Irises (Another Classical data science sample data)
 
+## 1. CHURN dataset. 
 
-[kagglelink](https://www.kaggle.com/datasets/ealtman2019/credit-card-transactions)
+This one w
+
+## 2. Credit Card Fraud.  
+
+
+## 3. Penguins  
+
+
+## 4. Irises  
+
 
