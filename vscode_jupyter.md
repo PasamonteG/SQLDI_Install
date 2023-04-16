@@ -156,11 +156,10 @@ Finally, we can use the %sql and %%sql commands to perform SQL connect, select a
 
 ![sql1](/vscodeimages/sql1.JPG)
 
-
 %sql only allows for a single statement to be executed, while the %%sql allows a block of SQL to be executed
-
 
 ![sql2](/vscodeimages/sql2.JPG)
 
-
 To learn more about using db2magic, please check out the [db2magic documentation](https://ibm.github.io/db2-jupyter/linevscell/))
+
+That's it!
