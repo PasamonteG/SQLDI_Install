@@ -68,6 +68,155 @@ Transactions
 ![transactions](/datasetimages/transactions.JPG)
 
 
+Create DDL based on CSV Contents
+
+```
+drop table CREDIT.USERS;
+drop table CREDIT.CARDS;
+drop table CREDIT.TXNS;
+drop DATABASE CREDIT ;
+
+CREATE DATABASE "CREDIT"
+	BUFFERPOOL BP0
+	INDEXBP BP0
+	STOGROUP SYSDEFLT
+	CCSID EBCDIC;
+
+CREATE  TABLESPACE "TSUSERS"
+	IN CREDIT
+	USING STOGROUP SYSDEFLT
+	  PRIQTY 7200
+	  SECQTY 14400
+	PCTFREE 0
+	TRACKMOD NO
+	SEGSIZE 64
+	BUFFERPOOL BP0
+	CCSID EBCDIC
+	CLOSE NO
+	LOCKMAX SYSTEM
+	LOCKSIZE ANY
+	MAXROWS 255;
+
+CREATE  TABLESPACE "TSCARDS"
+	IN CREDIT
+	USING STOGROUP SYSDEFLT
+	  PRIQTY 7200
+	  SECQTY 14400
+	PCTFREE 0
+	TRACKMOD NO
+	SEGSIZE 64
+	BUFFERPOOL BP0
+	CCSID EBCDIC
+	CLOSE NO
+	LOCKMAX SYSTEM
+	LOCKSIZE ANY
+	MAXROWS 255;
+	
+CREATE  TABLESPACE "TSTXNS"
+	IN CREDIT
+	USING STOGROUP SYSDEFLT
+	  PRIQTY 7200
+	  SECQTY 14400
+	PCTFREE 0
+	TRACKMOD NO
+	SEGSIZE 64
+	BUFFERPOOL BP0
+	CCSID EBCDIC
+	CLOSE NO
+	LOCKMAX SYSTEM
+	LOCKSIZE ANY
+	MAXROWS 255;
+
+create table CREDIT.USERS (
+Person_ID integer ,
+Person CHAR(40),	
+Current_Age	INTEGER,
+Retirement_Age INTEGER,
+Birth_Year INTEGER,
+Birth_Month	 INTEGER,
+Gender CHAR(10),	
+Address	CHAR(100),
+Apartment CHAR(10),
+City CHAR(40),	
+State CHAR(2),	
+Zipcode INTEGER,
+Latitude DECIMAL(5,2),
+Longitude	 DECIMAL(5,2),
+Per_Capita_Income_Zipcode	INTEGER,
+Yearly_Income_Person	INTEGER,
+Total_Debt	INTEGER,
+FICO_Score	INTEGER,
+Num_Credit_Cards INTEGER)
+IN "CREDIT"."TSUSERS"
+AUDIT NONE
+DATA CAPTURE NONE
+CCSID EBCDIC
+;
+
+CREATE UNIQUE INDEX CREDIT.USERS_IX1 ON CREDIT.USERS(Person_ID) ;
+
+create table CREDIT.CARDS (
+Person_ID integer,
+CARD_INDEX integer, 
+Card_Brand CHAR(20), 
+Card_Type CHAR(20), 
+Card_Number BIGINT, 
+Expires CHAR(10), 
+CVV integer, 
+Has_Chip CHAR(3), 
+Cards_Issued integer, 
+Credit_Limit integer, 
+Acct_Open_Date CHAR(10),
+Year_PIN_last_Changed integer, 
+Card_on_Dark_Web CHAR(3)) 
+IN "CREDIT"."TSCARDS"
+AUDIT NONE
+DATA CAPTURE NONE
+CCSID EBCDIC
+;
+
+CREATE UNIQUE INDEX CREDIT.CARDS_IX1 ON CREDIT.CARDS(Person_ID, CARD_INDEX) ;
+
+create table CREDIT.TXNS (
+Person_ID integer,
+CARD_INDEX integer, 
+Year integer,
+Month integer,
+Day integer,
+Time CHAR(5),
+Amount DECIMAL(9,2),
+Use_Chip CHAR(25),
+Merchant_Name CHAR(20),
+Merchant_City CHAR(40),
+Merchant_State VARCHAR(100),
+Zip integer,
+MCC integer,
+Errors VARCHAR(100),
+Is_Fraud CHAR(3) ) 
+IN "CREDIT"."TSTXNS"
+AUDIT NONE
+DATA CAPTURE NONE
+CCSID EBCDIC
+;
+
+```
+
+And load from Windows Db2 CLP with import statements. Single IXF file for users and cards. Txns split into 2000 separate IXF files for import kludge.
+
+```
+import from users.ixf of ixf insert into credit.users ;
+
+import from cards.ixf of ixf insert into credit.cards ;
+
+import from txns0.ixf of ixf insert into credit.txns ;
+import from txns1.ixf of ixf insert into credit.txns ;
+import from txns2.ixf of ixf insert into credit.txns ;
+import from txns3.ixf of ixf insert into credit.txns ;
+import from txns4.ixf of ixf insert into credit.txns ;
+import from txns5.ixf of ixf insert into credit.txns ;
+
+```
+
 
 ## 3. Penguins and Iris
 
