@@ -89,7 +89,9 @@ The SMP/E program installs WMLz in the default /usr/lpp/IBM/aln/v2r4 directory, 
 
 ![usspaths](wmlzimages/usspaths.JPG)
 
-The April 2023 download is missing
+The April 2023 download 
+1. is missing the IMIzOS.properties directory.
+2. includes /Z25C/usr/lpp/IBM/aln/v2r4/usr/extension/installableApps/scoring-wola.war
 
 
 
