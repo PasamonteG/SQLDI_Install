@@ -365,28 +365,95 @@ merge these instructions with my own PAGENT instructions at a later time
         
 ## Step 10	Configuring WMLz (Sysprog with USS skills)
 
+Locate the configtool.sh script in the $IML_INSTALL_DIR/iml-utilities/configtool directory.
+
+```
+./configtool.sh start
+
+or
+
+./configtool.sh start --no-python
+```
+
+* IP Address and Port
+* the script will display the full URL for the web user interface (UI) of the configuration tool and the access token required by the web UI.
+* On the Environment readiness page, verify that your system and environment are ready for configuration.
+* On the Authentication page, decide if you want to enable the AT-TLS support and then select a keystore for secure communications and user authentication
+* On the Metadata repository page, specify a Db2 for z/OS system and schema name for WMLz metadata objects
+* On the UI and core services page, specify the port number for your UI service, specify the port number for WMLz core services, set the password for the default user admin, and add one user as a WMLz system administrator
+* On the Runtime environment page, specify the default runtime environment for WMLz that includes both Spark and Python runtime engines.
+* On the Db2 anomaly detection service page, specify if you want to enable the service for the optional anomaly detection solution.
+* On the Review and configure page, review all your settings, correct any error, and configure WMLz and services.
+        
+        
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
 
+Optional for ONNX models
+        
+```
+./onnx-compiler.sh create
+```
+        
+        
 ## Step 12	Configuring Python runtime environment ... Optional (Sysprog with USS skills)	
 
+Optional - WML for z/OS uses the Python packages of z/OS Anaconda, a core IzODA component, for model training.
+
+```
+./create-python-runtime.sh
+```
+        
+        
 ## Step 13	Configuring client authentication for z/OS Spark  ... Optional (Sysprog with USS skills)	
 
+Optional - z/OS Spark includes a client authentication option for securing all connections to the Spark master and REST ports.
+        
+        
 ## Step 14	Configuring WML for z/OS scoring services (Sysprog with USS skills)	
 
-        Configuration method: administration dashboard ; interactive shell scripts 
+Configuration method: administration dashboard ; interactive shell scripts 
+        
+        
+### A standalone scoring service locally on the WMLz system (Non-HA, Standalone)
+        
+Sign in the WML for z/OS administration dashboard at https://<yourWMLzUI-URL>/admin-dashboard/configure by using your WMLz UI username and password.
+
+From the sidebar, navigate to the System management - Scoring services page. 
+    
+Click Add standalone scoring service ...
+        
+        
+### A standalone CICS scoring service locally on the WMLz system (Non-HA, Standalone)
+        
+Sign in the WML for z/OS administration dashboard at https://<yourWMLzUI-URL>/admin-dashboard/configure by using your WMLz UI username and password.
+
+From the sidebar, navigate to the System management - Scoring services page. 
+    
+Click Add standalone scoring service ...        
+        
         
 ## Step 15	Configuring WML for z/OS scoring services in a CICS region	... Optional (Sysprog with USS skills; CICS skills) 
 
 ## Step 16	Configuring scoring services for high availability ...	Optional	(Sysprog with USS skills; Network skills)	
 
+n/a 
+        
 ## Step 17	Configuring Db2 anomaly detection solution	... Optional (Sysprog with USS skills)
 
+later
+        
 ## Step 18	Configuring WMLz for high performance ...	Optional (Sysprog with USS skills)	
 
+n/a 
+        
 ## Step 19	Configuring a WMLz cluster for high availability	... Optional	(Sysprog with USS skills) 
 
+n/a 
+        
 ## Step 20	Configuring a standalone Jupyter notebook server	... Optional	(Sysprog with USS skills) 
 
+n/a
+        
 ## Step 21	Verifying WMLz installation and configuration	... Optional	(Sysprog with USS skills)
 
 
