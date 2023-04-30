@@ -268,8 +268,100 @@ lots of overlap with SQLDI to manage
         
         
 ## Step 9	Configuring secure network communications for WMLz	(Sysprog with USS & Security skills)
-        Security mechanisms: AT-TLS policy ; Keyring-based keystore ; File-based keystore
+
+* Security mechanisms: AT-TLS policy ; Keyring-based keystore ; File-based keystore
         
+By default, WML for z/OS uses SSL to secure network connections and authenticate users. You can further strengthen the security of your network communications by leveraging the Application Transparent Transport Layer Security (AT-TLS) capability on z/OS.
+        
+### Configuring a keyring-based keystore (JCERACFKS) for WMLz        
+
+Create Keyring
+```
+RACDCERT ADDRING(WMLZRING) ID(WMLZID)
+```
+
+Generate a CA (certificate authority) certificate        
+        
+```
+RACDCERT GENCERT CERTAUTH +  
+SUBJECTSDN( + 
+      CN('PLEXE2') + 
+      C('US') + 
+      SP('CA') + 
+      L('SAN JOSE') + 
+      O('IBM') + 
+      OU('WMLZ') + 
+) + 
+ALTNAME( + 
+      EMAIL('user1@ibm.com') + 
+) +  
+WITHLABEL('WMLZCACert') +  
+NOTAFTER(DATE(2030/01/01))
+```
+
+        
+Generate and sign a user certificate for <mlz_setup_userid>        
+        
+```
+RACDCERT GENCERT ID(WMLZID) + 
+SUBJECTSDN( + 
+      CN('PLEXE2') +  
+      C('US') + 
+      SP('CA') +  
+      L('SAN JOSE') + 
+      O('IBM') +
+      OU('WMLZ-USER') +   
+) +  
+ALTNAME( + 
+      IP(9.1.2.3) +
+      DOMAIN('svl.ibm.com') +
+      EMAIL('user1@ibm.com') + 
+) + 
+WITHLABEL('WMLZCert_WMLZID') +  
+SIGNWITH(CERTAUTH LABEL('WMLZCACert')) + 
+NOTAFTER(DATE(2022/01/01)) 
+```
+        
+Connect the user certificate and the CA certificate to the keyring you created and add usage options
+  
+```
+
+RACDCERT ID(WMLZID) CONNECT(CERTAUTH LABEL('WMLZCACert') +     
+RING(WMLZRING))                                  
+
+RACDCERT ID(WMLZID) CONNECT(ID(WMLZID) LABEL('WMLZCert_WMLZID') + 
+RING(WMLZRING) USAGE(PERSONAL) DEFAULT)                 
+
+```
+
+        
+Grant <mlz_setup_userid> permission to access the keyring and the CA certificate
+        
+```
+
+RDEFINE FACILITY IRR.DIGTCERT.LIST UACC(NONE)
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(<mlz_setup_userid>) ACCESS(READ)
+SETROPTS RACLIST(FACILITY) REFRESH            
+
+```        
+
+<mlz_setup_userid> must also have the READ or UPDATE authority to the <ringOwner>.<ringName>.LST resource in the RDATALIB class        
+        
+```
+
+RDEFINE RDATALIB WMLZID.WMLZRING.LST UACC(NONE) 
+SETROPTS CLASSACT(RDATALIB) RACLIST(RDATALIB) 
+SETROPTS CLASSACT(RDATALIB)
+PERMIT WMLZID.WMLZRING.LST CLASS(RDATALIB) ID(<mlz_setup_userid>) ACCESS(READ)
+SETROPTS RACLIST(RDATALIB) REFRESH
+```
+
+        
+### Optional for Encryption - Configuring AT-TLS for secure network connections with WMLz
+
+merge these instructions with my own PAGENT instructions at a later time
+
+
         
 ## Step 10	Configuring WMLz (Sysprog with USS skills)
 
