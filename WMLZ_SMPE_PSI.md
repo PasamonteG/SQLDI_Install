@@ -17,6 +17,21 @@ SGEXTEAV - for SQLDI and WMLZ instances - EAV001 - EAV004 - all 3390-27
 
 D:\ZSHOP_PSI\WMLZ_V24_APR2023
 
+## Big ZFS Cluster ( 20GB many volumes )
+
+```
+DEFINE -                                                
+     CLUSTER -                                          
+       ( -                                              
+           NAME(IBMUSER.PSI.ZFS) -                      
+           LINEAR -                                     
+           CYL(4000 500) VOLUME(USER0A USER0B USER0C) - 
+           DATACLASS(DCEXTEAV) -                        
+           SHAREOPTIONS(3) -                            
+       )   
+```
+
+
 ## zOSMF workflow to install the PSI
 
 Words
@@ -37,9 +52,62 @@ Word
 
 Word
 
+![/psi_step5](wmlzimages/psi_step5.JPG)
 
+Word
 
+![/psi_step6](wmlzimages/psi_step6.JPG)
 
+Word
 
+![/psi_step7](wmlzimages/psi_step7.JPG)
 
+Word
+
+![/psi_step8](wmlzimages/psi_step8.JPG)
+
+Word
+
+![/psi_step9](wmlzimages/psi_step9.JPG)
+
+Word
+
+![/psi_step10](wmlzimages/psi_step10.JPG)
+
+Word
+
+![/psi_step11](wmlzimages/psi_step11.JPG)
+
+Word
+
+![/psi_step12](wmlzimages/psi_step12.JPG)
+
+Word
+
+![/psi_step13](wmlzimages/psi_step13.JPG)
+
+Word
+
+![/psi_step14](wmlzimages/psi_step14.JPG)
+
+Word
+
+![/psi_step15](wmlzimages/psi_step15.JPG)
+
+Word
+
+![/psi_step16](wmlzimages/psi_step16.JPG)
+
+Word
+![/psi_step17](wmlzimages/psi_step17.JPG)
+
+Word
+
+![/psi_step18](wmlzimages/psi_step18.JPG)
+
+Word
+
+## Post Deploymemt Workflows
+
+Word
 
