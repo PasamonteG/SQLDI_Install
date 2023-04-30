@@ -19,6 +19,25 @@ D:\ZSHOP_PSI\WMLZ_V24_APR2023
 
 ## zOSMF workflow to install the PSI
 
+Words
+
+![/psi_step1](wmlzimages/psi_step1.JPG)
+
+Word
+
+![/psi_step2](wmlzimages/psi_step2.JPG)
+
+Word
+
+![/psi_step3](wmlzimages/psi_step3.JPG)
+
+Word
+
+![/psi_step4](wmlzimages/psi_step4.JPG)
+
+Word
+
+
 
 
 
