@@ -34,78 +34,114 @@ DEFINE -
 
 ## zOSMF workflow to install the PSI
 
-Words
+
+Upload the PSI from D:\ZSHOP_PSI\WMLZ_V24_APR2023 to /u/smpe/smppsi/wmlz 
+
 
 ![/psi_step1](wmlzimages/psi_step1.JPG)
 
-Word
+
+Switch to Deployments and start the deployment checklist
+
+
 
 ![/psi_step2](wmlzimages/psi_step2.JPG)
 
-Word
+Deployment Properties
+
+
 
 ![/psi_step3](wmlzimages/psi_step3.JPG)
 
-Word
+Type of Deployment = PSI
+
+
 
 ![/psi_step4](wmlzimages/psi_step4.JPG)
 
-Word
+Create a New CSI
+
+
 
 ![/psi_step5](wmlzimages/psi_step5.JPG)
 
-Word
+Start Configure Deployment Checklist
+
 
 ![/psi_step6](wmlzimages/psi_step6.JPG)
 
-Word
+DLIBs = Yes Please
+
 
 ![/psi_step7](wmlzimages/psi_step7.JPG)
 
-Word
+
+Use the Source Model (for SMPE zones)
+
+
 
 ![/psi_step8](wmlzimages/psi_step8.JPG)
 
-Word
+Accept Target and Distribution Zone names
+
+
 
 ![/psi_step9](wmlzimages/psi_step9.JPG)
 
-Word
+Modify HLQ of Libraries and create datasets in Store Class SCUSER
+
+
 
 ![/psi_step10](wmlzimages/psi_step10.JPG)
 
-Word
+Accept the Master ICF Catalog
+
+
 
 ![/psi_step11](wmlzimages/psi_step11.JPG)
 
-Word
+Not sure why volmes and storage classes report was empty
+
+
 
 ![/psi_step12](wmlzimages/psi_step12.JPG)
 
-Word
+Override USS Paths to ZFS mounted ZFS files systems
+
+
 
 ![/psi_step13](wmlzimages/psi_step13.JPG)
 
-Word
+Specify PDS for JCLs
+
 
 ![/psi_step14](wmlzimages/psi_step14.JPG)
 
-Word
+
+Submit Deployment Jobs
+
+
 
 ![/psi_step15](wmlzimages/psi_step15.JPG)
 
-Word
+Override Complete for the optional RACF definitions; Submit and verify the rest.
+
 
 ![/psi_step16](wmlzimages/psi_step16.JPG)
 
-Word
+
+Post Installation Workflows - Your Order workflow is just motherhood and apple pie
+
+
+
 ![/psi_step17](wmlzimages/psi_step17.JPG)
 
-Word
+Post Deploy Workflow is important. Especially the RACF stuff (2), the Parmlib stuff (3) and thePARMLIB stuff (4) and the completion of SMPE zone.
+
 
 ![/psi_step18](wmlzimages/psi_step18.JPG)
 
-Word
+
 
 ## Post Deploymemt Workflows
 
