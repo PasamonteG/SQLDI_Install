@@ -243,6 +243,18 @@ wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
 
 ## Step 7	Configuring additional user IDs	(Sysprog with USS & Security skills)
 
+Ensure that the LE runtime libraries are APF-authorized.
+
+        
+Configure (or reuse) userids for 
+
+* CICS
+* DB2
+* RACF
+* Docker (n/a)        
+
+probably use IBMUSER for all
+        
 ## Step 8	Configuring network ports for WMLz	(Sysprog with USS & Security skills)	
 
 ## Step 9	Configuring secure network communications for WMLz	(Sysprog with USS & Security skills)
