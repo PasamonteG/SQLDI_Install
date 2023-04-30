@@ -10,6 +10,11 @@ There are the 21 implementation steps for WMLZ V2.4
 The [KC_Link](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=installation-roadmap) 
 
 
+
+
+
+
+
 ```
 Step 1	Preparing for WMLz installation	(Sysprog, WMLz user)	 
 Step 2	Planning system capacity for WMLz	(Sysprog, WMLz user)	 
@@ -257,6 +262,11 @@ probably use IBMUSER for all
         
 ## Step 8	Configuring network ports for WMLz	(Sysprog with USS & Security skills)	
 
+Ports Docco from [KC](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-ports) 
+
+lots of overlap with SQLDI to manage
+        
+        
 ## Step 9	Configuring secure network communications for WMLz	(Sysprog with USS & Security skills)
         Security mechanisms: AT-TLS policy ; Keyring-based keystore ; File-based keystore
         
