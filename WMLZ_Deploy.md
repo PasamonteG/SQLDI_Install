@@ -148,7 +148,7 @@ To allocate zFS data sets for $IML_HOME and $IML_HOME/spark that are larger than
 
 Configure your z/OS UNIX shell environment for <mlz_setup_userid> ```/u/<mlz_setup_userid>/.profile```
 
-        ```
+```
 Copy the $IML_INSTALL_DIR/alnsamp/profile.template directory into $HOME/.profile for <mlz_setup_userid>.
 /usr/lpp/IBM/aln/v2r4/alnsamp/profile.template
 set 
