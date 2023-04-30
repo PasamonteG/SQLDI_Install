@@ -560,3 +560,71 @@ TYPE(ZFS) MODE(RDWR)
 //*
 
 ```
+
+Notes on ZFS
+
+```
+Step will run IEBUPDTE to create a BPXPRMPS member in your PARMLIB dataset with the new filesystem structure.
+>>> WMLZ.CPAC.PARMLIB
+
+USER.Z25C.PARMLIB(BPXPRMZZ)
+===========================
+/* WMLZ ZFS */                                   
+MOUNT FILESYSTEM('WMLZ.OMVS.SALNROOT')           
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/aln/v2r4')        
+/* WMLZ ANACONDA */                              
+MOUNT FILESYSTEM('WMLZ.OMVS.SANBZFS')            
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/izoda/anaconda')  
+/* WMLZ SPARK */                                 
+MOUNT FILESYSTEM('WMLZ.OMVS.SAZKROOT')           
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/izoda/spark')     
+
+IBMUSER:/Z25C/usr/lpp/IBM/aln/v2r4: >ls
+IBM            bin            extra          iml-onnx       iml-utilities  node_modules   usr
+README         cics-scoring   iml-db2ads     iml-portal     iml-zostools   nodejs         wlp
+alnsamp        configuration  iml-library    iml-services   imlpython      sparkaas
+ 
+IBMUSER:/Z25C/usr/lpp/IBM/izoda: >ls
+anaconda  spark
+IBMUSER:/Z25C/usr/lpp/IBM/izoda: >cd anaconda
+IBMUSER:/Z25C/usr/lpp/IBM/izoda/anaconda: >ls
+2017_ga_pkgs.txt          2020_q2_links             2022_alivy_sec1.txt       conda-meta
+2018_q1_pkgs.txt          2020_q2_pkgs.txt          2022_alivy_sec1_links     configure-anaconda
+2018_q3_links             2020_q2_pkgsn.txt         2022_alivy_sec2.txt       configure-anaconda-r
+2018_q3_pkgs.txt          2020_q4_p1_links          2022_alivy_sec2_links     dsdbc
+2018_sec_links            2020_q4_p2_links          2022_alivy_sec3.txt       envs
+2018_sec_pkgs.txt         2020_q4_pkgs_p1.txt       2022_alivy_sec3_links     etc
+2018_sec_pkgsn.txt        2020_q4_pkgs_p2.txt       2022_alivy_sec4.txt       ga_pkgs.txt
+2019_q1_links             2021_alivy_sec.txt        2022_alivy_sec4_links     include
+2019_q1_pe0_links         2021_alivy_sec2.txt       2022_q4_bundle_sec.txt    initial-install
+2019_q1_pkgs.txt          2021_alivy_sec2_links     2022_q4_bundle_sec_links  install-march-ptf
+2019_q1_pkgsn.txt         2021_alivy_sec3.txt       2023_alivy_sec1.txt       install_functions
+2019_q2_links             2021_alivy_sec3_links     2023_alivy_sec1_links     install_functions_r
+2019_q2_pkgsn.txt         2021_alivy_sec_links      2023_p1_bundle_sec.txt    lib
+2019_q3_links             2021_amaven_sec.txt       2023_p1_bundle_sec_links  man
+2019_q3_pkgs.txt          2021_amaven_sec_links     CHANGES.md                march_ptf_pkgs.txt
+2019_q3_pkgs36.txt        2021_q1_links             IBM                       pkgs
+2019_q3_r_links           2021_q1_pkgs.txt          README.md                 py37_pkgs.txt
+2019_q4_links             2021_q2_p1_links          README_CONFIGURE.md       r_pkgs.txt
+2019_q4_pkgs.txt          2021_q2_p2_links          README_PYTHON37.md        reinstall
+2019_q4_pkgsn.txt         2021_q2_pkgs_p1.txt       README_R.md               share
+2020_q1_pkgs_py.txt       2021_q2_pkgs_p2.txt       apar_notes.txt            ssl
+2020_q1_pkgs_r.txt        2021_q2_pkgsn.txt         bin                       var
+2020_q1_py_links          2021_q4_links             boot_pkgs.txt
+2020_q1_r_links           2021_q4_pkgsn.txt         change-prefix
+IBMUSER:/Z25C/usr/lpp/IBM/izoda/anaconda: >cd ..
+IBMUSER:/Z25C/usr/lpp/IBM/izoda: >cd spark
+IBMUSER:/Z25C/usr/lpp/IBM/izoda/spark: >ls
+IBM       spark24x
+IBMUSER:/Z25C/usr/lpp/IBM/izoda/spark: >
+
+```
