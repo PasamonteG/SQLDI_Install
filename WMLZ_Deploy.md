@@ -94,7 +94,11 @@ The April 2023 download
 2. includes /Z25C/usr/lpp/IBM/aln/v2r4/usr/extension/installableApps/scoring-wola.war
 
 
+I think I may be missing a couple of pre-reqs. 
+* zCX is optional, and only needed for deep learning models
+* izoda is probably only needed for the WMLZ IDE, which we dont need. Check with Maggie Lin
 
+![zcx_and_izoda](wmlzimages/zcx_and_izoda.JPG)
 
 
 
