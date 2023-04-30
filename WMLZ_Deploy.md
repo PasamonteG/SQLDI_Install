@@ -89,35 +89,17 @@ The SMP/E program installs WMLz in the default /usr/lpp/IBM/aln/v2r4 directory, 
 
 ![usspaths](wmlzimages/usspaths.JPG)
 
-![psiupload](wmlzimages/psiupload.JPG)
+The April 2023 download 
+1. is missing the IMIzOS.properties directory.
+2. includes /Z25C/usr/lpp/IBM/aln/v2r4/usr/extension/installableApps/scoring-wola.war
 
-the PSI is 21GB in size. So we'd better make the ZFS 25GB for starters.
 
-Check size of ZFS ( 326 MB )
-```
-IBMUSER:/u/ibmuser/smpe: >df -k /u/ibmuser/smpe
-Mounted on     Filesystem                Avail/Total    Files      Status
-/u/ibmuser/smpe (IBMUSER.SMPE.ZFS)        326255/1027200 4294967251 Available
-```
-increase it by 5 million KB
+I think I may be missing a couple of pre-reqs. 
+* zCX is optional, and only needed for deep learning models
+* izoda is probably only needed for the WMLZ IDE, which we dont need. Check with Maggie Lin
 
-```
-zfsadm grow -aggregate IBMUSER.SMPE.ZFS -size 5000000
+![zcx_and_izoda](wmlzimages/zcx_and_izoda.JPG)
 
-IBMUSER:/u/ibmuser/smpe: >zfsadm grow -aggregate IBMUSER.SMPE.ZFS -size 5000000
-IOEZ00173I Aggregate IBMUSER.SMPE.ZFS successfully grown
-IBMUSER.SMPE.ZFS (R/W COMP): 4298903 K free out of total 5000400
-```
-
-Now it's just under 5GB
-
-```
-IBMUSER:/u/ibmuser/smpe: >df -k /u/ibmuser/smpe
-Mounted on     Filesystem                Avail/Total    Files      Status
-/u/ibmuser/smpe (IBMUSER.SMPE.ZFS)        4298903/5000400 4294967251 Available
-```
-
-Rinse & Repeat.
 
 
 ## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	 
