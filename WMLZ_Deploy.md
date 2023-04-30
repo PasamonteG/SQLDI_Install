@@ -102,7 +102,144 @@ I think I may be missing a couple of pre-reqs.
 
 
 
-## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	 
+## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	
+
+### Create <mlz_setup_userid>
+
+```
+//CREATE JOB (0),'WMLZ RACF',CLASS=A,REGION=0M,
+//             MSGCLASS=H,NOTIFY=&SYSUID
+//*------------------------------------------------------------*/
+//RACF     EXEC PGM=IKJEFT01,REGION=0M
+//SYSTSPRT DD SYSOUT=*
+//SYSTSIN  DD *
+ADDGROUP <mlz_group> OMVS(GID(<group-identifier>)) OWNER(SYS1)
+ADDUSER <mlz_setup_userid> DFLTGRP(<mlz_group>) OMVS(UID(<user-identifier>) HOME(/u/<mlz_setup_userid>) -
+PROGRAM($IML_INSTALL_DIR/iml-zostools/bin/bash)) -
+NAME('WMLZ ID') PASSWORD(<password>) NOOIDCARD
+/*
+```
+
+where
+
+* <mlz_setup_userid> is the user ID that you will use to configure and run WMLz.
+* <mlz_group> is a RACF® group that you will use to associate WML for z/OS users and manage their access.
+* <group-identifier> is the identifier for <mlz_group>.
+* <user-identifier> is the identifier for <mlz_setup_userid>. Do not use UID 0 for <mlz_setup_userid>.
+* $IML_INSTALL_DIR is the directory where WMLz is installed. The default is /usr/lpp/IBM/aln/v2r4.
+
+
+### Paths and ZFS
+
+
+Allocate a minimum of 500 MB disk space to the home directory for <mlz_setup_userid>
+
+Create the $IML_HOME directory. Make sure that $IML_HOME is mounted to a zFS file system with at least 50 GB storage available
+
+Consider creating the $IML_HOME/spark subdirectory  mounted on a separate zFS file system with at least 4 GB storage available.
+
+chown –R <mlz_setup_userid>:<mlz_group> $IML_HOME/
+
+To allocate zFS data sets for $IML_HOME and $IML_HOME/spark that are larger than 4GB, make sure that you specify DFSMS data class with extended format and extended addressability.
+
+
+### USS Environment 
+
+
+Configure your z/OS UNIX shell environment for <mlz_setup_userid> ```/u/<mlz_setup_userid>/.profile```
+
+        ```
+Copy the $IML_INSTALL_DIR/alnsamp/profile.template directory into $HOME/.profile for <mlz_setup_userid>.
+/usr/lpp/IBM/aln/v2r4/alnsamp/profile.template
+set 
+$SPARK_HOME = /usr/lpp/IBM/izoda/spark/spark24x
+$ANACONDA_ROOT = /usr/lpp/IBM/izoda/anaconda 
+$JAVA_HOME = ?SQLDI 
+$IML_HOME = /u/wmlz
+$IML_INSTALL_DIR = /usr/lpp/IBM/aln/v2r4 
+$IML_JOBNAME_PREFIX = WMLZ 
+$AIE_INSTALL_DIR = /usr/lpp/IBM/aie 
+If necessary, set $XL_CONFIG to the xlc.cfg file ... n/a unless using ZCX & DLC 
+
+PATH=$IML_INSTALL_DIR/iml-zostools/bin:$IML_INSTALL_DIR/nodejs/bin:$PATH;
+```
+
+
+### Configure <mlz_setup_userid> access to your z/OS UNIX shell environment
+
+
+#### Permissions required for configuring and starting WMLz:
+
+$IML_HOME environment variable included in the user's profile
+Permission to read and write to the $IML_HOME directory.
+Permission to read and execute to the $IML_INSTALL_DIR. 
+
+$SPARK_HOME environment variables included in the user's profile.
+
+$ANACONDA_ROOT environment variable defined in the user's profile.
+
+$ANACONDA_ROOT/bin defined in the $PATH environment variable in the user's profile.
+
+Permission to read the $ANACONDA_ROOT directory.
+
+$JAVA_HOME/bin defined in the $PATH environment variable in the user's profile.
+
+$IBM_JAVA_OPTIONS environment variable set to -Dfile.encoding=UTF-8 in the user's profile.
+
+Consider using a customized java.security file if all of the following factors apply to you:
+- You select JCERACFKS or JCEKS as the keystore type for your WMLz.
+- The Java security specification ($JAVA_HOME/lib/security/java.security) on the system where your WMLz runs lists IBMJCECCA as the top provider.
+- Your WMLz does not need to use the resources in the ICSF services.
+export IBM_JAVA_OPTIONS="$IBM_JAVA_OPTIONS -Djava.security.properties=$IML_HOME/configuration/java.security"
+
+$_BPXK_AUTOCVT environment variable set to ON in the user's profile.
+
+Read access to the RACF BPX.JOBNAME facility class so that you can assign default jobnames with the ALN prefix to the started WMLz services.
+Read access to the RACF BPX.FILEATTR.PROGCTL facility class when using client authentication for z/OS Spark and Jupyter Kernel Gateway.
+Read access to resources CSFDSG, CSFDSV, CSFEDH, CSFIQA, CSFIQF, CSFOWH, CSFPKG, CSFPKI, CSFPKX, CSFRNG, and CSFRNGL for ICSF services in the CSFSERV class if your system is CryptoCard-enabled.
+
+#### Other Permissions
+        
+Permissions required for creating, configuring, and starting WMLz scoring service
+subset of above
+
+Permissions required for configuring WMLz scoring service in a CICS region
+subset of above
+        
+Permissions required for configuring and running Db2® anomaly detection solution
+...leave for later
+
+
+### OMVS properties
+
+```
+ALTUSER <mlz_setup_userid> OMVS(ASSIZEMAX(address-space-size) MEMLIMIT(nonshared-memory-size) CPUTIMEMAX(cpu-time))
+```
+        
+Check with ulimit
+
+```
+/bin/ulimit -a 
+core file         8192b
+cpu time          unlimited 
+data size         unlimited 
+file size         unlimited 
+stack size        unlimited 
+file descriptors  520000
+address space     1048576k
+memory above bar  24576m
+```
+        
+### Verify
+
+
+wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
+
+./wmlz-configuration-checker.sh -preconfig
+
+./wmlz-configuration-checker.sh -preconfig -no-python
+            
+            
 
 ## Step 7	Configuring additional user IDs	(Sysprog with USS & Security skills)
 
