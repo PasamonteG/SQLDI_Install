@@ -204,6 +204,58 @@ chown –R <mlz_setup_userid>:<mlz_group> $IML_HOME/
 
 To allocate zFS data sets for $IML_HOME and $IML_HOME/spark that are larger than 4GB, make sure that you specify DFSMS data class with extended format and extended addressability.
 
+Actual Job to setup home directory space
+```
+//IBMUSERJ JOB  (FB3),'CREATE ZFS',CLASS=A,MSGCLASS=H,                  
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                            
+//********************************************************************  
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                    
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSIN    DD *                                                         
+  DEFINE -                                                              
+       CLUSTER -                                                        
+         ( -                                                            
+             NAME(IBMUSER.WMLZHOME.ZFS) -                               
+             LINEAR -                                                   
+             CYL(600 50) VOLUME(USER0A USER0B USER0C) -                 
+             DATACLASS(DCEXTEAV) -                                      
+             SHAREOPTIONS(3) -                                          
+         )                                                              
+/*                                                                      
+//*                                                                     
+// SET ZFSDSN='IBMUSER.WMLZHOME.ZFS'                                    
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                     
+// PARM='-aggregate &ZFSDSN -compat'                                    
+//SYSPRINT DD SYSOUT=*                                                  
+//STDOUT   DD SYSOUT=*                                                  
+//STDERR   DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=*                                                  
+//CEEDUMP  DD SYSOUT=*                                                  
+//*                                                                     
+//*                                                                     
+//* Mount the dataset at the mountpoint directory                       
+//*                                                                     
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)          
+//SYSTSPRT  DD SYSOUT=*                                                 
+//SYSTSIN   DD *                                                        
+  PROFILE MSGID WTPMSG                                                  
+  MOUNT TYPE(ZFS) +                                                     
+    MODE(RDWR) +                                                        
+    MOUNTPOINT('/u/wmlzadm') +                                          
+    FILESYSTEM('IBMUSER.WMLZHOME.ZFS')                                  
+/*                                                                      
+```
+
+and permenant mount
+
+```
+/* WMLZADM ZFS */                          
+MOUNT FILESYSTEM('IBMUSER.WMLZHOME.ZFS')   
+      TYPE(ZFS)                            
+      MODE(RDWR)                           
+      NOAUTOMOVE                           
+      MOUNTPOINT('/u/wmlzadm')             
+```
 
 ### USS Environment 
 
