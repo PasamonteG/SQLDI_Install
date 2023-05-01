@@ -531,7 +531,95 @@ wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
 ./wmlz-configuration-checker.sh -preconfig
 
 ./wmlz-configuration-checker.sh -preconfig -no-python
-            
+
+
+First time round The checker threw some errors and warning
+
+```
+-bash-4.3$ cd /u/aiz/wmlz/alnsamp
+-bash-4.3$ ls -al
+total 64
+drwxr-xr-x   2 WMLZADM  WMLZGRP     8192 May  1 07:56 .
+drwxr-xr-x   3 WMLZADM  WMLZGRP     8192 May  1 07:55 ..
+-rw-r--r--   1 WMLZADM  WMLZGRP     3051 May  1 07:56 wmlz-checker-report-20230501075547.json
+-rw-r--r--   1 WMLZADM  WMLZGRP     4285 May  1 07:56 wmlz-checker-report-20230501075547.out
+-bash-4.3$ cat wmlz-checker-report-20230501075547.out
+
+======================================
+=                                    =
+=         WMLz PREREQ REPORT         =
+=                                    =
+======================================
+
+=-=-=-=-= REQUIRED SOFTWARE LEVEL =-=-=-=-=
+Spark location           /usr/lpp/IBM/izoda/spark/spark24x/bin/spark-submit
+Spark version            2.4.8
+
+Conda location           /usr/lpp/IBM/izoda/anaconda/bin/conda
+Conda version
+Conda level
+
+Bash location            /usr/lpp/IBM/aln/v2r4/iml-zostools/bin/bash
+Bash version             4.3.48
+
+Java location            /usr/lpp/java/J8.0_64/bin/java
+Java version             1.8.0
+
+Node.js location         /usr/lpp/IBM/aln/v2r4/nodejs/bin/node
+Node.js version          16.14.2
+
+
+=-=-=-=- ENVIRONMENT VARIABLES =-=-=-=
+SPARK_HOME               /usr/lpp/IBM/izoda/spark/spark24x
+ANACONDA_ROOT            /usr/lpp/IBM/izoda/anaconda
+JAVA_HOME                /usr/lpp/java/J8.0_64
+IML_HOME                 /u/aiz/wmlz
+IML_INSTALL_DIR          /usr/lpp/IBM/aln/v2r4
+IML_JOBNAME_PREFIX       ALN
+LIBPATH                  /lib:/usr/lib:/zdnn/lib:/usr/lpp/java/J8.0_64/bin/classic:/usr/lpp/java/J8.0_64/bin/j9vm:/usr/lpp/java/J8.0_64/lib/s390x:/usr/lpp/IBM/izoda/spark/spark24x/lib
+PATH                     /usr/lpp/IBM/aln/v2r4/iml-zostools/bin:/bin::/usr/lpp/IBM/izoda/anaconda/bin:/usr/lpp/java/J8.0_64/bin:/usr/lpp/IBM/izoda/spark/spark24x/bin:/usr/lpp/IBM/izoda/spark/spark24x/sbin:/usr/lpp/IBM/aln/v2r4/nodejs/bin:/usr/lpp/IBM/cobol/igyv6r4/bin
+IBM_JAVA_OPTIONS         -Dfile.encoding=UTF-8 -Djava.security.properties=/u/aiz/wmlz/configuration/java.security
+_BPXK_AUTOCVT            ON
+_BPX_SHAREAS             NO
+_ENCODE_FILE_NEW         ISO8859-1
+_ENCODE_FILE_EXISTING    UNTAGGED
+_CEE_RUNOPTS             FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)
+XL_CONFIG
+
+
+=-=-=-=-=- USER ID SETTINGS -=-=-=-=-=
+MEMLIMIT (Non-shared memory of OMVS segment) 32768M
+ASSIZEMAX (JVM maximum address space size)   1171875K
+IML Home Disk Space (Available)              2850687K
+
+
+======================================
+=                                    =
+=        ERROR & WARNING REPORT      =
+=                                    =
+======================================
+
+=-=-=-=-=-=-=-= ERRORS =-=-=-=-=-=-=-=
+WMLz:   ERROR:      2850687KB available for /u/aiz/wmlz  (10GB is required and 50GB is recommended)
+
+WMLz:   ERROR:      /usr/lpp/IBM/izoda/anaconda/bin/conda command failed. Check conda command file.
+
+WMLz:   ERROR:      /usr/lpp/IBM/izoda/anaconda/installation_record/2021_alivy_sec doesn't exist. Make sure UI76587 & UI75844 has been SMP/E applied and post-APPLY script /usr/lpp/IBM/izoda/anaconda/configure-anaconda has been executed to put the PTF into service.
+
+--------------> 3 errors.
+
+=-=-=-=-=-=-=- WARNINGS -=-=-=-=-=-=-=
+WMLz:   WARNING:    XL_CONFIG environment variable is not configured. Verify if you need a customized xlc configuration file to enable the xlc utility.
+
+WMLz:   WARNING:    ITOA_HOME is not set.
+
+--------------> 2 warnings.
+
+See IBM Watson Machine Learning for z/OS documentation for details.
+
+-bash-4.3$
+```
+
             
 
 ## Step 7	Configuring additional user IDs	(Sysprog with USS & Security skills)
