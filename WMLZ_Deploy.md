@@ -620,7 +620,82 @@ See IBM Watson Machine Learning for z/OS documentation for details.
 -bash-4.3$
 ```
 
+So, to address the errors.
+
+### Error 1
+
+2850687KB available for /u/aiz/wmlz  (10GB is required and 50GB is recommended)
+
+Fixed as follows
+
+```
+IBMUSER:/u/aiz: >df -k | grep aiz
+/u/aiz/wmlz    (AIZ.WMLZ.ZFS)            2850663/2880000 4294967289 Available
+
+IBMUSER:/u/aiz: >zfsadm grow -aggregate AIZ.WMLZ.ZFS -size 15000000
+IOEZ00173I Aggregate AIZ.WMLZ.ZFS successfully grown
+AIZ.WMLZ.ZFS (R/W COMP): 14969471 K free out of total 15000480
+
+IBMUSER:/u/aiz: >df -k | grep aiz
+/u/aiz/wmlz    (AIZ.WMLZ.ZFS)            14969471/15000480 4294967289 Available
+```
+
+### Error 2
+
+/usr/lpp/IBM/izoda/anaconda/bin/conda command failed. Check conda command file.
+
+Looks OK
+
+```
+-bash-4.3$ pwd
+/usr/lpp/IBM/izoda/anaconda/bin
+-bash-4.3$ ls -al | grep conda
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      185 Apr 25 12:53 anaconda
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      151 Apr 25 12:53 conda
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      185 Apr 25 12:53 conda-build
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      189 Apr 25 12:53 conda-convert
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      189 Apr 25 12:53 conda-develop
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      169 Apr 25 12:53 conda-env
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      185 Apr 25 12:53 conda-index
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      189 Apr 25 12:53 conda-inspect
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      197 Apr 25 12:53 conda-metapackage
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      187 Apr 25 12:53 conda-render
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      453 Apr 25 12:53 conda-server
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      183 Apr 25 12:53 conda-sign
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      191 Apr 25 12:53 conda-skeleton
+-rwxrwxr-x   1 OMVSKERN OMVSGRP      167 Apr 25 12:53 conda-verify
+-rwxrwxr-x   2 OMVSKERN OMVSGRP      554 Apr 25 12:53 install_set_shared_anaconda_admin
+-rwxrwxr-x   2 OMVSKERN OMVSGRP      342 Apr 25 12:53 install_set_single_anaconda_admin
+```
+
+### Error 3
+
+/usr/lpp/IBM/izoda/anaconda/installation_record/2021_alivy_sec doesn't exist. 
+Make sure UI76587 & UI75844 has been SMP/E applied 
+and post-APPLY script /usr/lpp/IBM/izoda/anaconda/configure-anaconda has been executed to put the PTF into service.
+
+PTFs were applied succesfully. Ran the post-APPLY script manually as IBMUSER
+
+```
+
+```
+
+### Warning 1
+
+XL_CONFIG environment variable is not configured. Verify if you need a customized xlc configuration file to enable the xlc utility.
+
+not applicable
+
+### Warning 2
+
+ITOA_HOME is not set.
+
+not applicable
+
             
+Suspect Error 2 was caused by Error 3. Hence retry.
+
+
 
 ## Step 7	Configuring additional user IDs	(Sysprog with USS & Security skills)
 
@@ -640,7 +715,7 @@ probably use IBMUSER for all
 
 Ports Docco from [KC](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-ports) 
 
-lots of overlap with SQLDI to manage
+lots of overlap with SQLDI to manage. Lets go defaults on this system because SQLDI is not deployed yet here.
         
         
 ## Step 9	Configuring secure network communications for WMLz	(Sysprog with USS & Security skills)
