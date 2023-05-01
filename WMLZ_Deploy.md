@@ -1,4 +1,4 @@
-# WMLZ Demployment
+# WMLZ Deployment
 
 These are the WMLZ moving parts.
 
