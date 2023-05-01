@@ -106,6 +106,23 @@ I think I may be missing a couple of pre-reqs.
 ![zcx_and_izoda](wmlzimages/zcx_and_izoda.JPG)
 
 
+Checked the SMPE Zone ```WMLZ.SMPE.GLOBAL.CSI``` to find that Izoda, Anaconda and Spark are all installed in the CSI Zone.
+Infer that the docco was written prior to PSI packaging.
+
+* HANA110 (anaconda)
+* HAQN240 (WMLZ Base)
+* HMDS120 (MDS - ie DVM)
+* HSPK120 (spark)
+
+Install Spark 2.4.0 and apply PTF UI81887. (SUPBY UI90277 ... which is installed.)
+
+Install Anaconda 3.7.0 and apply PTFs UI76587 and UI75844. (Installed)
+
+Install MDS 1.1 and apply PTF UI71323. (Installed)
+
+So, we're all good to go.
+
+
 
 ## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	
 
