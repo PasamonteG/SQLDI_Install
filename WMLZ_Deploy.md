@@ -257,6 +257,115 @@ MOUNT FILESYSTEM('IBMUSER.WMLZHOME.ZFS')
       MOUNTPOINT('/u/wmlzadm')             
 ```
 
+
+and change ownership
+
+```
+drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:04 wmlzadm
+```
+
+IML_HOME (where the WMLZ instance will be laid down?)
+
+create the path ```/u/aiz/wmlz```
+
+and change ownership
+
+```
+drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:15 wmlz
+```
+
+Create an ACS Rule to place HLQ on SGEXTEAV
+
+```
+CDS Name  : SYS1.S0W1.SCDS
+
+DATACLAS  SYS1.SMS.CNTL            ACSSTORD  IBMUSER   
+                                                       
+                                                       
+MGMTCLAS  -----------------------  --------  --------  
+                                                       
+                                                       
+STORCLAS  SYS1.SMS.CNTL            STORCLAS  IBMUSER   
+                                                       
+                                                       
+STORGRP   SYS1.SMS.CNTL            STORGRP   IBMUSER   
+
+
+===
+
+WHEN (&DSN = &AIZ_HLQ)                
+  DO                                  
+    SET &STORCLAS = 'SCEXTEAV'        
+    EXIT CODE(0)                      
+  END                                 
+  
+  
+
+WHEN (&STORCLAS= 'SCEXTEAV')          
+  DO                                  
+    SET &STORGRP = 'SGEXTEAV'
+    WRITE '&STORGRP = ' &STORGRP      
+    EXIT CODE(0)                      
+  END                                 
+  
+  
+```
+
+Create the ZFS ( must be able to grow HUGE 50GB plus ) using JCL in ```IBMUSER.NEALEJCL(IMLHOME)```.
+
+```
+//IBMUSERJ JOB  (FB3),'CREATE ZFS',CLASS=A,MSGCLASS=H,                
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                          
+//********************************************************************
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                  
+//SYSPRINT DD SYSOUT=*                                                
+//SYSIN    DD *                                                       
+  DEFINE -                                                            
+       CLUSTER -                                                      
+         ( -                                                          
+             NAME(AIZ.WMLZ.ZFS) -                                     
+             LINEAR -                                                 
+             CYL(4000 200) VOLUME(EAV001 EAV002) -                    
+             DATACLASS(DCEXTEAV) -                                    
+             SHAREOPTIONS(3) -                                        
+         )                                                            
+/*                                                                    
+//*                                                                   
+// SET ZFSDSN='AIZ.WMLZ.ZFS'                                          
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                   
+// PARM='-aggregate &ZFSDSN -compat'                                  
+//SYSPRINT DD SYSOUT=*                                                
+//STDOUT   DD SYSOUT=*                                                
+//STDERR   DD SYSOUT=*                                                
+//SYSUDUMP DD SYSOUT=*                                                
+//CEEDUMP  DD SYSOUT=*                                                
+//*                                                                   
+//*                                                                   
+//* Mount the dataset at the mountpoint directory                     
+//*                                                                   
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)        
+//SYSTSPRT  DD SYSOUT=*                                               
+//SYSTSIN   DD *                                                      
+  PROFILE MSGID WTPMSG                                                
+  MOUNT TYPE(ZFS) +                                                   
+    MODE(RDWR) +                                                      
+    MOUNTPOINT('/u/aiz/wmlz') +                                       
+    FILESYSTEM('AIZ.WMLZ.ZFS')                                        
+/*                                                                    
+```
+
+and mount it permenantly
+
+```
+/* WMLZ IMLHOME ZFS */            
+MOUNT FILESYSTEM('AIZ.WMLZ.ZFS')  
+      TYPE(ZFS)                   
+      MODE(RDWR)                  
+      NOAUTOMOVE                  
+      MOUNTPOINT('/u/aiz/wmlz')   
+```
+
+
 ### USS Environment 
 
 
