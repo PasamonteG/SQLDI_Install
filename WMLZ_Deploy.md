@@ -365,6 +365,11 @@ MOUNT FILESYSTEM('AIZ.WMLZ.ZFS')
       MOUNTPOINT('/u/aiz/wmlz')   
 ```
 
+and change the owner
+
+```
+chown wmlzadm:wmlzgrp wmlz
+```
 
 ### USS Environment 
 
@@ -387,6 +392,71 @@ If necessary, set $XL_CONFIG to the xlc.cfg file ... n/a unless using ZCX & DLC
 PATH=$IML_INSTALL_DIR/iml-zostools/bin:$IML_INSTALL_DIR/nodejs/bin:$PATH;
 ```
 
+I used this from ```/u/wmlzadm/.profile```
+
+```
+# This is a sample user profile for <mlz_setup_userid> which is used to install and configure IBM Watson Machine Learning for z/OS                      
+# Place the customized version of the .profile file under the user home of <mlz_setup_userid>                                                           
+                                                                                                                                                        
+                                                                                                                                                        
+# Spark environment variable                                                                                                                            
+export SPARK_HOME=/usr/lpp/IBM/izoda/spark/spark24x                                                                                                     
+                                                                                                                                                        
+# Anaconda environment variable                                                                                                                         
+export ANACONDA_ROOT=/usr/lpp/IBM/izoda/anaconda                                                                                                        
+                                                                                                                                                        
+# Java environment variable                                                                                                                             
+export JAVA_HOME=/usr/lpp/java/J8.0_64                                                                                                                  
+                                                                                                                                                        
+# AIE environment variable                                                                                                                              
+# export AIE_INSTALL_DIR=/usr/lpp/IBM/aie                                                                                                               
+                                                                                                                                                        
+# WML for z/OS environment variable                                                                                                                     
+export IML_HOME=/u/aiz/wmlz                                                                                                                             
+                                                                                                                                                        
+# WML for z/OS environment variable                                                                                                                     
+export IML_INSTALL_DIR=/usr/lpp/IBM/aln/v2r4                                                                                                            
+                                                                                                                                                        
+# WML for z/OS environment variable                                                                                                                     
+export IML_JOBNAME_PREFIX=ALN                        #REQUIRED Jobname prefix for each service. Default value is ALN                                    
+                                                     # Job name prefix has max 4 characters limit. First character has to be alphabetic. The rest charac
+                                                                                                                                                        
+# COBOL cob2 utility installation directory                                                                                                             
+export COBOL_INSTALL_DIR=/usr/lpp/IBM/cobol/igyv6r4                                                                                                     
+                                                                                                                                                        
+# PATH                                                                                                                                                  
+PATH=/bin:                                                                                                                                              
+PATH="${IML_INSTALL_DIR}"/iml-zostools/bin:$PATH                                                                                                        
+PATH=$PATH:"${ANACONDA_ROOT}"/bin                    #OPTIONAL Only set this if you have ANACONDA_ROOT environment variable set                         
+PATH=$PATH:"${JAVA_HOME}"/bin                                                                                                                           
+PATH=$PATH:"${SPARK_HOME}"/bin:"${SPARK_HOME}"/sbin                                                                                                     
+PATH=$PATH:"${IML_INSTALL_DIR}"/nodejs/bin                                                                                                              
+PATH=$PATH:"${COBOL_INSTALL_DIR}/bin"                #OPTIONAL Only set this if you have COBOL_INSTALL_DIR environment variable set                     
+                                                                                                                                                        
+export PATH="$PATH"                                                                                                                                     
+                                                                                                                                                        
+#LIBPATH                                                                                                                                                
+LIBPATH=/lib:/usr/lib                                                                                                                                   
+LIBPATH=$LIBPATH:"${AIE_INSTALL_DIR}"/zdnn/lib       #OPTIONAL Only set this if you have AIE_INSTALL_DIR environment variable set                       
+LIBPATH=$LIBPATH:"${JAVA_HOME}"/bin/classic                                                                                                             
+LIBPATH=$LIBPATH:"${JAVA_HOME}"/bin/j9vm                                                                                                                
+LIBPATH=$LIBPATH:"${JAVA_HOME}"/lib/s390x                                                                                                               
+LIBPATH=$LIBPATH:"${SPARK_HOME}"/lib                                                                                                                    
+                                                                                                                                                        
+export LIBPATH="$LIBPATH"                                                                                                                               
+                                                                                                                                                        
+                                                                                                                                                        
+# Other system environment variables                                                                                                                    
+export IBM_JAVA_OPTIONS="-Dfile.encoding=UTF-8"                                                                                                         
+export IBM_JAVA_OPTIONS="$IBM_JAVA_OPTIONS -Djava.security.properties=${IML_HOME}/configuration/java.security"  #OPTIONAL Only add this if you have a cu
+export _BPXK_AUTOCVT=ON                                                                                                                                 
+export _BPX_SHAREAS=NO                                                                                                                                  
+export _ENCODE_FILE_NEW=ISO8859-1                                                                                                                       
+export _ENCODE_FILE_EXISTING=UNTAGGED                                                                                                                   
+export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"                                                                                                
+# export STEPLIB=<DSN1:DSN2:DSN3>                 #OPTIONAL Set up the load library search order for executable files. Consider setting this when xlc   
+                                                    #EX: STEPLIB=IGY.V6R4M0.SIGYCOMP:CBC.SCCNCMP                                                        
+```
 
 ### Configure <mlz_setup_userid> access to your z/OS UNIX shell environment
 
