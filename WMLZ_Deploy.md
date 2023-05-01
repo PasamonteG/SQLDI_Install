@@ -11,10 +11,6 @@ The [KC_Link](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=installation-r
 
 
 
-
-
-
-
 ```
 Step 1	Preparing for WMLz installation	(Sysprog, WMLz user)	 
 Step 2	Planning system capacity for WMLz	(Sysprog, WMLz user)	 
@@ -86,6 +82,8 @@ Ordered WMLZ Portable Software Instance from ShopZ. Good to go.
 
 Nothing to do, Good to go. 
 
+
+
 ## Step 5	Installing WMLz, including the bundled IzODA (Spark, Anaconda, and MDS) (Sysprog with USS skills) 
 
 Review the [KC_Link](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-installing)
@@ -94,9 +92,11 @@ The SMP/E program installs WMLz in the default /usr/lpp/IBM/aln/v2r4 directory, 
 
 ![usspaths](wmlzimages/usspaths.JPG)
 
+
 The April 2023 download 
 1. is missing the IMIzOS.properties directory.
 2. includes /Z25C/usr/lpp/IBM/aln/v2r4/usr/extension/installableApps/scoring-wola.war
+
 
 
 I think I may be missing a couple of pre-reqs. 
@@ -104,6 +104,7 @@ I think I may be missing a couple of pre-reqs.
 * izoda is probably only needed for the WMLZ IDE, which we dont need. Check with Maggie Lin
 
 ![zcx_and_izoda](wmlzimages/zcx_and_izoda.JPG)
+
 
 
 Checked the SMPE Zone ```WMLZ.SMPE.GLOBAL.CSI``` to find that Izoda, Anaconda and Spark are all installed in the CSI Zone.
@@ -124,9 +125,13 @@ So, we're all good to go.
 
 
 
-## Step 6	Configuring WMLz setup user ID	(Sysprog with USS & Security skills)	
+
+## Step 6 Configuring WMLz setup user ID (Sysprog with USS & Security skills)	
+
 
 ### Create <mlz_setup_userid>
+
+
 
 ```
 //CREATE JOB (0),'WMLZ RACF',CLASS=A,REGION=0M,
@@ -144,12 +149,47 @@ NAME('WMLZ ID') PASSWORD(<password>) NOOIDCARD
 
 where
 
-* <mlz_setup_userid> is the user ID that you will use to configure and run WMLz.
-* <mlz_group> is a RACF® group that you will use to associate WML for z/OS users and manage their access.
-* <group-identifier> is the identifier for <mlz_group>.
-* <user-identifier> is the identifier for <mlz_setup_userid>. Do not use UID 0 for <mlz_setup_userid>.
-* $IML_INSTALL_DIR is the directory where WMLz is installed. The default is /usr/lpp/IBM/aln/v2r4.
 
+* mlz_setup_userid is the user ID that you will use to configure and run WMLz.
+* mlz_group is a RACF group that you will use to associate WML for z/OS users and manage their access.
+* group-identifier is the identifier for mlz_group.
+* user-identifier is the identifier for mlz_setup_userid. Do not use UID 0 for mlz_setup_userid.
+* IML_INSTALL_DIR is the directory where WMLz is installed. The default is /usr/lpp/IBM/aln/v2r4.
+
+
+Actual Job ```IBMUSER.NEALEJCL(WMLZUSER)``` run was
+
+```
+//IBMUSERJ JOB  (FB3),'INIT 3380 DASD',CLASS=A,MSGCLASS=H,    
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                  
+//*                                                           
+//*   JOB TO CREATE WMLZ SETUP USERID                         
+//*                                                           
+//RACF     EXEC PGM=IKJEFT01,REGION=0M                        
+//SYSTSPRT DD SYSOUT=*                                        
+//SYSTSIN  DD *                                               
+                                                              
+ADDGROUP WMLZGRP OMVS(AUTOGID) OWNER(SYS1)                    
+                                                              
+AU WMLZADM NAME('WMLZADM') PASSWORD(SYS1) -                   
+OWNER(SYS1) DFLTGRP(WMLZGRP) UACC(READ) OPERATIONS SPECIAL   -
+TSO(ACCTNUM(ACCT#) PROC(DBSPROCD) JOBCLASS(A) MSGCLASS(X) -   
+HOLDCLASS(X) SYSOUTCLASS(X) SIZE(4048) MAXSIZE(0))     -      
+OMVS(HOME(/u/wmlzadm) -                                       
+PROGRAM(/usr/lpp/IBM/aln/v2r4/iml-zostools/bin/bash) -        
+CPUTIMEMAX(86400) -                                           
+MEMLIMIT(32G) ASSIZEMAX(1200000000) AUTOUID)                  
+                                                              
+PERMIT ACCT#     CLASS(ACCTNUM) ID(WMLZADM)                   
+PERMIT ISPFPROC  CLASS(TSOPROC) ID(WMLZADM)                   
+PERMIT DBSPROC   CLASS(TSOPROC) ID(WMLZADM)                   
+PERMIT JCL       CLASS(TSOAUTH) ID(WMLZADM)                   
+PERMIT OPER      CLASS(TSOAUTH) ID(WMLZADM)                   
+PERMIT ACCT      CLASS(TSOAUTH) ID(WMLZADM)                   
+PERMIT MOUNT     CLASS(TSOAUTH) ID(WMLZADM)                   
+                                                              
+```
+        
 
 ### Paths and ZFS
 
