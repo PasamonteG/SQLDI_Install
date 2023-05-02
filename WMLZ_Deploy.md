@@ -733,6 +733,41 @@ probably use IBMUSER for all
 
 Ports Docco from [KC](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-ports) 
 
+```
+Db2 User-defined 
+z/OS Spark master 	7077 or user-defined 
+z/OS Spark master REST API 	6066 or user-defined 
+z/OS Spark master UI 	8080 or user-defined 
+z/OS Spark worker 	Dynamically assigned or user-defined 
+z/OS Spark worker UI 	8081 or user-defined 
+z/OS Spark executor 	Dynamically assigned or user-defined 
+z/OS Spark driver 	Dynamically assigned or user-defined 
+Spark-integration service 	10080 or user-defined 
+Scoring service 	User-defined 
+Scoring service 	Dynamically assigned or user-defined 
+Jupyter Kernel Gateway 	8889 or user-defined 
+Apache Toree kernel 	User-defined 
+Python kernel 	User-defined 
+UI service 	9888 or user-defined 
+Core services 	11442 or user-defined 
+Configuration tool service 	50000 or user-defined 
+zCX Docker CLI 	8022 or user-defined 
+ONNX compiler service 	18080 or user-defined 
+Python scoring service 	User-defined 
+Db2 anomaly detection service 	15001 
+MDS server 	User-defined 
+```
+
+Ports to check: 
+* Db2 5045 
+* Spark 7077 6066 8080 8081 10080
+* Jupyter 8889
+* WMLZ 9888 11442 50000 
+* zCX & ONNX 8022 18080
+* Db2 anomoly 15001 
+
+netstat portlist
+
 lots of overlap with SQLDI to manage. Lets go defaults on this system because SQLDI is not deployed yet here.
         
         
