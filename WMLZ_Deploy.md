@@ -528,10 +528,11 @@ memory above bar  24576m
 
 wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
 
+```
 ./wmlz-configuration-checker.sh -preconfig
 
 ./wmlz-configuration-checker.sh -preconfig -no-python
-
+```
 
 First time round The checker threw some errors and warning
 
@@ -690,17 +691,34 @@ not applicable
 
 ITOA_HOME is not set.
 
-not applicable
+not applicable. Only needed for SMF datasets for Db2 Anomoly Detection.
 
             
-Suspect Error 2 was caused by Error 3. Hence retry.
-
+### Decisons
+Fixed the easy things. Maggie Lin didnt help on the hard things, but simply suggested forgoing the python aspects of WMLZ deployment. Not happy at the abdication from the issue, but agree that I don't need python for the immediate purpose. Hence accepted Maggie's suggestion for this build. Re-ran 
+```./wmlz-configuration-checker.sh -preconfig -no-python``` and got a clean bill of health.
 
 
 ## Step 7	Configuring additional user IDs	(Sysprog with USS & Security skills)
 
+Nothing done for this build.
+
 Ensure that the LE runtime libraries are APF-authorized.
 
+```
+D PROG,APF,ALL
+
+RESPONSE=S0W1                                 
+ CSV450I 09.07.22 PROG,APF DISPLAY 110        
+ FORMAT=DYNAMIC                               
+ ENTRY VOLUME DSNAME                          
+...                 
+   33  C5RES2 CEE.SCEERUN                     
+   34  C5RES2 CEE.SCEERUN2                    
+   35  C5RES1 CBC.SCLBDLL                     
+   36  C5RES1 CBC.SCLBDLL2  
+...
+```
         
 Configure (or reuse) userids for 
 
