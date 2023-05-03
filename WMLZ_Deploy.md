@@ -1256,21 +1256,25 @@ Create a scoring service
         
 ![maggie01](wmlzimages/maggie01.JPG)    
 
-Navigate to Runtime Environments
+See it listed
 
 ![maggie06](wmlzimages/maggie06.JPG) 
 
-xxx
+Navigate to Runtime Environments
 
 ![maggie07](wmlzimages/maggie07.JPG)  
         
-xxx
+Create a runtime environment
+
+![maggie02](wmlzimages/maggie02.JPG) 
+
+See
 
 ![maggie08](wmlzimages/maggie08.JPG) 
 
 xxx
 
-![maggie02](wmlzimages/maggie02.JPG) 
+
 
 
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
