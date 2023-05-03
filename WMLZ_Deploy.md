@@ -1277,8 +1277,6 @@ We're good to go ...
 
 
 
-
-
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
 
 Optional for ONNX models
@@ -1353,7 +1351,16 @@ n/a
 ## Step 21	Verifying WMLz installation and configuration	... Optional	(Sysprog with USS skills)
 
 IVP time
-        
-        
 
+So open up the main dashboard
+
+![deploy01](wmlzimages/deploy01.JPG) 
+        
+Navigate to Models
+
+![deploy02](wmlzimages/deploy02.JPG) 
+        
+Import a Model
+
+![deploy03](wmlzimages/deploy03.JPG) 
 
