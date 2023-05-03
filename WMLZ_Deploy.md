@@ -1243,17 +1243,15 @@ Open a browser to the WMLZ UI at ```https://192.168.1.191:9888/```
 
 ![maggie03](wmlzimages/maggie03.JPG)  
 
-Navigate to Dashboard Services
+Navigate to Administration Dashboard Services
 
 ![maggie04](wmlzimages/maggie04.JPG) 
 
 Create a scoring service
-
         
 ![maggie01](wmlzimages/maggie01.JPG)  
         
-xxx
-
+Navigate to Runtime Services
 
 ![maggie05](wmlzimages/maggie05.JPG)  
         
