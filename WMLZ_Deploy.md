@@ -1163,13 +1163,117 @@ Timeout ... looks like this thing doesn't have enough horsepower to get started 
 Andrew Mattingly had got a special build from Sharon Yu to increased the startup timeouts.
 Ask Maggie for help.
         
+Maggie looked at the Spark logs. figured it was just timing out.
+Logged on as WMLZADM
 
+```
+cd /u/wmlzadm
+source .profile
+alias
+```
+
+That extracts the alias commands (which were setup by the WMLZ install process.
+
+* start_master
+* start_slave
+* stop_master
+* stop_slave
+
+So
+
+1. start_master
+2. wait
+3. start_slave
+4. wait
+5. cd $IML_INSTALL_DIR/bin
+6. ./sparkaas.sh create
+
+```
+WMLZADM:/usr/lpp/IBM/aln/v2r4/bin: >./sparkaas.sh create
+Create Spark-integration server
+
+Copy mdss driver jars
+Generating Spark-integration server configuration file (/u/aiz/wmlz/configuration/sparkaas.cfg)
+
+Checking ATTLS setting and keystore type for WMLz base in /u/aiz/wmlz/iml-portal/deploy.cfg
+AT TLS configuration is false
+Keystore type is JCERACFKS
+
+Customizing sparkaas.cfg. Provide requested information for each field or press <enter> to accept the default.
+
+Press <enter> to confirm AT-TLS setting for your Spark-integration server is false or <ctrl+c> to exit
+Enter IP address or host name of your Spark-integration server or press <enter> to use 10.1.1.2: 192.168.1.191
+Enter port number of your Spark-integration server or press <enter> to use 10080:
+Press <enter> to confirm keystore type for your Spark-integration server JCERACFKS or <ctrl+c> to exit
+Press <enter> to confirm keystore path for your Spark-integration server safkeyring://WMLZADM/WMLZRING
+Press <enter> to confirm certificate label for your Spark-integration server WMLZCert_WMLZID
+
+
+Configuration file is stored at /u/aiz/wmlz/configuration/sparkaas.cfg
+
+Do you want to start Spark Integration service? [y/n]: y
+/u/aiz/wmlz/mds-library exists. No need to copy mdss driver jars.
+Configuring server sparkaas.
+copying package from /Z25C/usr/lpp/IBM/aln/v2r4/sparkaas/usr/extension to /u/aiz/wmlz/sparkaas/usr
+reading configuration file /u/aiz/wmlz/configuration/sparkaas.cfg
+Keystore type JCERACFKS
+Keystore path safkeyring://WMLZADM/WMLZRING
+Generating new configuration file sparkaasService.conf.
+Copying /Z25C/usr/lpp/IBM/aln/v2r4/configuration/defaults/log4j2.xml.sparkaas.template file to /u/aiz/wmlz/configuration/generated directory
+Generating file server.env.sparkaas.
+Generating file jvm.options.sparkaas.
+copying jvm.options to /u/aiz/wmlz/sparkaas/usr/servers/sparkaas/jvm.options.
+copying server.env to /u/aiz/wmlz/sparkaas/usr/servers/sparkaas/server.env.
+Removing workarea directory.
+Clean up the /u/aiz/wmlz/userdata/sparkaas/runtime directory
+Starting Liberty service.
+
+Starting server sparkaas.
+Server sparkaas started with process ID 50397475.
+
+sparkaas is starting in the background, it may take about 3-4 minutes to finish this process, please check the log file /u/aiz/wmlz/iml-logs/sparkaas/console.log for more details.
+Checking the status of sparkaas service ...
+sparkaas is successfully started.
+WMLZADM:/usr/lpp/IBM/aln/v2r4/bin: >
+```
         
-       
+Next do some more admin to create a scoring service and a runtime environment
+
+Open a browser to the WMLZ UI at ```https://192.168.1.191:9888/```
+
+![maggie03](wmlzimages/maggie03.JPG)  
+
+Navigate to Dashboard Services
+
+![maggie04](wmlzimages/maggie04.JPG) 
+
+Create a scoring service
+
         
 ![maggie01](wmlzimages/maggie01.JPG)  
         
+xxx
+
+
+![maggie05](wmlzimages/maggie05.JPG)  
         
+xxx
+
+![maggie06](wmlzimages/maggie06.JPG) 
+
+xxx
+
+![maggie07](wmlzimages/maggie07.JPG)  
+        
+xxx
+
+![maggie08](wmlzimages/maggie08.JPG) 
+
+xxx
+
+![maggie02](wmlzimages/maggie02.JPG) 
+
+
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
 
 Optional for ONNX models
