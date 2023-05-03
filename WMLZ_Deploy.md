@@ -717,7 +717,6 @@ RESPONSE=S0W1
    34  C5RES2 CEE.SCEERUN2                    
    35  C5RES1 CBC.SCLBDLL                     
    36  C5RES1 CBC.SCLBDLL2  
-...
 ```
         
 Configure (or reuse) userids for 
@@ -833,7 +832,6 @@ NOTAFTER(DATE(2022/01/01))
 Connect the user certificate and the CA certificate to the keyring you created and add usage options
   
 ```
-
 RACDCERT ID(WMLZID) CONNECT(CERTAUTH LABEL('WMLZCACert') +     
 RING(WMLZRING))                                  
 
@@ -846,7 +844,6 @@ RING(WMLZRING) USAGE(PERSONAL) DEFAULT)
 Grant <mlz_setup_userid> permission to access the keyring and the CA certificate
         
 ```
-
 RDEFINE FACILITY IRR.DIGTCERT.LIST UACC(NONE)
 PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(<mlz_setup_userid>) ACCESS(READ)
 SETROPTS RACLIST(FACILITY) REFRESH            
@@ -954,7 +951,27 @@ RACDCERT LIST(LABEL('WMLZCert_WMLZID')) ID(WMLZADM)
                                                                                                                                         
 /*                                                                    
 ```
+
+And I need to write a job to clean up the stuff
+
+```
+//IBMUSERJ JOB (RACF),'KEYRING CERT',CLASS=A,MSGCLASS=H,              
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* Cleanup RACF stuff                                               *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD   SYSOUT=*                                              
+//SYSPRINT DD   SYSOUT=*                                              
+//SYSTSIN  DD   *  
         
+RACDCERT xxxxx                  
+                                                                                                                                        
+/*                                                                    
+```
+
 ### Optional for Encryption - Configuring AT-TLS for secure network connections with WMLz
 
 * Encryption is transparent (by definition) for z/OS applications, so this optional task is independent of WMLZ deployment.
