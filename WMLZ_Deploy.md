@@ -1381,33 +1381,33 @@ Click on the model to view it's details.
 
         
         
-xxx
+Click on Create Deployment to create an online deployment
         
 ![deploy07](wmlzimages/deploy07.JPG) 
         
         
-xxx
+View the deployments
         
 ![deploy08](wmlzimages/deploy08.JPG) 
         
         
-xxx
+Click in Test API Call
         
 ![deploy09](wmlzimages/deploy09.JPG) 
         
         
-xxx
+Option to fill in the parameters directly
         
 ![deploy10](wmlzimages/deploy10.JPG) 
         
-        
-        
-xxx
+             
+Or paste in some pre-prepared JSON
         
 ![deploy11](wmlzimages/deploy11.JPG) 
         
         
-xxx
+Click Submit and get the result
         
 ![deploy12](wmlzimages/deploy12.JPG) 
-        
+      
+Done !!!!
