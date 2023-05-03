@@ -1000,6 +1000,77 @@ or
 * On the Runtime environment page, specify the default runtime environment for WMLz that includes both Spark and Python runtime engines.
 * On the Db2 anomaly detection service page, specify if you want to enable the service for the optional anomaly detection solution.
 * On the Review and configure page, review all your settings, correct any error, and configure WMLz and services.
+
+Run the config tool
+
+        
+```
+WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >./configtool.sh start --no-python
+Checking for required Bash and IML_HOME ...
+Bash version is 4.3.48
+IML_HOME is /u/aiz/wmlz
+IML_JOBNAME_PREFIX is ALN
+Enter IP address or hostname of your z/OS system where the configuration tool will run or press <enter> to use 10.1.1.2:192.168.1.191
+Checking 192.168.1.191
+Enter port of your z/OS system where the configuration tool will run or press <enter> to use 50000:
+Starting the WMLz configuration tool ...
+The configuration tool is successfully started.
+Open your browser, copy and paste http://192.168.1.191:50000 into the address field, and launch the web interface of the configuration tool.
+Enter access token 1L+lRBhMI4udWOoeTJ+cGiub/0FlfQGeCyMY5d2jtIs= and click Start to start the configuration of WMLz.
+WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >
+```
+
+So, launch the config tool & enter the access token
+        
+![configtool01](wmlzimages/configtool01.JPG)
+        
+        
+Review the environment readiness display
+        
+![configtool02](wmlzimages/configtool02.JPG)
+        
+        
+Enter the authentication credentials. Keystore, but no AT-TLSk. The GUI will spin for a bit, whilst it checks the RACF keyring.
+        
+![configtool03](wmlzimages/configtool03.JPG)
+        
+        
+Provide the Db2 details for the repository. The GUI will spin for a bit, whilst it checks the Db2 connection.
+        
+![configtool04](wmlzimages/configtool04.JPG)
+        
+
+If the Schema doesn't yet exist, click on the option to create new schema
+        
+![configtool05](wmlzimages/configtool05.JPG)
+        
+
+The config tool will prompt you to provide a database name, stogroup and bufferpool (which must be a 32K bufferpool)
+        
+![configtool06](wmlzimages/configtool06.JPG)
+        
+
+Provide Ports and TCPIP details for the UI and the core services. 
+For this implementation we will not be deploying a core services HA cluster, and will will not be implementating traces for model governance.
+Annoyingly the password needs to be 8 characters minimum
+        
+![configtool07](wmlzimages/configtool07.JPG)
+        
+
+Specify the runtime environment. For this first deployment we will not bother with spark client authentication. 
+We willa ccept all the default ports.
+        
+![configtool08](wmlzimages/configtool08.JPG)
+        
+
+It has already worked out that we don't have the pre-reqs for the Db2 anomoly detection solution..
+        
+![configtool09](wmlzimages/configtool09.JPG)
+        
+We are presented with a summary of our configuration choices, and can press the 'Configure' Button
+        
+![configtool10](wmlzimages/configtool10.JPG)
+        
         
         
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
@@ -1009,7 +1080,7 @@ Optional for ONNX models
 ```
 ./onnx-compiler.sh create
 ```
-        
+
         
 ## Step 12	Configuring Python runtime environment ... Optional (Sysprog with USS skills)	
 
