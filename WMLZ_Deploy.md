@@ -1268,11 +1268,13 @@ Create a runtime environment
 
 ![maggie02](wmlzimages/maggie02.JPG) 
 
-See
+See it started
 
 ![maggie08](wmlzimages/maggie08.JPG) 
 
-xxx
+We're good to go ...
+
+
 
 
 
