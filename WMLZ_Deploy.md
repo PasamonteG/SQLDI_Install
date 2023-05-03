@@ -1050,6 +1050,9 @@ Click Add standalone scoring service ...
         
 ## Step 15	Configuring WML for z/OS scoring services in a CICS region	... Optional (Sysprog with USS skills; CICS skills) 
 
+        
+Second pass maybe
+
 ## Step 16	Configuring scoring services for high availability ...	Optional	(Sysprog with USS skills; Network skills)	
 
 n/a 
@@ -1072,6 +1075,8 @@ n/a
         
 ## Step 21	Verifying WMLz installation and configuration	... Optional	(Sysprog with USS skills)
 
-
+IVP time
+        
+        
 
 
