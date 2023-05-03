@@ -1122,7 +1122,34 @@ IBMUSER:/bin: >
 More patience. Press Retry.
         
 ![configtool17](wmlzimages/configtool17.JPG)  
+
+OK, so lets look at the log
         
+```
+WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >cat /u/aiz/wmlz/spark/log/spark-WMLZADM-org.apache.spark.deploy.master.Master-1-S0W1.out
+Spark Command: /usr/lpp/java/J8.0_64/bin/java -cp /u/aiz/wmlz/spark/conf/:/usr/lpp/IBM/izoda/spark/spark24x/jars/* -Xmx1G org.apache.spark.deploy.master.Master --host 192.168.1.191 --port 7077 --webui-port 8080
+========================================
+23/05/02 22:47:28 INFO Master: Started daemon with process name: 33620753@S0W1
+23/05/02 22:47:30 INFO SecurityManager: z/OS client authentication is disabled.
+23/05/02 22:47:33 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+23/05/02 22:47:35 INFO SecurityManager: Changing view acls to: WMLZADM
+23/05/02 22:47:35 INFO SecurityManager: Changing modify acls to: WMLZADM
+23/05/02 22:47:35 INFO SecurityManager: Changing view acls groups to:
+23/05/02 22:47:35 INFO SecurityManager: Changing modify acls groups to:
+23/05/02 22:47:35 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(WMLZADM); groups with view permissions: Set(); users  with modify permissions: Set(WMLZADM); groups with modify permissions: Set()
+23/05/02 22:47:38 WARN NetUtilInitializations: Failed to find the loopback interface
+23/05/02 22:47:38 WARN MacAddressUtil: Failed to find a usable hardware address from the network interfaces; using random bytes: dd:bc:63:2d:74:3d:5c:11
+23/05/02 22:47:39 INFO Utils: Successfully started service 'sparkMaster' on port 7077.
+23/05/02 22:47:40 INFO Master: Starting Spark master at spark://192.168.1.191:7077
+23/05/02 22:47:40 INFO Master: Running Spark version 2.4.8
+23/05/02 22:47:40 INFO Master: Performing master environment verification
+23/05/02 22:47:42 INFO Utils: Successfully started service 'MasterUI' on port 8080.
+23/05/02 22:47:42 INFO MasterWebUI: Bound MasterWebUI to 192.168.1.191, and started at http://S0W1.DAL-EBIS.IHOST.COM:8080
+23/05/02 22:47:43 INFO Utils: Successfully started service on port 6066.
+23/05/02 22:47:43 INFO StandaloneRestServer: Started REST server for submitting applications on port 6066
+23/05/02 22:47:45 INFO Master: I have been elected leader! New state: ALIVE
+WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >
+```
         
         
         
