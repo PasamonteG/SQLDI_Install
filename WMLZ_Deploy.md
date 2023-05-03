@@ -1361,7 +1361,53 @@ Navigate to Models
 
 ![deploy02](wmlzimages/deploy02.JPG) 
         
-Import a Model
+Import a Model. Review Evan Rivera's webex recording (offset 19 mins)
 
 ![deploy03](wmlzimages/deploy03.JPG) 
 
+And do it for myself.
+        
+![deploy04](wmlzimages/deploy04.JPG) 
+    
+        
+See it in the list
+        
+![deploy05](wmlzimages/deploy05.JPG) 
+        
+        
+Click on the model to view it's details.
+        
+![deploy06](wmlzimages/deploy06.JPG) 
+
+        
+        
+xxx
+        
+![deploy07](wmlzimages/deploy07.JPG) 
+        
+        
+xxx
+        
+![deploy08](wmlzimages/deploy08.JPG) 
+        
+        
+xxx
+        
+![deploy09](wmlzimages/deploy09.JPG) 
+        
+        
+xxx
+        
+![deploy10](wmlzimages/deploy10.JPG) 
+        
+        
+        
+xxx
+        
+![deploy11](wmlzimages/deploy11.JPG) 
+        
+        
+xxx
+        
+![deploy12](wmlzimages/deploy12.JPG) 
+        
