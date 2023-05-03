@@ -1075,6 +1075,55 @@ Now be patient
         
 ![configtool11](wmlzimages/configtool11.JPG)
         
+Not bad for a first attempt. Seems we have a connection error when trying to connect to the WMLZ UI.
+        
+![configtool12](wmlzimages/configtool12.JPG)
+
+        
+ERROR: Failed to create user: connect ECONNREFUSED 192.168.1.191:11442
+        
+Problem Determination
+* SYSLOG - no error messages
+* 2021 APAR for WMLZ V2.3 https://www.ibm.com/support/pages/apar/PH38510
+        
+      
+![configtool13](wmlzimages/configtool13.JPG)
+
+SDSF no use - cant see into a USSS service 
+        
+![configtool14](wmlzimages/configtool14.JPG)
+
+Wait for the service to come up.
+        
+Then check whether there is anything actually listening on the port
+
+```
+IBMUSER:/bin: >./netstat -a | grep 11442
+WMLZADM7 000022B3 0.0.0.0..11442         0.0.0.0..0             Listen
+```
+        
+Then press retry and we ge stuck into creating the admin user.
+        
+![configtool15](wmlzimages/configtool15.JPG)        
+        
+Unfortunately. The same thing happens when we start Spark. This was always a problem with SQLDI too.
+        
+![configtool16](wmlzimages/configtool16.JPG)  
+        
+```
+IBMUSER:/bin: >ps -ef | grep wmlz
+ WMLZADM   83952113          1  - 21:36:47 ttyp0000 14:49 /usr/lpp/java/J8.0_64/bin/java -classpath /u/aiz/wmlz/iml-services/imlservice_
+ WMLZADM   67175090          1  - 21:36:49 ttyp0000 10:44 /usr/lpp/java/J8.0_64/bin/java -classpath /u/aiz/wmlz/iml-services/imlservice_
+ WMLZADM   67175146          1  - 22:33:55 ttyp0000  2:00 /usr/lpp/java/J8.0_64/bin/java -cp /u/aiz/wmlz/spark/conf/:/usr/lpp/IBM/izoda/
+OMVSKERN   33620722   16843466  - 22:46:08 ttyp0001  0:00 grep wmlz
+IBMUSER:/bin: >
+```
+
+More patience. Press Retry.
+        
+![configtool17](wmlzimages/configtool17.JPG)  
+        
+        
         
         
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
