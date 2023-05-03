@@ -776,6 +776,10 @@ lots of overlap with SQLDI to manage. Lets go defaults on this system because SQ
 * Security mechanisms: AT-TLS policy ; Keyring-based keystore ; File-based keystore
         
 By default, WML for z/OS uses SSL to secure network connections and authenticate users. You can further strengthen the security of your network communications by leveraging the Application Transparent Transport Layer Security (AT-TLS) capability on z/OS.
+
+* Configuring a keyring-based keystore (JCERACFKS) for WMLz. (just this for authentication only)
+* Configuring AT-TLS for secure network connections with WMLz. (also needed for encryption)
+
         
 ### Configuring a keyring-based keystore (JCERACFKS) for WMLz        
 
@@ -863,7 +867,8 @@ SETROPTS RACLIST(RDATALIB) REFRESH
         
 ### Optional for Encryption - Configuring AT-TLS for secure network connections with WMLz
 
-merge these instructions with my own PAGENT instructions at a later time
+* Encryption is transparent (by definition) for z/OS applications, so this optional task is independent of WMLZ deployment.
+* merge these instructions with my own PAGENT instructions at a later time
 
 
         
