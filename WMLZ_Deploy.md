@@ -1247,15 +1247,16 @@ Navigate to Administration Dashboard Services
 
 ![maggie04](wmlzimages/maggie04.JPG) 
 
-Create a scoring service
-        
-![maggie01](wmlzimages/maggie01.JPG)  
-        
-Navigate to Runtime Services
+   
+Navigate to Scoring Services
 
 ![maggie05](wmlzimages/maggie05.JPG)  
+  
+Create a scoring service
         
-xxx
+![maggie01](wmlzimages/maggie01.JPG)    
+
+Navigate to Runtime Environments
 
 ![maggie06](wmlzimages/maggie06.JPG) 
 
