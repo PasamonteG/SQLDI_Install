@@ -695,7 +695,8 @@ not applicable. Only needed for SMF datasets for Db2 Anomoly Detection.
 
             
 ### Decisons
-Fixed the easy things. Maggie Lin didnt help on the hard things, but simply suggested forgoing the python aspects of WMLZ deployment. Not happy at the abdication from the issue, but agree that I don't need python for the immediate purpose. Hence accepted Maggie's suggestion for this build. Re-ran 
+Fixed the easy things. Maggie Lin  suggested forgoing the python aspects of WMLZ deployment.  
+Hence accepted Maggie's suggestion for this build. Re-ran 
 ```./wmlz-configuration-checker.sh -preconfig -no-python``` and got a clean bill of health.
 
 
@@ -1277,8 +1278,6 @@ We're good to go ...
 
 
 
-
-
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
 
 Optional for ONNX models
@@ -1353,7 +1352,62 @@ n/a
 ## Step 21	Verifying WMLz installation and configuration	... Optional	(Sysprog with USS skills)
 
 IVP time
+
+So open up the main dashboard
+
+![deploy01](wmlzimages/deploy01.JPG) 
+        
+Navigate to Models
+
+![deploy02](wmlzimages/deploy02.JPG) 
+        
+Import a Model. Review Evan Rivera's webex recording (offset 19 mins)
+
+![deploy03](wmlzimages/deploy03.JPG) 
+
+And do it for myself.
+        
+![deploy04](wmlzimages/deploy04.JPG) 
+    
+        
+See it in the list
+        
+![deploy05](wmlzimages/deploy05.JPG) 
         
         
+Click on the model to view it's details.
+        
+![deploy06](wmlzimages/deploy06.JPG) 
 
-
+        
+        
+Click on Create Deployment to create an online deployment
+        
+![deploy07](wmlzimages/deploy07.JPG) 
+        
+        
+View the deployments
+        
+![deploy08](wmlzimages/deploy08.JPG) 
+        
+        
+Click in Test API Call
+        
+![deploy09](wmlzimages/deploy09.JPG) 
+        
+        
+Option to fill in the parameters directly
+        
+![deploy10](wmlzimages/deploy10.JPG) 
+        
+             
+Or paste in some pre-prepared JSON
+        
+![deploy11](wmlzimages/deploy11.JPG) 
+        
+        
+Click Submit and get the result
+        
+![deploy12](wmlzimages/deploy12.JPG) 
+      
+Done !!!!
