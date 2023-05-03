@@ -1070,6 +1070,10 @@ It has already worked out that we don't have the pre-reqs for the Db2 anomoly de
 We are presented with a summary of our configuration choices, and can press the 'Configure' Button
         
 ![configtool10](wmlzimages/configtool10.JPG)
+
+Now be patient
+        
+![configtool11](wmlzimages/configtool11.JPG)
         
         
         
