@@ -863,7 +863,97 @@ SETROPTS CLASSACT(RDATALIB)
 PERMIT WMLZID.WMLZRING.LST CLASS(RDATALIB) ID(<mlz_setup_userid>) ACCESS(READ)
 SETROPTS RACLIST(RDATALIB) REFRESH
 ```
+        
+Here's what I actually submitted
 
+```
+//IBMUSERJ JOB (RACF),'KEYRING CERT',CLASS=A,MSGCLASS=H,               
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                       
+//******************************************************************** 
+//*                                                                  * 
+//* CREATE RACF KEYRING FOR SQLDI V12                                * 
+//*                                                                  * 
+//******************************************************************** 
+//S1       EXEC PGM=IKJEFT01                                           
+//SYSTSPRT DD   SYSOUT=*                                               
+//SYSPRINT DD   SYSOUT=*                                               
+//SYSTSIN  DD   *                                                      
+RACDCERT ADDRING(WMLZRING) ID(WMLZADM)                                 
+                                                                       
+RACDCERT GENCERT CERTAUTH +                                            
+SUBJECTSDN( +                                                          
+      CN('ZVASYS') +                                                   
+      C('US') +                                                        
+      SP('CA') +                                                       
+      L('SAN JOSE') +                                                  
+      O('IBM') +                                                       
+      OU('WMLZ') +                                                     
+) +                                                                    
+ALTNAME( +                                                             
+      EMAIL('neale@au1.ibm.com') +                                     
+) +                                                                    
+WITHLABEL('WMLZCACert') +                                              
+NOTAFTER(DATE(2030/01/01))                                             
+                                                                       
+RACDCERT GENCERT ID(WMLZADM) +                                         
+SUBJECTSDN( +                                                          
+      CN('ZVASYS') +                                                   
+      C('US') +                                                        
+      SP('CA') +                                                       
+      L('SAN JOSE') +                                                  
+      O('IBM') +                                                       
+      OU('WMLZ') +                                                     
+) +                                                                    
+ALTNAME( +                                                             
+      EMAIL('neale@au1.ibm.com') +                                     
+) +                                                                    
+WITHLABEL('WMLZCert_WMLZID') +                                         
+SIGNWITH(CERTAUTH LABEL('WMLZCACert')) +                               
+NOTAFTER(DATE(2025/01/01))                                             
+                                                                       
+RACDCERT ID(WMLZADM) CONNECT(CERTAUTH LABEL('WMLZCACert') +            
+RING(WMLZRING))                                                        
+                                                                       
+RACDCERT ID(WMLZADM) CONNECT(ID(WMLZADM) LABEL('WMLZCert_WMLZID') +    
+RING(WMLZRING) USAGE(PERSONAL) DEFAULT)                                
+                                                                       
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(WMLZADM) ACCESS(READ)  
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(IBMUSER) ACCESS(READ)  
+                                                                       
+SETROPTS RACLIST(FACILITY) REFRESH                                     
+                                                                       
+RDEFINE RDATALIB WMLZID.WMLZRING.LST UACC(NONE)                        
+SETROPTS CLASSACT(RDATALIB) RACLIST(RDATALIB)                          
+SETROPTS CLASSACT(RDATALIB)                                            
+PERMIT WMLZID.WMLZRING.LST CLASS(RDATALIB) ID(WMLZADM) ACCESS(READ)    
+SETROPTS RACLIST(RDATALIB) REFRESH                                     
+                                                                       
+                                                                       
+/*                                                                                    
+```
+
+And here is the RACFCHCK job IBMUSER.NEALEJCL(RACFCHCK)
+
+```
+//IBMUSERJ JOB (RACF),'KEYRING CERT',CLASS=A,MSGCLASS=H,              
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* CREATE RACF KEYRING FOR SQLDI V12                                *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD   SYSOUT=*                                              
+//SYSPRINT DD   SYSOUT=*                                              
+//SYSTSIN  DD   *                                                     
+RACDCERT LISTRING(WMLZRING) ID(WMLZADM)                               
+                                                                      
+RACDCERT CERTAUTH LIST(LABEL('WMLZCACert'))                           
+                                                                      
+RACDCERT LIST(LABEL('WMLZCert_WMLZID')) ID(WMLZADM)                   
+                                                                                                                                        
+/*                                                                    
+```
         
 ### Optional for Encryption - Configuring AT-TLS for secure network connections with WMLz
 
