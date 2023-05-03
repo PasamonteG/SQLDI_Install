@@ -695,7 +695,8 @@ not applicable. Only needed for SMF datasets for Db2 Anomoly Detection.
 
             
 ### Decisons
-Fixed the easy things. Maggie Lin didnt help on the hard things, but simply suggested forgoing the python aspects of WMLZ deployment. Not happy at the abdication from the issue, but agree that I don't need python for the immediate purpose. Hence accepted Maggie's suggestion for this build. Re-ran 
+Fixed the easy things. Maggie Lin  suggested forgoing the python aspects of WMLZ deployment.  
+Hence accepted Maggie's suggestion for this build. Re-ran 
 ```./wmlz-configuration-checker.sh -preconfig -no-python``` and got a clean bill of health.
 
 
