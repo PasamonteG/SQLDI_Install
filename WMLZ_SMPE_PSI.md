@@ -31,6 +31,11 @@ DEFINE -
        )   
 ```
 
+## SMPE CSI Zone
+
+Allocated by SMPE PSI deployment process ```WMLZ.SMPE.GLOBAL.CSI```
+
+
 
 ## zOSMF workflow to install the PSI
 
