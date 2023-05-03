@@ -850,16 +850,21 @@ SETROPTS RACLIST(FACILITY) REFRESH
 
 ```        
 
-<mlz_setup_userid> must also have the READ or UPDATE authority to the <ringOwner>.<ringName>.LST resource in the RDATALIB class        
+
+mlz_setup_userid must also have the READ or UPDATE authority to the ringOwner.ringName.LST resource in the RDATALIB class        
         
 ```
-
 RDEFINE RDATALIB WMLZID.WMLZRING.LST UACC(NONE) 
 SETROPTS CLASSACT(RDATALIB) RACLIST(RDATALIB) 
 SETROPTS CLASSACT(RDATALIB)
-PERMIT WMLZID.WMLZRING.LST CLASS(RDATALIB) ID(<mlz_setup_userid>) ACCESS(READ)
+PERMIT WMLZID.WMLZRING.LST CLASS(RDATALIB) ID(mlz_setup_userid) ACCESS(READ)
 SETROPTS RACLIST(RDATALIB) REFRESH
 ```
+
+
+
+
+        
         
 Here's what I actually submitted
 
@@ -929,6 +934,7 @@ SETROPTS RACLIST(RDATALIB) REFRESH
 /*                                                                                    
 ```
 
+        
 And here is the RACFCHCK job IBMUSER.NEALEJCL(RACFCHCK)
 
 ```
@@ -979,15 +985,15 @@ RACDCERT xxxxx
 
 
         
+        
+        
 ## Step 10	Configuring WMLz (Sysprog with USS skills)
 
 Locate the configtool.sh script in the $IML_INSTALL_DIR/iml-utilities/configtool directory.
 
 ```
 ./configtool.sh start
-
 or
-
 ./configtool.sh start --no-python
 ```
 
@@ -1003,6 +1009,7 @@ or
 
 Run the config tool
 
+        
         
 ```
 WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >./configtool.sh start --no-python
@@ -1150,7 +1157,17 @@ Spark Command: /usr/lpp/java/J8.0_64/bin/java -cp /u/aiz/wmlz/spark/conf/:/usr/l
 23/05/02 22:47:45 INFO Master: I have been elected leader! New state: ALIVE
 WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >
 ```
+
         
+Timeout ... looks like this thing doesn't have enough horsepower to get started on my ZPDT.
+Andrew Mattingly had got a special build from Sharon Yu to increased the startup timeouts.
+Ask Maggie for help.
+        
+
+        
+       
+        
+![maggie01](wmlzimages/maggie01.JPG)  
         
         
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
