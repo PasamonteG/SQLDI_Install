@@ -1150,7 +1150,17 @@ Spark Command: /usr/lpp/java/J8.0_64/bin/java -cp /u/aiz/wmlz/spark/conf/:/usr/l
 23/05/02 22:47:45 INFO Master: I have been elected leader! New state: ALIVE
 WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >
 ```
+
         
+Timeout ... looks like this thing doesn't have enough horsepower to get started on my ZPDT.
+Andrew Mattingly had got a special build from Sharon Yu to increased the startup timeouts.
+Ask Maggie for help.
+        
+
+        
+       
+        
+![maggie01](wmlzimages/maggie01.JPG)  
         
         
 ## Step 11	Configuring ONNX compiler service ... Optional (Sysprog with USS skills)
