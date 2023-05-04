@@ -161,7 +161,31 @@ An audit trail of following each of the required steps above follows now
 
 ### 3.1 Step 1 Preparing for WMLz installation	 
 
-Blah blah blah 
+Be sure to check all the pre-requisites carefully on [pereqs_page](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-installing-prerequisites) 
+
+A brief summary of meeting the pre-reqs in this system is as follow.
+
+***System*** z16, z15™, z14, z13®, or zEnterprise® EC12 system. (This example is deployed on a ZVDT-virtualised Z server).
+
+***z/OS*** z/OS 2.5 or 2.4. (This example is running z/OS V2.5, taken from the ADCD distribution volumes) 
+
+***PTFs*** For z/OS 2.5, apply PTFs UI64830, UI64837, and UI64940. (all applied)
+
+***zDNN*** For z/OS 2.5, apply APARs OA62901, OA62902, and OA62903. (all applied, even though this worked example won't deploy zCX)
+ 
+***z/OS Integrated Cryptographic Service Facility (ICSF).***  (Yup - standard part of ADCD.)
+
+***z/OS OpenSSH***. See z/OS OpenSSH for instructions. (Yup - standard part of ADCD.)
+
+***IBM 64-bit SDK for z/OS Java*** Yup Version 8 SR6 FP25 or later. (Yup - standard part of ADCD.)
+
+***Db2® 12 for z/OS*** or later. (Yup - ADCD includes both Db2 z/OS V12 and V13.)
+
+***CICS TS for z/OS 5.6.0*** with PTFs UI77466, UI80396 and UI80397 or later. (Yup - ADCD includes CICS V5.6 and V6.1).
+
+***IBM z/OS Container Extensions 2.4*** with PTF OA59111 applied (zCX container extensions is not supported by ZD&T and ZVDT)
+
+So, we're good to go!
 
 ### 3.2 Step 2 Planning system capacity for WMLz	
 
