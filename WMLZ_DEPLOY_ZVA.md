@@ -19,7 +19,7 @@ There are two documents covering WMLZ V2.4
 
 ## Contents
 
-1. SMPE Installation
+1. Purpose of this deployment worked example
 2. Planning and Pre-Requisites
 3. Deploying a simple WMLZ Instance
 4. Installation Verification Test
@@ -29,72 +29,16 @@ There are two documents covering WMLZ V2.4
 
 
 
-## 1.0 SMPE Installation
+## 1.0 Purpose of this deployment worked example
 
-WMLZ should be ordered from ShopZ as a Portable Software Instance, screenshot below
+The purpose of this document is to provide a clear and simple worked example of what is involved in deploying Watson Machine Learning for z/OS.
 
-![shopz](wmlzzvaimages/shopz.JPG)
+This document is written in support of a ***"Test Drive"*** system, in Techzone and/or ZVA, that can be provisioned by IBMers for the purposes of self-education, demonstrations or customer workshops.
 
-Use the Download to host JCL to download the PSI image files into a large ZFS on your z/OS system. 
-The base size of the PSI image is about 20GB, so you will need to allocate a large multi-volume ZFS with extended data class attributes to store the image.
-Use the z/OSMF Software Configuration app to download the PSI image to your ZFS.
+It ***IS NOT*** a performance test environment.
 
-Once the PSI image is downloaded you will need to switch to the Deploymemts tab of z/OSMF Software Configuration app to deploy the software to z/OS.
-Aside from the sheer size of the WMLZ PSI image, the SMPE installation is no different from any other Portable Sofware Instance deployment.
+It ***IS*** a functional test environment for the purposes of learning about dpeloying and using WMLZ/
 
-Be sure the run the post-deployment steps which allocate ZFS file systems and polish of the SMPE CSI dataset.
-
-Having chosen a HLQ of ***WMLZ*** The following target libraries will be deployed.
-
-```
-'WMLZ.AZK.SAZKBIN' 
-'WMLZ.AZK.SAZKCNTL'
-'WMLZ.AZK.SAZKDBRM'
-'WMLZ.AZK.SAZKEXEC'
-'WMLZ.AZK.SAZKLOAD'
-'WMLZ.AZK.SAZKMAP' 
-'WMLZ.AZK.SAZKMENU'
-'WMLZ.AZK.SAZKOBJX'
-'WMLZ.AZK.SAZKPENU'
-'WMLZ.AZK.SAZKRPC' 
-'WMLZ.AZK.SAZKSAMP'
-'WMLZ.AZK.SAZKSLIB'
-'WMLZ.AZK.SAZKSMAP'
-'WMLZ.AZK.SAZKTENU'
-'WMLZ.AZK.SAZKXATH'
-'WMLZ.AZK.SAZKXCMD'
-'WMLZ.AZK.SAZKXEXC'
-'WMLZ.AZK.SAZKXSQL'
-'WMLZ.AZK.SAZKXTOD'
-'WMLZ.AZK.SAZKXVTB'
-```
-
-Much of the WMLZ product us deployed within USS. Parmlib should be updated to permanently mount the following ZFS filesystems at the mountpoints prescribed for WMLZ. Specifically 
-
-* WMLZ mountpoint is ```/usr/lpp/IBM/aln```
-* Anaconda mountpoint is ```/usr/lpp/IBM/izoda/anaconda```
-* Spark mopuntpoint is ```/usr/lpp/IBM/izoda/spark```
-
-```
-/* WMLZ ZFS */                                   
-MOUNT FILESYSTEM('WMLZ.OMVS.SALNROOT')           
-      TYPE(ZFS)                                  
-      MODE(RDWR)                                 
-      NOAUTOMOVE                                 
-      MOUNTPOINT('/usr/lpp/IBM/aln/v2r4')        
-/* WMLZ ANACONDA */                              
-MOUNT FILESYSTEM('WMLZ.OMVS.SANBZFS')            
-      TYPE(ZFS)                                  
-      MODE(RDWR)                                 
-      NOAUTOMOVE                                 
-      MOUNTPOINT('/usr/lpp/IBM/izoda/anaconda')  
-/* WMLZ SPARK */                                 
-MOUNT FILESYSTEM('WMLZ.OMVS.SAZKROOT')           
-      TYPE(ZFS)                                  
-      MODE(RDWR)                                 
-      NOAUTOMOVE                                 
-      MOUNTPOINT('/usr/lpp/IBM/izoda/spark') 
-```
 
 ## 2.0 Planning and Pre-Requisites
 
@@ -189,11 +133,77 @@ So, we're good to go!
 
 ### 3.2 Step 2 Planning system capacity for WMLz	
 
-Blah blah blah 
+The [minimum system capacity](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-planning-system-capacity) is described as 4 zIIPs, 1 GCP, 100GB memory, 100GB DASD. If you wanted to perform model training on WMLZ, the same link gives capacity guidelines for different intensities of model training.
 
-### 3.3 Step 3 btaining SMP/E image and PTFs for WMLz	
+This deployment, using the "Z Virtual Access" service for demonstrations is based on ZVDT. The system resources given to a ZVDT applicance can be varied to satisfy the minimum requirements listed above.
 
-Blah blah blah 
+### 3.3 Step 3 Obtaining SMP/E image and PTFs for WMLz	
+
+WMLZ should be ordered from ShopZ as a Portable Software Instance, screenshot below
+
+![shopz](wmlzzvaimages/shopz.JPG)
+
+Use the Download to host JCL to download the PSI image files into a large ZFS on your z/OS system. 
+The base size of the PSI image is about 20GB, so you will need to allocate a large multi-volume ZFS with extended data class attributes to store the image.
+Use the z/OSMF Software Configuration app to download the PSI image to your ZFS.
+
+Once the PSI image is downloaded you will need to switch to the Deploymemts tab of z/OSMF Software Configuration app to deploy the software to z/OS.
+Aside from the sheer size of the WMLZ PSI image, the SMPE installation is no different from any other Portable Sofware Instance deployment.
+
+Be sure the run the post-deployment steps which allocate ZFS file systems and polish of the SMPE CSI dataset.
+
+Having chosen a HLQ of ***WMLZ*** The following target libraries will be deployed.
+
+```
+'WMLZ.AZK.SAZKBIN' 
+'WMLZ.AZK.SAZKCNTL'
+'WMLZ.AZK.SAZKDBRM'
+'WMLZ.AZK.SAZKEXEC'
+'WMLZ.AZK.SAZKLOAD'
+'WMLZ.AZK.SAZKMAP' 
+'WMLZ.AZK.SAZKMENU'
+'WMLZ.AZK.SAZKOBJX'
+'WMLZ.AZK.SAZKPENU'
+'WMLZ.AZK.SAZKRPC' 
+'WMLZ.AZK.SAZKSAMP'
+'WMLZ.AZK.SAZKSLIB'
+'WMLZ.AZK.SAZKSMAP'
+'WMLZ.AZK.SAZKTENU'
+'WMLZ.AZK.SAZKXATH'
+'WMLZ.AZK.SAZKXCMD'
+'WMLZ.AZK.SAZKXEXC'
+'WMLZ.AZK.SAZKXSQL'
+'WMLZ.AZK.SAZKXTOD'
+'WMLZ.AZK.SAZKXVTB'
+```
+
+Much of the WMLZ product us deployed within USS. Parmlib should be updated to permanently mount the following ZFS filesystems at the mountpoints prescribed for WMLZ. Specifically 
+
+* WMLZ mountpoint is ```/usr/lpp/IBM/aln```
+* Anaconda mountpoint is ```/usr/lpp/IBM/izoda/anaconda```
+* Spark mopuntpoint is ```/usr/lpp/IBM/izoda/spark```
+
+```
+/* WMLZ ZFS */                                   
+MOUNT FILESYSTEM('WMLZ.OMVS.SALNROOT')           
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/aln/v2r4')        
+/* WMLZ ANACONDA */                              
+MOUNT FILESYSTEM('WMLZ.OMVS.SANBZFS')            
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/izoda/anaconda')  
+/* WMLZ SPARK */                                 
+MOUNT FILESYSTEM('WMLZ.OMVS.SAZKROOT')           
+      TYPE(ZFS)                                  
+      MODE(RDWR)                                 
+      NOAUTOMOVE                                 
+      MOUNTPOINT('/usr/lpp/IBM/izoda/spark') 
+```
+
 
 ### 3.4 Step 4 Procuring, installing, and configuring prerequisites for WMLz 
 
