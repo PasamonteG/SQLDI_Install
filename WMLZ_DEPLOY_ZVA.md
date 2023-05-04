@@ -269,11 +269,11 @@ The home directory of the WMZL setup userid needs a minimum of 500 MB disk space
 
 create the home directory for wmlzadm
 
-```/u/wmlzadm```
+```mkdir /u/wmlzadm```
 
 Change the ownership of the home directory to wmlzadm
 
-```chown –R <mlz_setup_userid>:<mlz_group> $IML_HOME/```
+```chown –R wmlzadm:wmlzgrp $IML_HOME/```
 
 Create a ZFS of approx 500MB and mount it at ```/u/wmlzadm```. The actual Job to setup home directory space is
 
@@ -334,18 +334,23 @@ MOUNT FILESYSTEM('IBMUSER.WMLZHOME.ZFS')
 #### 3.6.2 $IML_HOME directory
 
 
-$IML_HOME is used as the environment parameter that representrs where the WMLZ instance is to be mounted.
+$IML_HOME is used as the environment parameter that representrs where the WMLZ instance is to be mounted. 
+100GB is the recommended minimum size, so it will need to be allocated in an SMS extendable data class.
 
 
-create the USS path ```/u/aiz/wmlz```
+create the USS path 
+
+```mkdir /u/aiz/wmlz```
 
 and change ownership
 
-```
-drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:15 wmlz
-```
 
-Create an ACS Rule to place HLQ on SGEXTEAV
+```chown –R wmlzadm:wmlzgrp /u/aiz/wmlz```
+
+
+Create an ACS Rule in the SMS Control Dataset to place HLQ ***WMLZ*** on SGEXTEAV
+
+Display the SMS CDS
 
 ```
 CDS Name  : SYS1.S0W1.SCDS
@@ -360,29 +365,32 @@ STORCLAS  SYS1.SMS.CNTL            STORCLAS  IBMUSER
                                                        
                                                        
 STORGRP   SYS1.SMS.CNTL            STORGRP   IBMUSER   
+```
 
+Update the STORCLAS member of SYS1.SMS.CNTL, adding
 
-===
-
+```
 WHEN (&DSN = &AIZ_HLQ)                
   DO                                  
     SET &STORCLAS = 'SCEXTEAV'        
     EXIT CODE(0)                      
   END                                 
-  
-  
+```  
+ 
+and Update the STORGRP member of SYS1.SMS.CNTL, adding
 
+```
 WHEN (&STORCLAS= 'SCEXTEAV')          
   DO                                  
     SET &STORGRP = 'SGEXTEAV'
     WRITE '&STORGRP = ' &STORGRP      
     EXIT CODE(0)                      
   END                                 
-  
-  
 ```
 
-Create the ZFS ( must be able to grow HUGE 50GB plus ) using JCL in ```IBMUSER.NEALEJCL(IMLHOME)```.
+Then use ISMF panels to translate and validate the new ACS rules, before activating the new SMS CDS.
+
+Next, create the ZFS ( must be able to grow to 50GB plus ) using JCL in ```IBMUSER.NEALEJCL(IMLHOME)```.
 
 ```
 //IBMUSERJ JOB  (FB3),'CREATE ZFS',CLASS=A,MSGCLASS=H,                
@@ -425,7 +433,7 @@ Create the ZFS ( must be able to grow HUGE 50GB plus ) using JCL in ```IBMUSER.N
 /*                                                                    
 ```
 
-and mount it permenantly
+and permanently mount the ZFS by updating the appropriate PARMLIB BPX member.
 
 ```
 /* WMLZ IMLHOME ZFS */            
@@ -438,32 +446,18 @@ MOUNT FILESYSTEM('AIZ.WMLZ.ZFS')
 
 and change the owner
 
-```
-chown wmlzadm:wmlzgrp wmlz
-```
 
-### USS Environment 
+#### 3.6.3 USS Environment 
 
 
-Configure your z/OS UNIX shell environment for <mlz_setup_userid> ```/u/<mlz_setup_userid>/.profile```
+Configure your z/OS UNIX shell environment for wmlzadm.  
 
-```
-Copy the $IML_INSTALL_DIR/alnsamp/profile.template directory into $HOME/.profile for <mlz_setup_userid>.
-/usr/lpp/IBM/aln/v2r4/alnsamp/profile.template
-set 
-$SPARK_HOME = /usr/lpp/IBM/izoda/spark/spark24x
-$ANACONDA_ROOT = /usr/lpp/IBM/izoda/anaconda 
-$JAVA_HOME = ?SQLDI 
-$IML_HOME = /u/wmlz
-$IML_INSTALL_DIR = /usr/lpp/IBM/aln/v2r4 
-$IML_JOBNAME_PREFIX = WMLZ 
-$AIE_INSTALL_DIR = /usr/lpp/IBM/aie 
-If necessary, set $XL_CONFIG to the xlc.cfg file ... n/a unless using ZCX & DLC 
+Copy the WMLZ-provided profile template to /u/wmlzadm/.profile
 
-PATH=$IML_INSTALL_DIR/iml-zostools/bin:$IML_INSTALL_DIR/nodejs/bin:$PATH;
-```
+```cp /usr/lpp/IBM/aln/v2r4/alnsamp/profile.template /u/wmlzadm/.profile```
 
-I used this from ```/u/wmlzadm/.profile```
+Edit /u/wmlzadm/.profile to set all the environment variables correctly for this system. End result below
+
 
 ```
 # This is a sample user profile for <mlz_setup_userid> which is used to install and configure IBM Watson Machine Learning for z/OS                      
@@ -529,58 +523,26 @@ export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"
                                                     #EX: STEPLIB=IGY.V6R4M0.SIGYCOMP:CBC.SCCNCMP                                                        
 ```
 
-### Configure <mlz_setup_userid> access to your z/OS UNIX shell environment
+
+#### 3.6.4 WMLZADM permissions 
+The comprehensive set of permissions is documented in the [KC](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-setup-user-id)
+
+In the ADCD z/OS V2.5 system used in this example there was no need for any additional permission setting. 
+The instructions to change the owner of /u/wmlzadm and $IML_HOME, combined with the default permissions set by the WMLZ SMPE install covered all the bases.
 
 
-#### Permissions required for configuring and starting WMLz:
+#### 3.6.5 OMVS properties
 
-$IML_HOME environment variable included in the user's profile
-Permission to read and write to the $IML_HOME directory.
-Permission to read and execute to the $IML_INSTALL_DIR. 
-
-$SPARK_HOME environment variables included in the user's profile.
-
-$ANACONDA_ROOT environment variable defined in the user's profile.
-
-$ANACONDA_ROOT/bin defined in the $PATH environment variable in the user's profile.
-
-Permission to read the $ANACONDA_ROOT directory.
-
-$JAVA_HOME/bin defined in the $PATH environment variable in the user's profile.
-
-$IBM_JAVA_OPTIONS environment variable set to -Dfile.encoding=UTF-8 in the user's profile.
-
-Consider using a customized java.security file if all of the following factors apply to you:
-- You select JCERACFKS or JCEKS as the keystore type for your WMLz.
-- The Java security specification ($JAVA_HOME/lib/security/java.security) on the system where your WMLz runs lists IBMJCECCA as the top provider.
-- Your WMLz does not need to use the resources in the ICSF services.
-export IBM_JAVA_OPTIONS="$IBM_JAVA_OPTIONS -Djava.security.properties=$IML_HOME/configuration/java.security"
-
-$_BPXK_AUTOCVT environment variable set to ON in the user's profile.
-
-Read access to the RACF BPX.JOBNAME facility class so that you can assign default jobnames with the ALN prefix to the started WMLz services.
-Read access to the RACF BPX.FILEATTR.PROGCTL facility class when using client authentication for z/OS Spark and Jupyter Kernel Gateway.
-Read access to resources CSFDSG, CSFDSV, CSFEDH, CSFIQA, CSFIQF, CSFOWH, CSFPKG, CSFPKI, CSFPKX, CSFRNG, and CSFRNGL for ICSF services in the CSFSERV class if your system is CryptoCard-enabled.
-
-#### Other Permissions
-        
-Permissions required for creating, configuring, and starting WMLz scoring service
-subset of above
-
-Permissions required for configuring WMLz scoring service in a CICS region
-subset of above
-        
-Permissions required for configuring and running Db2® anomaly detection solution
-...leave for later
-
-
-### OMVS properties
+Varioud omvs properties need to be set to allow for the workload characteristics that WMLZ needs to support. 
+The RACF job provided in section 3.6.1 actually set the 4 required omvs parameter.
+However, if you are using an existing user, the following command will do the job.
 
 ```
-ALTUSER <mlz_setup_userid> OMVS(ASSIZEMAX(address-space-size) MEMLIMIT(nonshared-memory-size) CPUTIMEMAX(cpu-time))
+ALTUSER wmlzadm OMVS(ASSIZEMAX(1200000000) MEMLIMIT(32G) CPUTIMEMAX(86400))
 ```
-        
-Check with ulimit
+
+
+Check with the ulimit command in USS.
 
 ```
 /bin/ulimit -a 
@@ -594,10 +556,14 @@ address space     1048576k
 memory above bar  24576m
 ```
         
-### Verify
+#### 3.6.6 Verify
 
+WMLZ provides a configuration checker tool to very that the wmlz setup userid has indeed been setup correctly.
+The tool is found here
 
-wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
+```/usr/lpp/IBM/aln/v2r4/alnsamp/wmlz-configuration-checker.sh```
+
+There are two modes for invoking the configuration checker, depending on whether you plan to use python in this instance or not.
 
 ```
 ./wmlz-configuration-checker.sh -preconfig
@@ -605,7 +571,93 @@ wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
 ./wmlz-configuration-checker.sh -preconfig -no-python
 ```
 
-First time round The checker threw some errors and warning
+I ran the checker with the -no-python option and got some errors and warnings first time.
+
+```
+======================================
+=                                    =
+=         WMLz PREREQ REPORT         =
+=                                    =
+======================================
+
+=-=-=-=-= REQUIRED SOFTWARE LEVEL =-=-=-=-=
+Spark location           /usr/lpp/IBM/izoda/spark/spark24x/bin/spark-submit
+Spark version            2.4.8
+
+Conda location           /usr/lpp/IBM/izoda/anaconda/bin/conda
+Conda version
+Conda level
+
+Bash location            /usr/lpp/IBM/aln/v2r4/iml-zostools/bin/bash
+Bash version             4.3.48
+
+Java location            /usr/lpp/java/J8.0_64/bin/java
+Java version             1.8.0
+
+Node.js location         /usr/lpp/IBM/aln/v2r4/nodejs/bin/node
+Node.js version          16.14.2
+
+
+=-=-=-=- ENVIRONMENT VARIABLES =-=-=-=
+SPARK_HOME               /usr/lpp/IBM/izoda/spark/spark24x
+ANACONDA_ROOT            /usr/lpp/IBM/izoda/anaconda
+JAVA_HOME                /usr/lpp/java/J8.0_64
+IML_HOME                 /u/aiz/wmlz
+IML_INSTALL_DIR          /usr/lpp/IBM/aln/v2r4
+IML_JOBNAME_PREFIX       ALN
+LIBPATH                  /lib:/usr/lib:/zdnn/lib:/usr/lpp/java/J8.0_64/bin/classic:/usr/lpp/java/J8.0_64/bin/j9vm:/usr/lpp/java/J8.0_64/lib/s390x:/usr/lpp/IBM/izoda/spark/spark24x/lib
+PATH                     /usr/lpp/IBM/aln/v2r4/iml-zostools/bin:/bin::/usr/lpp/IBM/izoda/anaconda/bin:/usr/lpp/java/J8.0_64/bin:/usr/lpp/IBM/izoda/spark/spark24x/bin:/usr/lpp/IBM/izoda/spark/spark24x/sbin:/usr/lpp/IBM/aln/v2r4/nodejs/bin:/usr/lpp/IBM/cobol/igyv6r4/bin
+IBM_JAVA_OPTIONS         -Dfile.encoding=UTF-8 -Djava.security.properties=/u/aiz/wmlz/configuration/java.security
+_BPXK_AUTOCVT            ON
+_BPX_SHAREAS             NO
+_ENCODE_FILE_NEW         ISO8859-1
+_ENCODE_FILE_EXISTING    UNTAGGED
+_CEE_RUNOPTS             FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)
+XL_CONFIG
+
+
+=-=-=-=-=- USER ID SETTINGS -=-=-=-=-=
+MEMLIMIT (Non-shared memory of OMVS segment) 32768M
+ASSIZEMAX (JVM maximum address space size)   1171875K
+IML Home Disk Space (Available)              2850687K
+
+
+======================================
+=                                    =
+=        ERROR & WARNING REPORT      =
+=                                    =
+======================================
+
+=-=-=-=-=-=-=-= ERRORS =-=-=-=-=-=-=-=
+WMLz:   ERROR:      2850687KB available for /u/aiz/wmlz  (10GB is required and 50GB is recommended)
+
+--------------> 1 error.
+
+=-=-=-=-=-=-=- WARNINGS -=-=-=-=-=-=-=
+WMLz:   WARNING:    XL_CONFIG environment variable is not configured. Verify if you need a customized xlc configuration file to enable the xlc utility.
+
+WMLz:   WARNING:    ITOA_HOME is not set.
+
+--------------> 2 warnings.
+
+```
+
+The error was fixed by growing the ZFS filesystem as follows
+
+```
+IBMUSER:/u/aiz: >df -k | grep aiz
+/u/aiz/wmlz    (AIZ.WMLZ.ZFS)            2850663/2880000 4294967289 Available
+
+IBMUSER:/u/aiz: >zfsadm grow -aggregate AIZ.WMLZ.ZFS -size 15000000
+IOEZ00173I Aggregate AIZ.WMLZ.ZFS successfully grown
+AIZ.WMLZ.ZFS (R/W COMP): 14969471 K free out of total 15000480
+
+IBMUSER:/u/aiz: >df -k | grep aiz
+/u/aiz/wmlz    (AIZ.WMLZ.ZFS)            14969471/15000480 4294967289 Available
+```
+
+The warnings are not relevant because we do not plan to use the C compiler or deploy the Db2 anomoly detection solution.
+
 
 ### 3.7 Step 7 Configuring additional user IDs	 
 
