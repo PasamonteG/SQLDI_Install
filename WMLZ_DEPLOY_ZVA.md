@@ -143,14 +143,23 @@ WMLZ should be ordered from ShopZ as a Portable Software Instance, screenshot be
 
 ![shopz](wmlzzvaimages/shopz.JPG)
 
-Use the Download to host JCL to download the PSI image files into a large ZFS on your z/OS system. 
+Use the "Download to host" sample JCL to download the PSI image files into a large ZFS on your z/OS system. 
 The base size of the PSI image is about 20GB, so you will need to allocate a large multi-volume ZFS with extended data class attributes to store the image.
 Use the z/OSMF Software Configuration app to download the PSI image to your ZFS.
 
-Once the PSI image is downloaded you will need to switch to the Deploymemts tab of z/OSMF Software Configuration app to deploy the software to z/OS.
-Aside from the sheer size of the WMLZ PSI image, the SMPE installation is no different from any other Portable Sofware Instance deployment.
+### 3.4 Step 4 Procuring, installing, and configuring prerequisites for WMLz 
 
-Be sure the run the post-deployment steps which allocate ZFS file systems and polish of the SMPE CSI dataset.
+In this worked example I was fortunate that all the pre-requisites were already installed. 
+
+### 3.5 Step 5 Installing WMLz, including the bundled IzODA (Spark, Anaconda, and MDS) 
+
+This document does not attempt to capture the SMPE download and install process, 
+because there is nothing special or different about the SMPE process for WMLZ.
+The only thing that is slightly unusual is the size of the WMLZ portable software instance, which is about 20GB.
+
+Once the PSI image is downloaded you will need to switch to the Deploymemts tab of z/OSMF Software Configuration app to deploy the software to z/OS.
+
+Be sure the run all the post-deployment steps which allocate ZFS file systems and polish of the SMPE CSI dataset.
 
 Having chosen a HLQ of ***WMLZ*** The following target libraries will be deployed.
 
@@ -205,13 +214,6 @@ MOUNT FILESYSTEM('WMLZ.OMVS.SAZKROOT')
 ```
 
 
-### 3.4 Step 4 Procuring, installing, and configuring prerequisites for WMLz 
-
-Blah blah blah 
-
-### 3.5 Step 5 Installing WMLz, including the bundled IzODA (Spark, Anaconda, and MDS) 
-
-Blah blah blah 
 
 
 ### 3.6 Step 6 Configuring WMLz setup user ID	 
