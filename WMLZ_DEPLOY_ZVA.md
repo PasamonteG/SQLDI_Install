@@ -213,6 +213,12 @@ MOUNT FILESYSTEM('WMLZ.OMVS.SAZKROOT')
       MOUNTPOINT('/usr/lpp/IBM/izoda/spark') 
 ```
 
+SMPE will create the SMPE Zone ```WMLZ.SMPE.GLOBAL.CSI``` which you can inspect. It will show that you installed 4 FMIDs, as follows.
+
+* HANA110 (anaconda)
+* HAQN240 (WMLZ Base)
+* HMDS120 (MDS - ie DVM)
+* HSPK120 (spark)
 
 
 ### 3.6 Step 6 Configuring WMLz setup user ID	 
@@ -222,7 +228,384 @@ This is because WMLZ mostly runs in USS, and needs to run in an environment that
 
 The [knowledge_center](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-setup-user-id) does a very good job of explaining the hows and whys of setting up the wmlz setup userid. This paper provides the jobs that were used to create the userid in this worked example.
 
+Actual Job ```IBMUSER.NEALEJCL(WMLZUSER)``` run was
 
+```
+//IBMUSERJ JOB  (FB3),'INIT 3380 DASD',CLASS=A,MSGCLASS=H,    
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                  
+//*                                                           
+//*   JOB TO CREATE WMLZ SETUP USERID                         
+//*                                                           
+//RACF     EXEC PGM=IKJEFT01,REGION=0M                        
+//SYSTSPRT DD SYSOUT=*                                        
+//SYSTSIN  DD *                                               
+                                                              
+ADDGROUP WMLZGRP OMVS(AUTOGID) OWNER(SYS1)                    
+                                                              
+AU WMLZADM NAME('WMLZADM') PASSWORD(SYS1) -                   
+OWNER(SYS1) DFLTGRP(WMLZGRP) UACC(READ) OPERATIONS SPECIAL   -
+TSO(ACCTNUM(ACCT#) PROC(DBSPROCD) JOBCLASS(A) MSGCLASS(X) -   
+HOLDCLASS(X) SYSOUTCLASS(X) SIZE(4048) MAXSIZE(0))     -      
+OMVS(HOME(/u/wmlzadm) -                                       
+PROGRAM(/usr/lpp/IBM/aln/v2r4/iml-zostools/bin/bash) -        
+CPUTIMEMAX(86400) -                                           
+MEMLIMIT(32G) ASSIZEMAX(1200000000) AUTOUID)                  
+                                                              
+PERMIT ACCT#     CLASS(ACCTNUM) ID(WMLZADM)                   
+PERMIT ISPFPROC  CLASS(TSOPROC) ID(WMLZADM)                   
+PERMIT DBSPROC   CLASS(TSOPROC) ID(WMLZADM)                   
+PERMIT JCL       CLASS(TSOAUTH) ID(WMLZADM)                   
+PERMIT OPER      CLASS(TSOAUTH) ID(WMLZADM)                   
+PERMIT ACCT      CLASS(TSOAUTH) ID(WMLZADM)                   
+PERMIT MOUNT     CLASS(TSOAUTH) ID(WMLZADM)                   
+                                                              
+```
+        
+
+### Paths and ZFS
+
+
+Allocate a minimum of 500 MB disk space to the home directory for <mlz_setup_userid>
+
+Create the $IML_HOME directory. Make sure that $IML_HOME is mounted to a zFS file system with at least 50 GB storage available
+
+Consider creating the $IML_HOME/spark subdirectory  mounted on a separate zFS file system with at least 4 GB storage available.
+
+chown –R <mlz_setup_userid>:<mlz_group> $IML_HOME/
+
+To allocate zFS data sets for $IML_HOME and $IML_HOME/spark that are larger than 4GB, make sure that you specify DFSMS data class with extended format and extended addressability.
+
+Actual Job to setup home directory space
+```
+//IBMUSERJ JOB  (FB3),'CREATE ZFS',CLASS=A,MSGCLASS=H,                  
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                            
+//********************************************************************  
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                    
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSIN    DD *                                                         
+  DEFINE -                                                              
+       CLUSTER -                                                        
+         ( -                                                            
+             NAME(IBMUSER.WMLZHOME.ZFS) -                               
+             LINEAR -                                                   
+             CYL(600 50) VOLUME(USER0A USER0B USER0C) -                 
+             DATACLASS(DCEXTEAV) -                                      
+             SHAREOPTIONS(3) -                                          
+         )                                                              
+/*                                                                      
+//*                                                                     
+// SET ZFSDSN='IBMUSER.WMLZHOME.ZFS'                                    
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                     
+// PARM='-aggregate &ZFSDSN -compat'                                    
+//SYSPRINT DD SYSOUT=*                                                  
+//STDOUT   DD SYSOUT=*                                                  
+//STDERR   DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=*                                                  
+//CEEDUMP  DD SYSOUT=*                                                  
+//*                                                                     
+//*                                                                     
+//* Mount the dataset at the mountpoint directory                       
+//*                                                                     
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)          
+//SYSTSPRT  DD SYSOUT=*                                                 
+//SYSTSIN   DD *                                                        
+  PROFILE MSGID WTPMSG                                                  
+  MOUNT TYPE(ZFS) +                                                     
+    MODE(RDWR) +                                                        
+    MOUNTPOINT('/u/wmlzadm') +                                          
+    FILESYSTEM('IBMUSER.WMLZHOME.ZFS')                                  
+/*                                                                      
+```
+
+and permenant mount
+
+```
+/* WMLZADM ZFS */                          
+MOUNT FILESYSTEM('IBMUSER.WMLZHOME.ZFS')   
+      TYPE(ZFS)                            
+      MODE(RDWR)                           
+      NOAUTOMOVE                           
+      MOUNTPOINT('/u/wmlzadm')             
+```
+
+
+and change ownership
+
+```
+drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:04 wmlzadm
+```
+
+IML_HOME (where the WMLZ instance will be laid down?)
+
+create the path ```/u/aiz/wmlz```
+
+and change ownership
+
+```
+drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:15 wmlz
+```
+
+Create an ACS Rule to place HLQ on SGEXTEAV
+
+```
+CDS Name  : SYS1.S0W1.SCDS
+
+DATACLAS  SYS1.SMS.CNTL            ACSSTORD  IBMUSER   
+                                                       
+                                                       
+MGMTCLAS  -----------------------  --------  --------  
+                                                       
+                                                       
+STORCLAS  SYS1.SMS.CNTL            STORCLAS  IBMUSER   
+                                                       
+                                                       
+STORGRP   SYS1.SMS.CNTL            STORGRP   IBMUSER   
+
+
+===
+
+WHEN (&DSN = &AIZ_HLQ)                
+  DO                                  
+    SET &STORCLAS = 'SCEXTEAV'        
+    EXIT CODE(0)                      
+  END                                 
+  
+  
+
+WHEN (&STORCLAS= 'SCEXTEAV')          
+  DO                                  
+    SET &STORGRP = 'SGEXTEAV'
+    WRITE '&STORGRP = ' &STORGRP      
+    EXIT CODE(0)                      
+  END                                 
+  
+  
+```
+
+Create the ZFS ( must be able to grow HUGE 50GB plus ) using JCL in ```IBMUSER.NEALEJCL(IMLHOME)```.
+
+```
+//IBMUSERJ JOB  (FB3),'CREATE ZFS',CLASS=A,MSGCLASS=H,                
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                          
+//********************************************************************
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                  
+//SYSPRINT DD SYSOUT=*                                                
+//SYSIN    DD *                                                       
+  DEFINE -                                                            
+       CLUSTER -                                                      
+         ( -                                                          
+             NAME(AIZ.WMLZ.ZFS) -                                     
+             LINEAR -                                                 
+             CYL(4000 200) VOLUME(EAV001 EAV002) -                    
+             DATACLASS(DCEXTEAV) -                                    
+             SHAREOPTIONS(3) -                                        
+         )                                                            
+/*                                                                    
+//*                                                                   
+// SET ZFSDSN='AIZ.WMLZ.ZFS'                                          
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                   
+// PARM='-aggregate &ZFSDSN -compat'                                  
+//SYSPRINT DD SYSOUT=*                                                
+//STDOUT   DD SYSOUT=*                                                
+//STDERR   DD SYSOUT=*                                                
+//SYSUDUMP DD SYSOUT=*                                                
+//CEEDUMP  DD SYSOUT=*                                                
+//*                                                                   
+//*                                                                   
+//* Mount the dataset at the mountpoint directory                     
+//*                                                                   
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)        
+//SYSTSPRT  DD SYSOUT=*                                               
+//SYSTSIN   DD *                                                      
+  PROFILE MSGID WTPMSG                                                
+  MOUNT TYPE(ZFS) +                                                   
+    MODE(RDWR) +                                                      
+    MOUNTPOINT('/u/aiz/wmlz') +                                       
+    FILESYSTEM('AIZ.WMLZ.ZFS')                                        
+/*                                                                    
+```
+
+and mount it permenantly
+
+```
+/* WMLZ IMLHOME ZFS */            
+MOUNT FILESYSTEM('AIZ.WMLZ.ZFS')  
+      TYPE(ZFS)                   
+      MODE(RDWR)                  
+      NOAUTOMOVE                  
+      MOUNTPOINT('/u/aiz/wmlz')   
+```
+
+and change the owner
+
+```
+chown wmlzadm:wmlzgrp wmlz
+```
+
+### USS Environment 
+
+
+Configure your z/OS UNIX shell environment for <mlz_setup_userid> ```/u/<mlz_setup_userid>/.profile```
+
+```
+Copy the $IML_INSTALL_DIR/alnsamp/profile.template directory into $HOME/.profile for <mlz_setup_userid>.
+/usr/lpp/IBM/aln/v2r4/alnsamp/profile.template
+set 
+$SPARK_HOME = /usr/lpp/IBM/izoda/spark/spark24x
+$ANACONDA_ROOT = /usr/lpp/IBM/izoda/anaconda 
+$JAVA_HOME = ?SQLDI 
+$IML_HOME = /u/wmlz
+$IML_INSTALL_DIR = /usr/lpp/IBM/aln/v2r4 
+$IML_JOBNAME_PREFIX = WMLZ 
+$AIE_INSTALL_DIR = /usr/lpp/IBM/aie 
+If necessary, set $XL_CONFIG to the xlc.cfg file ... n/a unless using ZCX & DLC 
+
+PATH=$IML_INSTALL_DIR/iml-zostools/bin:$IML_INSTALL_DIR/nodejs/bin:$PATH;
+```
+
+I used this from ```/u/wmlzadm/.profile```
+
+```
+# This is a sample user profile for <mlz_setup_userid> which is used to install and configure IBM Watson Machine Learning for z/OS                      
+# Place the customized version of the .profile file under the user home of <mlz_setup_userid>                                                           
+                                                                                                                                                        
+                                                                                                                                                        
+# Spark environment variable                                                                                                                            
+export SPARK_HOME=/usr/lpp/IBM/izoda/spark/spark24x                                                                                                     
+                                                                                                                                                        
+# Anaconda environment variable                                                                                                                         
+export ANACONDA_ROOT=/usr/lpp/IBM/izoda/anaconda                                                                                                        
+                                                                                                                                                        
+# Java environment variable                                                                                                                             
+export JAVA_HOME=/usr/lpp/java/J8.0_64                                                                                                                  
+                                                                                                                                                        
+# AIE environment variable                                                                                                                              
+# export AIE_INSTALL_DIR=/usr/lpp/IBM/aie                                                                                                               
+                                                                                                                                                        
+# WML for z/OS environment variable                                                                                                                     
+export IML_HOME=/u/aiz/wmlz                                                                                                                             
+                                                                                                                                                        
+# WML for z/OS environment variable                                                                                                                     
+export IML_INSTALL_DIR=/usr/lpp/IBM/aln/v2r4                                                                                                            
+                                                                                                                                                        
+# WML for z/OS environment variable                                                                                                                     
+export IML_JOBNAME_PREFIX=ALN                        #REQUIRED Jobname prefix for each service. Default value is ALN                                    
+                                                     # Job name prefix has max 4 characters limit. First character has to be alphabetic. The rest charac
+                                                                                                                                                        
+# COBOL cob2 utility installation directory                                                                                                             
+export COBOL_INSTALL_DIR=/usr/lpp/IBM/cobol/igyv6r4                                                                                                     
+                                                                                                                                                        
+# PATH                                                                                                                                                  
+PATH=/bin:                                                                                                                                              
+PATH="${IML_INSTALL_DIR}"/iml-zostools/bin:$PATH                                                                                                        
+PATH=$PATH:"${ANACONDA_ROOT}"/bin                    #OPTIONAL Only set this if you have ANACONDA_ROOT environment variable set                         
+PATH=$PATH:"${JAVA_HOME}"/bin                                                                                                                           
+PATH=$PATH:"${SPARK_HOME}"/bin:"${SPARK_HOME}"/sbin                                                                                                     
+PATH=$PATH:"${IML_INSTALL_DIR}"/nodejs/bin                                                                                                              
+PATH=$PATH:"${COBOL_INSTALL_DIR}/bin"                #OPTIONAL Only set this if you have COBOL_INSTALL_DIR environment variable set                     
+                                                                                                                                                        
+export PATH="$PATH"                                                                                                                                     
+                                                                                                                                                        
+#LIBPATH                                                                                                                                                
+LIBPATH=/lib:/usr/lib                                                                                                                                   
+LIBPATH=$LIBPATH:"${AIE_INSTALL_DIR}"/zdnn/lib       #OPTIONAL Only set this if you have AIE_INSTALL_DIR environment variable set                       
+LIBPATH=$LIBPATH:"${JAVA_HOME}"/bin/classic                                                                                                             
+LIBPATH=$LIBPATH:"${JAVA_HOME}"/bin/j9vm                                                                                                                
+LIBPATH=$LIBPATH:"${JAVA_HOME}"/lib/s390x                                                                                                               
+LIBPATH=$LIBPATH:"${SPARK_HOME}"/lib                                                                                                                    
+                                                                                                                                                        
+export LIBPATH="$LIBPATH"                                                                                                                               
+                                                                                                                                                        
+                                                                                                                                                        
+# Other system environment variables                                                                                                                    
+export IBM_JAVA_OPTIONS="-Dfile.encoding=UTF-8"                                                                                                         
+export IBM_JAVA_OPTIONS="$IBM_JAVA_OPTIONS -Djava.security.properties=${IML_HOME}/configuration/java.security"  #OPTIONAL Only add this if you have a cu
+export _BPXK_AUTOCVT=ON                                                                                                                                 
+export _BPX_SHAREAS=NO                                                                                                                                  
+export _ENCODE_FILE_NEW=ISO8859-1                                                                                                                       
+export _ENCODE_FILE_EXISTING=UNTAGGED                                                                                                                   
+export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"                                                                                                
+# export STEPLIB=<DSN1:DSN2:DSN3>                 #OPTIONAL Set up the load library search order for executable files. Consider setting this when xlc   
+                                                    #EX: STEPLIB=IGY.V6R4M0.SIGYCOMP:CBC.SCCNCMP                                                        
+```
+
+### Configure <mlz_setup_userid> access to your z/OS UNIX shell environment
+
+
+#### Permissions required for configuring and starting WMLz:
+
+$IML_HOME environment variable included in the user's profile
+Permission to read and write to the $IML_HOME directory.
+Permission to read and execute to the $IML_INSTALL_DIR. 
+
+$SPARK_HOME environment variables included in the user's profile.
+
+$ANACONDA_ROOT environment variable defined in the user's profile.
+
+$ANACONDA_ROOT/bin defined in the $PATH environment variable in the user's profile.
+
+Permission to read the $ANACONDA_ROOT directory.
+
+$JAVA_HOME/bin defined in the $PATH environment variable in the user's profile.
+
+$IBM_JAVA_OPTIONS environment variable set to -Dfile.encoding=UTF-8 in the user's profile.
+
+Consider using a customized java.security file if all of the following factors apply to you:
+- You select JCERACFKS or JCEKS as the keystore type for your WMLz.
+- The Java security specification ($JAVA_HOME/lib/security/java.security) on the system where your WMLz runs lists IBMJCECCA as the top provider.
+- Your WMLz does not need to use the resources in the ICSF services.
+export IBM_JAVA_OPTIONS="$IBM_JAVA_OPTIONS -Djava.security.properties=$IML_HOME/configuration/java.security"
+
+$_BPXK_AUTOCVT environment variable set to ON in the user's profile.
+
+Read access to the RACF BPX.JOBNAME facility class so that you can assign default jobnames with the ALN prefix to the started WMLz services.
+Read access to the RACF BPX.FILEATTR.PROGCTL facility class when using client authentication for z/OS Spark and Jupyter Kernel Gateway.
+Read access to resources CSFDSG, CSFDSV, CSFEDH, CSFIQA, CSFIQF, CSFOWH, CSFPKG, CSFPKI, CSFPKX, CSFRNG, and CSFRNGL for ICSF services in the CSFSERV class if your system is CryptoCard-enabled.
+
+#### Other Permissions
+        
+Permissions required for creating, configuring, and starting WMLz scoring service
+subset of above
+
+Permissions required for configuring WMLz scoring service in a CICS region
+subset of above
+        
+Permissions required for configuring and running Db2® anomaly detection solution
+...leave for later
+
+
+### OMVS properties
+
+```
+ALTUSER <mlz_setup_userid> OMVS(ASSIZEMAX(address-space-size) MEMLIMIT(nonshared-memory-size) CPUTIMEMAX(cpu-time))
+```
+        
+Check with ulimit
+
+```
+/bin/ulimit -a 
+core file         8192b
+cpu time          unlimited 
+data size         unlimited 
+file size         unlimited 
+stack size        unlimited 
+file descriptors  520000
+address space     1048576k
+memory above bar  24576m
+```
+        
+### Verify
+
+
+wmlz-configuration-checker.sh script in the $IML_INSTALL_DIR/alnsamp directory.
+
+```
+./wmlz-configuration-checker.sh -preconfig
+
+./wmlz-configuration-checker.sh -preconfig -no-python
+```
+
+First time round The checker threw some errors and warning
 
 ### 3.7 Step 7 Configuring additional user IDs	 
 
