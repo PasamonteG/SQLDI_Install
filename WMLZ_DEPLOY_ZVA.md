@@ -262,10 +262,13 @@ PERMIT MOUNT     CLASS(TSOAUTH) ID(WMLZADM)
 ```
         
 
-### Paths and ZFS
+#### 3.6.1 WMLZADM home directory
 
 
-Allocate a minimum of 500 MB disk space to the home directory for <mlz_setup_userid>
+The home directory of the WMZL setup userid needs a minimum of 500 MB disk space. So, we need to
+1. create the home directory ```/u/wmlzadm```
+2. Make wlmzadm the owner of the directory ( using shell command chown -R wmlzadm:wmlzgrp /u/wmlzadm )
+3. 
 
 Create the $IML_HOME directory. Make sure that $IML_HOME is mounted to a zFS file system with at least 50 GB storage available
 
@@ -334,6 +337,9 @@ and change ownership
 ```
 drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:04 wmlzadm
 ```
+
+
+
 
 IML_HOME (where the WMLZ instance will be laid down?)
 
