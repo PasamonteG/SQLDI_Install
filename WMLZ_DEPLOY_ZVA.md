@@ -33,7 +33,7 @@ There are two documents covering WMLZ V2.4
 
 The purpose of this document is to provide a clear and simple worked example of what is involved in deploying Watson Machine Learning for z/OS.
 
-This document is written in support of a ***"Test Drive"*** system, in Techzone and/or ZVA, that can be provisioned by IBMers for the purposes of self-education, demonstrations or customer workshops.
+This document is written in support of a ***"Test Drive"*** system, bookable from Techzone or ZVA, that can be provisioned by IBMers for the purposes of self-education, demonstrations or customer workshops.
 
 It ***IS NOT*** a performance test environment.
 
