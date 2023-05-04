@@ -266,19 +266,17 @@ PERMIT MOUNT     CLASS(TSOAUTH) ID(WMLZADM)
 
 
 The home directory of the WMZL setup userid needs a minimum of 500 MB disk space. So, we need to
-1. create the home directory ```/u/wmlzadm```
-2. Make wlmzadm the owner of the directory ( using shell command chown -R wmlzadm:wmlzgrp /u/wmlzadm )
-3. 
 
-Create the $IML_HOME directory. Make sure that $IML_HOME is mounted to a zFS file system with at least 50 GB storage available
+create the home directory for wmlzadm
 
-Consider creating the $IML_HOME/spark subdirectory  mounted on a separate zFS file system with at least 4 GB storage available.
+```/u/wmlzadm```
 
-chown –R <mlz_setup_userid>:<mlz_group> $IML_HOME/
+Change the ownership of the home directory to wmlzadm
 
-To allocate zFS data sets for $IML_HOME and $IML_HOME/spark that are larger than 4GB, make sure that you specify DFSMS data class with extended format and extended addressability.
+```chown –R <mlz_setup_userid>:<mlz_group> $IML_HOME/```
 
-Actual Job to setup home directory space
+Create a ZFS of approx 500MB and mount it at ```/u/wmlzadm```. The actual Job to setup home directory space is
+
 ```
 //IBMUSERJ JOB  (FB3),'CREATE ZFS',CLASS=A,MSGCLASS=H,                  
 //             NOTIFY=&SYSUID,MSGLEVEL=(1,1)                            
@@ -320,7 +318,7 @@ Actual Job to setup home directory space
 /*                                                                      
 ```
 
-and permenant mount
+and permanently mount the ZFS by updating the appropriate PARMLIB BPX member.
 
 ```
 /* WMLZADM ZFS */                          
@@ -332,18 +330,14 @@ MOUNT FILESYSTEM('IBMUSER.WMLZHOME.ZFS')
 ```
 
 
-and change ownership
 
-```
-drwxr-xr-x   2 WMLZADM  WMLZGRP        0 May  1 01:04 wmlzadm
-```
+#### 3.6.2 $IML_HOME directory
 
 
+$IML_HOME is used as the environment parameter that representrs where the WMLZ instance is to be mounted.
 
 
-IML_HOME (where the WMLZ instance will be laid down?)
-
-create the path ```/u/aiz/wmlz```
+create the USS path ```/u/aiz/wmlz```
 
 and change ownership
 
