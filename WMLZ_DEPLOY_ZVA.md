@@ -156,12 +156,96 @@ The list below is an overview of the 21 steps, including an indication of the sk
 * Step 20	Configuring a standalone Jupyter notebook server	... Optional	(Sysprog with USS skills)  ***... omitted this time***
 * Step 21	Verifying WMLz installation and configuration	... Optional	(Sysprog with USS skills)	
 
+An audit trail of following each of the required steps above follows now
 
 
-So, Tally Ho, Lets get on with it.
+### 3.1 Step 1 Preparing for WMLz installation	 
+
+Blah blah blah 
+
+### 3.2 Step 2 Planning system capacity for WMLz	
+
+Blah blah blah 
+
+### 3.3 Step 3 btaining SMP/E image and PTFs for WMLz	
+
+Blah blah blah 
+
+### 3.4 Step 4 Procuring, installing, and configuring prerequisites for WMLz 
+
+Blah blah blah 
+
+### 3.5 Step 5 Installing WMLz, including the bundled IzODA (Spark, Anaconda, and MDS) 
+
+Blah blah blah 
+
+
+### 3.6 Step 6 Configuring WMLz setup user ID	 
+
+Blah blah blah 
+
+### 3.7 Step 7 Configuring additional user IDs	 
+
+***omitted this time*** No need for additional users in this worked example.
+
+### 3.8 Step 8 Configuring network ports for WMLz	
+
+Blah blah blah 
+
+### 3.9 Step 9 Configuring secure network communications for WMLz	
+
+Blah blah blah 
+
+### 3.10 Step 10 Configuring WMLz  
+
+Blah blah blah 
+
+### 3.11 Step 11 Configuring ONNX compiler service ... Optional (Sysprog with USS  & zCX skills)  
+
+***omitted this time*** Using the IBM Deep Learning compiler to support ONNX models requires z/OC container extensions to be deployed.
+zCX can be deployed using an IBM-provided workflow in z/OSMF.
+This is outside the scope of this worked example.
+
+### 3.12 Step 12 Configuring Python runtime environment ... Optional  	 
+
+***omitted this time*** Using python for data wrangling and model development is outside the scope of this worked example.
+
+### 3.13 Step 13 Configuring client authentication for z/OS Spark  ... Optional  
+
+***omitted this time*** Client authentication is outside the scope of this worked example.
+
+### 3.14 Step 14 Configuring WML for z/OS scoring services  	
+
+Blah blah blah 
+
+### 3.15 Step 15 Configuring WML for z/OS scoring services in a CICS region	
+
+Blah blah blah 
+
+### 3.16 Step 16 Configuring scoring services for high availability ...	Optional	 
+
+***omitted this time*** outside the scope of this worked example.
+
+### 3.17 Step 17 Configuring Db2 anomaly detection solution	... Optional  
+
+***omitted this time*** outside the scope of this worked example.
+
+### 3.18 Step 18 Configuring WMLz for high performance ...	Optional  
+
+***omitted this time*** outside the scope of this worked example.
+
+### 3.19 Step 19 Configuring a WMLz cluster for high availability	... Optional	 
+
+***omitted this time*** outside the scope of this worked example.
+
+### 3.20 Step 20 Configuring a standalone Jupyter notebook server	... Optional	 
+
+***omitted this time*** outside the scope of this worked example.
+
 
 ## 4.0 Installation Verification Test
 
+Finally - Step 21 - the installation verification test.
 
 ## 5.0 Operational Considerations
 
