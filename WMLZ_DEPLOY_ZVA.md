@@ -668,6 +668,21 @@ The warnings are not relevant because we do not plan to use the C compiler or de
 WMLZ requires many network ports to facilitate communication between the various services.
 The complete list is [here](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-ports)
 
+It's always simplest to go with the default ports for any given piece of software. 
+WMLZ will offer you the following defaults, which all worked fine for this system.
+* Db2 5045 
+* Spark 7077 6066 8080 8081 10080
+* Jupyter 8889
+* WMLZ 9888 11442 50000 
+* zCX & ONNX 8022 18080
+* Db2 anomoly 15001 
+
+However, it is essential to check that there will be no port conflicts.
+Port Conflicts will be likely if you have any other products that use overlapping components.
+A couple of examples are 
+* SQL Data Insights feature of Db2, which also includes an embedded copy of Spark
+* Data Virtualisation Manager which is incorporated into the MDS feature of IzODA.
+
 Open up a USS shell and invoke the /bin/netstat command to view the active ports on your system. 
 The output below is a subset of the (very) long output showing which local ports are listening for incoming connections, and which local ports already have established sessions with foreign sockets.
 
@@ -709,14 +724,239 @@ IBMUSER:/bin: >./netstat -a | grep 11442
 WMLZADM7 00003021 0.0.0.0..11442         0.0.0.0..0             Listen
 ```
 
+At this point we are just checking on available ports. We get to choose the actual ports that WMLZ will use in Step 10 (Configuring WMLZ)
 
 ### 3.9 Step 9 Configuring secure network communications for WMLz	
 
-Blah blah blah 
+WMLZ offers secure network authentication and encryption capabilities. 
+* TLS for WMLZ authentication is required. 
+* TLS encryption for WMLZ is optional. 
+
+TLS encryption is entirely transparent to WMLZ because the z/OS standard is to you Application-Transparent TLS. (AT-TLS). 
+The z/OS philosophy is that TLS encryption should be programmed once by a common service, in order to relieve every application from the effort and responsibility of this standard requirement. The z/OS Communications Server Policy Agent (PAGENT) is that common service.
+
+This worked example is focussed on WMLZ, and skips implementation of TLS encryption.
+
+TLS authentication is performed by RACF. A certificate needs to be generated and placed in a keyring for the purposes of TLS authentication from browsers to connect to the WMLZ interfaces. In this example we use a self-signed certificate.
+
+ The [knowledge center](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=communications-configuring-keyring-based-keystore) provides details on what needs to be setup. This example condensed those requirements into a single Job. Here's what was actually submitted
+
+```
+//IBMUSERJ JOB (RACF),'KEYRING CERT',CLASS=A,MSGCLASS=H,               
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                       
+//******************************************************************** 
+//*                                                                  * 
+//* CREATE RACF KEYRING FOR SQLDI V12                                * 
+//*                                                                  * 
+//******************************************************************** 
+//S1       EXEC PGM=IKJEFT01                                           
+//SYSTSPRT DD   SYSOUT=*                                               
+//SYSPRINT DD   SYSOUT=*                                               
+//SYSTSIN  DD   *                                                      
+RACDCERT ADDRING(WMLZRING) ID(WMLZADM)                                 
+                                                                       
+RACDCERT GENCERT CERTAUTH +                                            
+SUBJECTSDN( +                                                          
+      CN('ZVASYS') +                                                   
+      C('US') +                                                        
+      SP('CA') +                                                       
+      L('SAN JOSE') +                                                  
+      O('IBM') +                                                       
+      OU('WMLZ') +                                                     
+) +                                                                    
+ALTNAME( +                                                             
+      EMAIL('neale@au1.ibm.com') +                                     
+) +                                                                    
+WITHLABEL('WMLZCACert') +                                              
+NOTAFTER(DATE(2030/01/01))                                             
+                                                                       
+RACDCERT GENCERT ID(WMLZADM) +                                         
+SUBJECTSDN( +                                                          
+      CN('ZVASYS') +                                                   
+      C('US') +                                                        
+      SP('CA') +                                                       
+      L('SAN JOSE') +                                                  
+      O('IBM') +                                                       
+      OU('WMLZ') +                                                     
+) +                                                                    
+ALTNAME( +                                                             
+      EMAIL('neale@au1.ibm.com') +                                     
+) +                                                                    
+WITHLABEL('WMLZCert_WMLZID') +                                         
+SIGNWITH(CERTAUTH LABEL('WMLZCACert')) +                               
+NOTAFTER(DATE(2025/01/01))                                             
+                                                                       
+RACDCERT ID(WMLZADM) CONNECT(CERTAUTH LABEL('WMLZCACert') +            
+RING(WMLZRING))                                                        
+                                                                       
+RACDCERT ID(WMLZADM) CONNECT(ID(WMLZADM) LABEL('WMLZCert_WMLZID') +    
+RING(WMLZRING) USAGE(PERSONAL) DEFAULT)                                
+                                                                       
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(WMLZADM) ACCESS(READ)  
+PERMIT IRR.DIGTCERT.LISTRING CLASS(FACILITY) ID(IBMUSER) ACCESS(READ)  
+                                                                       
+SETROPTS RACLIST(FACILITY) REFRESH                                     
+                                                                       
+RDEFINE RDATALIB WMLZID.WMLZRING.LST UACC(NONE)                        
+SETROPTS CLASSACT(RDATALIB) RACLIST(RDATALIB)                          
+SETROPTS CLASSACT(RDATALIB)                                            
+PERMIT WMLZID.WMLZRING.LST CLASS(RDATALIB) ID(WMLZADM) ACCESS(READ)    
+SETROPTS RACLIST(RDATALIB) REFRESH                                     
+                                                                       
+                                                                       
+/*                                                                                    
+```
+
+The following job IBMUSER.NEALEJCL(RACFCHCK) is designed to verify that the RACF artefacts were created correctly.
+
+```
+//IBMUSERJ JOB (RACF),'KEYRING CERT',CLASS=A,MSGCLASS=H,              
+//       NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                      
+//********************************************************************
+//*                                                                  *
+//* CREATE RACF KEYRING FOR SQLDI V12                                *
+//*                                                                  *
+//********************************************************************
+//S1       EXEC PGM=IKJEFT01                                          
+//SYSTSPRT DD   SYSOUT=*                                              
+//SYSPRINT DD   SYSOUT=*                                              
+//SYSTSIN  DD   *                                                     
+RACDCERT LISTRING(WMLZRING) ID(WMLZADM)                               
+                                                                      
+RACDCERT CERTAUTH LIST(LABEL('WMLZCACert'))                           
+                                                                      
+RACDCERT LIST(LABEL('WMLZCert_WMLZID')) ID(WMLZADM)                   
+                                                                                                                                        
+/*                                                                    
+```
+
+![racfcheck](wmlzzvaimages/racfcheck.JPG)
 
 ### 3.10 Step 10 Configuring WMLz  
 
-Blah blah blah 
+Locate the configtool.sh script in the $IML_INSTALL_DIR/iml-utilities/configtool directory.
+
+```
+./configtool.sh start
+or
+./configtool.sh start --no-python
+```
+
+* IP Address and Port
+* the script will display the full URL for the web user interface (UI) of the configuration tool and the access token required by the web UI.
+* On the Environment readiness page, verify that your system and environment are ready for configuration.
+* On the Authentication page, decide if you want to enable the AT-TLS support and then select a keystore for secure communications and user authentication
+* On the Metadata repository page, specify a Db2 for z/OS system and schema name for WMLz metadata objects
+* On the UI and core services page, specify the port number for your UI service, specify the port number for WMLz core services, set the password for the default user admin, and add one user as a WMLz system administrator
+* On the Runtime environment page, specify the default runtime environment for WMLz that includes both Spark and Python runtime engines.
+* On the Db2 anomaly detection service page, specify if you want to enable the service for the optional anomaly detection solution.
+* On the Review and configure page, review all your settings, correct any error, and configure WMLz and services.
+
+Run the config tool
+
+        
+        
+```
+WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >./configtool.sh start --no-python
+Checking for required Bash and IML_HOME ...
+Bash version is 4.3.48
+IML_HOME is /u/aiz/wmlz
+IML_JOBNAME_PREFIX is ALN
+Enter IP address or hostname of your z/OS system where the configuration tool will run or press <enter> to use 10.1.1.2:192.168.1.191
+Checking 192.168.1.191
+Enter port of your z/OS system where the configuration tool will run or press <enter> to use 50000:
+Starting the WMLz configuration tool ...
+The configuration tool is successfully started.
+Open your browser, copy and paste http://192.168.1.191:50000 into the address field, and launch the web interface of the configuration tool.
+Enter access token 1L+lRBhMI4udWOoeTJ+cGiub/0FlfQGeCyMY5d2jtIs= and click Start to start the configuration of WMLz.
+WMLZADM:/usr/lpp/IBM/aln/v2r4/iml-utilities/configtool: >
+```
+
+So, launch the config tool & enter the access token
+        
+![configtool01](wmlzimages/configtool01.JPG)
+        
+        
+Review the environment readiness display
+        
+![configtool02](wmlzimages/configtool02.JPG)
+        
+        
+Enter the authentication credentials. Keystore, but no AT-TLSk. The GUI will spin for a bit, whilst it checks the RACF keyring.
+        
+![configtool03](wmlzimages/configtool03.JPG)
+        
+        
+Provide the Db2 details for the repository. The GUI will spin for a bit, whilst it checks the Db2 connection.
+        
+![configtool04](wmlzimages/configtool04.JPG)
+        
+
+If the Schema doesn't yet exist, click on the option to create new schema
+        
+![configtool05](wmlzimages/configtool05.JPG)
+        
+
+The config tool will prompt you to provide a database name, stogroup and bufferpool (which must be a 32K bufferpool)
+        
+![configtool06](wmlzimages/configtool06.JPG)
+        
+
+Provide Ports and TCPIP details for the UI and the core services. 
+For this implementation we will not be deploying a core services HA cluster, and will will not be implementating traces for model governance.
+Annoyingly the password needs to be 8 characters minimum
+        
+![configtool07](wmlzimages/configtool07.JPG)
+        
+
+Specify the runtime environment. For this first deployment we will not bother with spark client authentication. 
+We willa ccept all the default ports.
+        
+![configtool08](wmlzimages/configtool08.JPG)
+        
+
+It has already worked out that we don't have the pre-reqs for the Db2 anomoly detection solution..
+        
+![configtool09](wmlzimages/configtool09.JPG)
+        
+We are presented with a summary of our configuration choices, and can press the 'Configure' Button
+        
+![configtool10](wmlzimages/configtool10.JPG)
+
+Now be patient
+        
+![configtool11](wmlzimages/configtool11.JPG)
+        
+Not bad for a first attempt. Seems we have a connection error when trying to connect to the WMLZ UI.
+        
+![configtool12](wmlzimages/configtool12.JPG)
+
+        
+ERROR: Failed to create user: connect ECONNREFUSED 192.168.1.191:11442
+        
+Problem Determination
+* SYSLOG - no error messages
+* 2021 APAR for WMLZ V2.3 https://www.ibm.com/support/pages/apar/PH38510
+        
+      
+![configtool13](wmlzimages/configtool13.JPG)
+
+SDSF no use - cant see into a USSS service 
+        
+![configtool14](wmlzimages/configtool14.JPG)
+
+Wait for the service to come up.
+        
+Then check whether there is anything actually listening on the port
+
+```
+IBMUSER:/bin: >./netstat -a | grep 11442
+WMLZADM7 000022B3 0.0.0.0..11442         0.0.0.0..0             Listen
+```
+        
+Then press retry and we ge stuck into creating the admin user.
+        
+![configtool15](wmlzimages/configtool15.JPG)        
 
 ### 3.11 Step 11 Configuring ONNX compiler service ... Optional (Sysprog with USS  & zCX skills)  
 
