@@ -665,7 +665,50 @@ The warnings are not relevant because we do not plan to use the C compiler or de
 
 ### 3.8 Step 8 Configuring network ports for WMLz	
 
-Blah blah blah 
+WMLZ requires many network ports to facilitate communication between the various services.
+The complete list is [here](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-ports)
+
+Open up a USS shell and invoke the /bin/netstat command to view the active ports on your system. 
+The output below is a subset of the (very) long output showing which local ports are listening for incoming connections, and which local ports already have established sessions with foreign sockets.
+
+```
+IBMUSER:/bin: >./netstat
+MVS TCP/IP NETSTAT CS V2R5       TCPIP Name: TCPIP           00:20:01
+User Id  Conn     Local Socket           Foreign Socket         State
+-------  ----     ------------           --------------         -----
+AVZS     000000A2 0.0.0.0..12010         0.0.0.0..0             Listen
+AVZS     000000A1 0.0.0.0..12011         0.0.0.0..0             Listen
+BLZBFA7  0000004C 0.0.0.0..5555          0.0.0.0..0             Listen
+BLZISPFD 000000E7 127.0.0.1..4152        0.0.0.0..0             Listen
+BPXOINIT 0000000B 0.0.0.0..10007         0.0.0.0..0             Listen
+BUZAGNT1 00000064 127.0.0.1..1025        127.0.0.1..1026        Establsh
+BUZAGNT3 00000063 127.0.0.1..1026        127.0.0.1..1025        Establsh
+CFZCIM   0000004B 0.0.0.0..5989          0.0.0.0..0             Listen
+CSQ9CHIN 00000046 0.0.0.0..1414          0.0.0.0..0             Listen
+DBDGDIST 00003016 192.168.1.191..5045    192.168.1.191..8207    Establsh
+DBDGDIST 00003057 192.168.1.191..5045    192.168.1.191..8236    Establsh
+DBDGDIST 000031E9 192.168.1.191..5045    192.168.1.191..8308    Establsh
+DBDGDIST 000031EF 192.168.1.191..5045    192.168.1.191..8309    Establsh
+DBDGDIST 000031F4 192.168.1.191..5045    192.168.1.191..8310    Establsh
+DBDGDIST 00003283 192.168.1.191..5045    192.168.1.191..8332    Establsh
+DBDGDIST 00003011 192.168.1.191..5045    192.168.1.191..8204    Establsh
+DBDGDIST 000038E8 192.168.1.191..5045    192.168.1.191..8659    Establsh
+DBDGDIST 00003014 192.168.1.191..5045    192.168.1.191..8206    Establsh
+DBDGDIST 0000003D 0.0.0.0..5047          0.0.0.0..0             Listen
+DBDGDIST 0000001E 0.0.0.0..5046          0.0.0.0..0             Listen
+DBDGDIST 00000013 0.0.0.0..5045          0.0.0.0..0             Listen
+FTPD1    00000054 0.0.0.0..21            0.0.0.0..0             Listen
+HTTPD17  00000039 0.0.0.0..80            0.0.0.0..0             Listen
+IZUSVR1  00000084 192.168.1.191..10443   0.0.0.0..0             Listen
+```
+
+If you wish to focus on a particular port you can issue a variation of the command. For example, the following command listens only for active sockets and filters the results with the string '11442'.
+
+```
+IBMUSER:/bin: >./netstat -a | grep 11442
+WMLZADM7 00003021 0.0.0.0..11442         0.0.0.0..0             Listen
+```
+
 
 ### 3.9 Step 9 Configuring secure network communications for WMLz	
 
