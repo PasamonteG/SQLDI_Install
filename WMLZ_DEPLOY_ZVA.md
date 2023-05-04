@@ -228,7 +228,7 @@ This is because WMLZ mostly runs in USS, and needs to run in an environment that
 
 The [knowledge_center](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-setup-user-id) does a very good job of explaining the hows and whys of setting up the wmlz setup userid. This paper provides the jobs that were used to create the userid in this worked example.
 
-Actual Job ```IBMUSER.NEALEJCL(WMLZUSER)``` run was
+The job below (in IBMUSER.NEALEJCL(WMLZUSER) on the ZVA system) was used to create the RACF group and USERID.
 
 ```
 //IBMUSERJ JOB  (FB3),'INIT 3380 DASD',CLASS=A,MSGCLASS=H,    
