@@ -123,6 +123,7 @@ Having selected a subset of components for a first deployment, the diagram below
 * Db2 z/OS is used to stor the WMLZ metadata
 * Your chosen System Authorisation Facility (eg: RACF) is responsible for authentication and encryption services using keyrings and certifictes
 
+The interaction between the various services is performed using TCPIP. You will need a range of ports to be reserved for WMLZ. You should also be aware that other z/OS products may also be using IzODA and Spark components, and you will need to choose which products get to use the default ports for IzODA and Spark, and which products are configured to use non-default ports.
 
 ## 3.0 Deploying a simple WMLZ Instance
 
