@@ -102,12 +102,26 @@ WMLZ requires a considerable amount of hardware resources to deploy. Bare minimu
 
 The Knowledge Center provides a helpful representation of the architectural components of WMLZ.
 
-![wmlzarch](wmlzzvaimages/wmlzarch.JPG)
+![wmlzarch](wmlzzvaimages/components_all.JPG)
 
-Howver, it is helpful to dissect this image a bit further.
+However, for this simple worked example (which serves models that were developed elsewhere) we are not going to be deploying all the components.
 
+* We will only deploy the online and CICS scoring services. (zCX deep learning services can be deployed later).
+* We will not install python or the Jupyter notebook components. 
+* We will not configure izODA and the MDS feature for accessing data sources for model development.
+* We will not deploy the optional Db2 anomoly detection solution
 
+Having selected a subset of components for a first deployment, the diagram below summarizes what this simple worked example aims to cover.
 
+![wmlzarch](wmlzzvaimages/components_simple.JPG)
+
+* The user interface service supports html pages that allow WMLZ administration to be performed.
+* The user management service interacts with other components to perform requested actions 
+* The core services manage the administration tasks (e.g. configure a scoring service or deploy a model) 
+* The scoring services are responsible to support application requests to invoke models
+* The spark integration service is responsible for invoking spark processes
+* Db2 z/OS is used to stor the WMLZ metadata
+* Your chosen System Authorisation Facility (eg: RACF) is responsible for authentication and encryption services using keyrings and certifictes
 
 
 ## 3.0 Deploying a simple WMLZ Instance
