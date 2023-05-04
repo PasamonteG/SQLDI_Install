@@ -157,7 +157,7 @@ This document does not attempt to capture the SMPE download and install process,
 because there is nothing special or different about the SMPE process for WMLZ.
 The only thing that is slightly unusual is the size of the WMLZ portable software instance, which is about 20GB.
 
-Once the PSI image is downloaded you will need to switch to the Deploymemts tab of z/OSMF Software Configuration app to deploy the software to z/OS.
+Once the PSI image is downloaded from ShopZ you will need to switch to the Deploymemts tab of z/OSMF Software Configuration app to deploy the software to z/OS.
 
 Be sure the run all the post-deployment steps which allocate ZFS file systems and polish of the SMPE CSI dataset.
 
@@ -215,10 +215,14 @@ MOUNT FILESYSTEM('WMLZ.OMVS.SAZKROOT')
 
 
 
-
 ### 3.6 Step 6 Configuring WMLz setup user ID	 
 
-Blah blah blah 
+The WMLZ setup userid is the anchor point for deploying WMLZ. 
+This is because WMLZ mostly runs in USS, and needs to run in an environment that controls Paths, Libraries, Environment Variables, RACF certificates and so forth. The WMLZ setup userid must have a .profile that defines the environment perfectly, so that when the WMLZ services are started under the WMLZ setup userid they can access everything that they need at runtime.
+
+The [knowledge_center](https://www.ibm.com/docs/en/wml-for-zos/2.4.0?topic=wmlz-configuring-setup-user-id) does a very good job of explaining the hows and whys of setting up the wmlz setup userid. This paper provides the jobs that were used to create the userid in this worked example.
+
+
 
 ### 3.7 Step 7 Configuring additional user IDs	 
 
