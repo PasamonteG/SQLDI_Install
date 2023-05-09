@@ -35,8 +35,14 @@ Both ZVA and zTrial images consist of
 - prepared with software and data for specified z Software fanmiliarisation.
 - and accessible over the internet, either from a web browser, or an RDP client.
 
+### 2.1 The AI on Z test-drive image.
 
-### 2.1 Access to the ZVA image.
+The image below represents the software available to use during this lab exercise.
+
+![aiz_zva](aizimages/aiz_zva.png)
+
+
+### 2.2 Access to the ZVA image.
 
 When you receive your signon creditials, they will look something like this.
 
@@ -56,7 +62,7 @@ The easiest method of accessing the ZVA image is to click on the Browser URL, an
 If you prefer to use a Remote Desktop Protocol client, paste the RDP IP Address into your RDP client, and then paste the userid and password into the logon screen.
 
 
-### 2.2 Starting Point
+### 2.3 Starting Point
 
 The system that you connect to will be a Windows client, with various tools that access the z/OS image.
 
