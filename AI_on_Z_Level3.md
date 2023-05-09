@@ -242,16 +242,55 @@ The next step of this Lab exercise is to do the following.
 2. Review Scoring Services and Runtime Services through the WMLZ Administration Dashboard
 3. Open up the Main WMLZ Dashboard
 4. Import Model
-5. Deploy Model to a Scoring Service
+5. Deploy Model to an Online Scoring Service
 6. Test the Model with some test data.
+7. Deploy the same model to a CICS Online Scoring Service
 
 
 ## 7.Calling the Model from CICS for realtime scoring of CICS transactions
 
+***This section of the lab Workshop has yet to be completed***
 
-## 8.Calling the Model from anywhere using REST APIs
+## 8. Calling the Model from anywhere using REST APIs
 
-## 9.Developing AI scoring services with SQL Data Insights
+Watson Machine Learning for z/OS has many different scoring servives. 
+We used the CICS online scoring service so that a CICS transaction can link to the IBM-provided ALNSCORE transaction to invoke the scoring model.
+The Online Scoring Service can be invoked from any client that is capable of making RESTful API calls to the endpoint of the scoring service.
+
+We can test the scoring service using a Curl Command or a REST IDE such as Postman.
+
+### 8.1 Invoke the model using a Curl command
+
+Open Putty
+ssh into USS
+Paste the curl command in to the terminal
+
+Open dos prompt
+Paste the curl command in to the terminal
+
+### 8.2 Invoke the model using Postman (REST IDE)
+
+Open Postman
+Paste the curl command in to the terminal
+
+
+## 9. Developing AI scoring services with SQL Data Insights
+
+Supervised Scoring models are generally the best-targetted way to use AI to make a decision or a recommendation based on previous data patterns. 
+Data Science practices should be developed according to best practice and regulation on the use of AI.
+Techniques such as bias removal etc...
+
+A rigorous data science process can be an expensive and time-consuming affair. 
+Consider the following project elements that may consume both time and money....
+
+* Recruit ( or train ) skilled data scientists
+* Build a Data Science infrastructure
+* Provide Data to that infrastructure
+* Develop and Test models
+* Deploy scoring services
+* Build or Modify Applications to call scoring services
+
+However, SQL Data Insights can be a power
 
 ## 10. Review the AI lifecycle support available on IBM Z
 
