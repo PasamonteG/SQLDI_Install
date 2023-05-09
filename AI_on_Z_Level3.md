@@ -84,14 +84,14 @@ Db2 z/OS V13 will be started already. It's connection details are
 
 The outline of the Lab Exercises in the rest of this document is as follows 
 
-1. Start SQLDI, and view the Web User Interfaces for SQLDI and Spark
-2. Perform some AI-Enabled Queries against the sample table, to become familiar with the Build-In functions for AI provided by Db2
-3. Follow the process to AI-Enable another table
-4. Define a View against the sample table, and AI-Enable the view
-5. Review the underlying configuration that is required to support SQLDI
-6. Delete the existing SQLDI instance, and perform the provisioning workflow yourself to deploy an SQLDI instance
+3. Using Opensource Data Science Tools with IBM Z Data Sources
+4. Using Db2 z/OS SQL Data Insights to support the data wrangling process
+5. Developing and Training a Model
+6. Deploying the Model to Watson Machine Learning for z/OS
+7. Calling the Model from CICS for realtime scoring of CICS transactions
+8. Calling the Model from anywhere using REST APIs
+9. Developing AI scoring services with SQL Data Insights
 
-The chronologically-logical sequence of steps would start at #6 (provision SQLDI instance) and then follow steps #1 to #5 against the SQLDI instance that you have created. However, the author feels that it is better to start off with the experience if using SQLDI to understand it, and then perform the more complex task of provisioning an instance. Feedback is welcome :-)
 
 ## 3. Using Opensource Data Science Tools with IBM Z Data Sources
 
