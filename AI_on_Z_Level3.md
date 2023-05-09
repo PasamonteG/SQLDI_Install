@@ -101,7 +101,73 @@ The outline of the Lab Exercises in the rest of this document is as follows
 
 ## 3. Using Opensource Data Science Tools with IBM Z Data Sources
 
+Data Science is founded in open source technologies. 
+The tools needed to perform many aspects of data science are freely available to download from the internet. 
+Examples are software tools such as python, anaconda, jupyter, spark, tensorflow and so forth.
+
+Many vendors (including IBM) provide commercial-grade software that combine open source technology with commercial software. 
+IBM's Watson Machine Learning for z/OS is an example, where opensource software is compiled to run on IBM Z, and
+optimised to exploit the Z16 Telum AI Acceleration Unit, and integrated with transaction and data processing environments like 
+IMS, CICS and Db2.
+
+For the purposes of these lab exercises we will start by using some common open source AI tooling, and just connecting it directly 
+to IBM z/OS for data access. Specifically, the following software has been installed on the Windows client.
+
+* Anaconda, which helps you create an environment for many different versions of Python and package versions.
+* Python itself, and many other analytics packages for data analysis and charting.
+* Jupyter Notebooks, which is used for data wrangling by millions of data scientists worldwide
+* VSCODE (from Microsoft), which is the ubiquitous IDE for developers, and is a great user interface for running Jupyter Notebooks.
+
+For the purposes of the Lab workbook, we just need to start VSCODE and play some of the Jupyter notebooks that have been prepared earlier.
+
+
+### 3.1 Invoking the Jupyter-familiarisation notebook.
+
+***Optional Step*** You may skip this step and progress to Step 3.2 if you are already familiar with the concepts of using Juputer notebooks.
+
+From the desktop, open VSCODE.
+
+Now hit File + Open + ...... instructions for opening the introductory jupyter notebook to access Db2.
+
+![xxx](aizimages/xxx.png)
+
+Get used to the feel of running Jupyter notebooks by clicking through this introductory notebook. 
+The notebooks include detailed notes on the steps performed, so that they are self-documenting and independent of this workbook.
+This introductory workbook performs the following tasks.
+
+1. Install and import the python and db2 libraries (using anaconda)
+2. Load a connection to the Db2 z/OS database
+3. Query the data for the classical data science datasets of Penguins and Irises
+4. Fit a Data Model and Train the data model
+
+***Insert some selected screenshots from the Notebook here***
+
+That concludes the introductory familiarisation with Jupyter notebooks and Db2 z/OS.
+
+### 3.2 Invoking the Jupyter notebook to analyze the credit card fraud dataset.
+
+The primary dataset that we will use in this lab exercise is a synthetic credit card fraud dataset. 
+This dataset includes 24 million credit card transactions by 2,000 credit card holders over a period of 20 years. 
+It was developed by Eric Altman of IBM, and has been made available publicly through [kaggle](https://www.kaggle.com/datasets/ealtman2019/credit-card-transactions)
+
+The data has been loaded into Db2 z/OS (where much financial transational data is often located), and 
+we will explore this dataset by opening the following Jupyter notebook.
+
+The notebook is well documented with notes to guide you through the following steps.
+
+1. Import the python and db2 libraries (using anaconda)
+2. Load a connection to the Db2 z/OS database
+3. Query the credit card data to gain some initial insight into the underlying data
+4. perform some data wrangling to attempt to discern patterns in the data, and determine what supervised model types might be best suited to predict fraud 
+
+***Insert some selected screenshots from the Notebook here***
+
+This is a really useful point to take a look at SQL Data Insights. 
+One of the most valuable use cases for SQL Data Insights is to quickly gain an understanding of the data so that we are in a position to develop supervised machine learning models as quickly as possible.
+
 ## 4. Using Db2 z/OS SQL Data Insights to support the data wrangling process
+
+SQL Data Insights
 
 ## 5. Developing and Training a Model
 
