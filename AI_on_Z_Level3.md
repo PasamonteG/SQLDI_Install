@@ -15,7 +15,18 @@
 
 ## 1. Objectives and Scope of this workbook
 
+This workbook is a companion intended for use with the Test Drive System for AI Solutions on z/OS available at 'Z Virtual Access' (ZVA)
+
+* The ZVA image includes a range of Data and AI software on z/OS, prepared and ready for a test drive.
+* This workbook is a guided tour for using that software to progress through an AI lifecycle process. (Data analysis, Model Training, Deploying Scoring Models, and Calling the Models from OLTP environments).
+
+The objective is to provide practical insight into deploying AI solutions on the IBM Z platform, using a worked example that is documented in this workbook.
+
+A sister workbook is also available to allow practitioners to rehearse the deployment of the software, to gain experience in the deployment processes before performing a deployment in a customer environment.
+
 ## 2. Accessing the ZVA environment to perform the hands-on exercises
+
+
 
 ## 3. Using Opensource Data Science Tools with IBM Z Data Sources
 
