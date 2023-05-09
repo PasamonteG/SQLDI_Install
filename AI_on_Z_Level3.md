@@ -167,6 +167,8 @@ One of the most valuable use cases for SQL Data Insights is to quickly gain an u
 
 ## 4. Using Db2 z/OS SQL Data Insights to support the data wrangling process
 
+### 4.1 SQL Data Insights Concepts
+
 The core concept of SQL Data Insights is that it builds and trains a neural network model for a Db2 table or view, load it into a model table that is associated with the base table, so that a range of Db2 BIFs (built-in-functions) can used within SQL queries for find patterns in the data. For example, if you have a table containing a list of clients and their important characteristics, you can discover which clients are most similar to a chosen client or cluster of clients.
 
 ![sqldi_concept](aizimages/sqldi_concept.JPG)
@@ -180,10 +182,52 @@ Using a simple SQL query, you can do things like
 
 SQLDI can operate against Db2 views, or even external data sources like IMS and VSAM.
 
+### 4.2 SQL Data Insights into the Credit Card Fraud dataset
+
+Lets start the SQL Data Insights Server. to do this ...
+
+***Insert instructions to start SQLDI***
+
+Now lets open the SQLDI Web portal. 
+* Start the chrome browser inside the ZVA Windows client.
+* Open the bookmark for SQLDI
+* Logon (using IBMUSER / SYS1)
+* Connect to DBDG
+* List AI-Enabled Objects
+
+Right-Mouse Click on CREDIT.TXNS
+Display Stats
+Display Column Influence
+
+***Emphasise the value of column influence***
+
+Perform some AI-enabled queries
+* run the DSNAIDB.CHURN sample queries
+* Switch back to VSCODE / Jupyter for pre-prepared notebooks for queries against CREDIT
+
+Open a second Jupyter notebook to continue analyzing the credit card fraud dataset.
+
+This Jupyter notebook runs a number of AI-enabled queries to better understand the data patterns
+
+
+***Write some SQLDI queries that look cool***
+
 
 ## 5. Developing and Training a Model
 
+With the cpu and memory resources available in this ZVA image we are not going to train a supervised model against 24 million records.
+In fact, this is a good point to mention which parts of the AI lifecycle make sense to perform on Z or against Z.
+
+
+
+
+What we will do is review a notebook that would be used to train the model.
+
+Open a third Jupyter notebook to fit and train the model
+
 ## 6. Deploying the Model to Watson Machine Learning for z/OS
+
+
 
 ## 7.Calling the Model from CICS for realtime scoring of CICS transactions
 
