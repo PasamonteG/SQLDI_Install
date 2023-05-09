@@ -216,20 +216,38 @@ This Jupyter notebook runs a number of AI-enabled queries to better understand t
 ## 5. Developing and Training a Model
 
 With the cpu and memory resources available in this ZVA image we are not going to train a supervised model against 24 million records.
+
 In fact, this is a good point to mention which parts of the AI lifecycle make sense to perform on Z or against Z.
+The following rules of thumb are a good starting point.
 
-
-
+* Running scoring models on IBM Z platform makes sense when the transaction that needs to invoke the scoring service runs on Z.
+* Data Analysis on IBM Z makes sense when the subject data resides on IBM Z
+* Training Models on IBM Z is technically possible, but the economics of using IBM Z for training large and complex models might lead you to use intel servers with GPUs for the model training part of the AI lifecycle.
 
 What we will do is review a notebook that would be used to train the model.
 
 Open a third Jupyter notebook to fit and train the model
 
+1. review the steps in the Jupyter Notebook
+2. Possibly run them on a smaller dataset
+
 ## 6. Deploying the Model to Watson Machine Learning for z/OS
 
+Now that the model is developed we can deploy it onto IBM Z.
+
+The scoring model is stored in an xml file which can be imported into Watson Machine Learning for z/OS, where it can be deployed to CICS or REST scoring services. 
+The next step of this Lab exercise is to do the following.
+
+1. Open the WMLZ Web Portal User Interface
+2. Review Scoring Services and Runtime Services through the WMLZ Administration Dashboard
+3. Open up the Main WMLZ Dashboard
+4. Import Model
+5. Deploy Model to a Scoring Service
+6. Test the Model with some test data.
 
 
 ## 7.Calling the Model from CICS for realtime scoring of CICS transactions
+
 
 ## 8.Calling the Model from anywhere using REST APIs
 
