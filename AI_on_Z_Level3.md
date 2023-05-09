@@ -167,7 +167,19 @@ One of the most valuable use cases for SQL Data Insights is to quickly gain an u
 
 ## 4. Using Db2 z/OS SQL Data Insights to support the data wrangling process
 
-SQL Data Insights
+The core concept of SQL Data Insights is that it builds and trains a neural network model for a Db2 table or view, load it into a model table that is associated with the base table, so that a range of Db2 BIFs (built-in-functions) can used within SQL queries for find patterns in the data. For example, if you have a table containing a list of clients and their important characteristics, you can discover which clients are most similar to a chosen client or cluster of clients.
+
+![sqldi_concept](aizimages/sqldi_concept.JPG)
+
+The model used by SQLDI is the Bag of Words model, which is described by many places on the web such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model)
+
+Using a simple SQL query, you can do things like
+- find and rank clients who are most similar to your most profitable clients. 
+- find clients who have similar patterns to previous clients who closed their accounts.
+- see which data items are most influential towards certain outcomes
+
+SQLDI can operate against Db2 views, or even external data sources like IMS and VSAM.
+
 
 ## 5. Developing and Training a Model
 
