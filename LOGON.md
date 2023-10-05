@@ -110,19 +110,19 @@ You can add masks to narrow what you see. Enter the mask "Q*" under schema to fi
 
 ![eg21](logonimages/eg21.JPG)
 
-Press Enter and all the tables under schema Q* are displayed
+Press Enter and all the tables under schema Q* are displayed. You can enter commands on the left hand side. Some of the common commands are listed at the Top,. ENter "S" against table Q.ORG to find what tablespace it resides in.
 
 ![eg22](logonimages/eg22.JPG)
 
-You can enter commands on the left hand side. Some of the common commands are listed at the Top,. ENter "S" against table Q.ORG to find what tablespace it resides in.
+There it is. Now, enter "?" against the tablespace to find what commands are available.
 
 ![eg23](logonimages/eg23.JPG)
 
-There it is
+Scroll down, and select the option to perform a utility operation ( Full Copy )
 
 ![eg24](logonimages/eg24.JPG)
 
-Now, enter "?" against the tablespace to find what commands are available.
+It generates the JCL to submit a Full Copy database utility
 
 ![eg25](logonimages/eg25.JPG)
 
