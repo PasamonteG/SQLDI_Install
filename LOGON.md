@@ -40,8 +40,11 @@ This is the ISPF main menu
 
 ![eg06](logonimages/eg06.JPG)
 
-Enter 
+Enter m ( more options )
+
 ![eg07](logonimages/eg07.JPG)
+
+Enter 15, for the Db2 sub menu
 
 ![eg08](logonimages/eg08.JPG)
 
