@@ -48,7 +48,11 @@ Enter 15, for the Db2 sub menu
 
 ![eg08](logonimages/eg08.JPG)
 
+Enter 1 for SPUFI
+
 ![eg09](logonimages/eg09.JPG)
+
+The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options.
 
 ![eg10](logonimages/eg10.JPG)
 
