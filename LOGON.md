@@ -20,6 +20,24 @@ The core concept of SQL Data Insights is to build and train a neural network mod
 
 ![eg03](logonimages/eg03.JPG)
 
+![eg04](logonimages/eg04.JPG)
+
+![eg05](logonimages/eg05.JPG)
+
+![eg06](logonimages/eg06.JPG)
+
+![eg07](logonimages/eg07.JPG)
+
+![eg08](logonimages/eg08.JPG)
+
+![eg09](logonimages/eg09.JPG)
+
+![eg10](logonimages/eg10.JPG)
+
+![eg11](logonimages/eg11.JPG)
+
+![eg12](logonimages/eg12.JPG)
+
 
 The model used by SQLDI is the Bag of Words model, which is described by many places on the web such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model)
 
