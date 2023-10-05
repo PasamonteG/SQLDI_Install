@@ -110,19 +110,19 @@ You can add masks to narrow what you see. Enter the mask "Q*" under schema to fi
 
 ![eg21](logonimages/eg21.JPG)
 
-??
+Press Enter and all the tables under schema Q* are displayed
 
 ![eg22](logonimages/eg22.JPG)
 
-This the edit screen for your input file.
+You can enter commands on the left hand side. Some of the common commands are listed at the Top,. ENter "S" against table Q.ORG to find what tablespace it resides in.
 
 ![eg23](logonimages/eg23.JPG)
 
-SPUFI is now ready to submit your file. Press Enter to proceed
+There it is
 
 ![eg24](logonimages/eg24.JPG)
 
-These are the results... TA DA !. Use F8 and F7 to scroll down and up. Press F3 when you are done.
+Now, enter "?" against the tablespace to find what commands are available.
 
 ![eg25](logonimages/eg25.JPG)
 
