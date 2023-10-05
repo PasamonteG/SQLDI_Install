@@ -135,36 +135,36 @@ You can just type "sub" to submit thiks job immediately. Or you can copy the JCL
 ![eg27](logonimages/eg27.JPG)
 
 
+## 3. DB2 CLP
 
-The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options. Press Enter to proceed
+Moving away from 3270 screens, Db2 has a number of clients and drivers that allow applications ( like query tools running on Windows ) to connect to DB2 and access Db2 data. Find the Db2 Command Line Application on the Desktop.
 
 ![eg30](logonimages/eg30.JPG)
 
-Ignore the code page mismatch. Press Enter to proceed
+Open it
 
 ![eg31](logonimages/eg31.JPG)
 
-These are the default settings for interacting with Db2. Accept them. Press Enter to proceed
+Type the command " db2 connect to DALLASD user IBM USER using SYS1 " in order to connect to the Db2 systems ( whose name is DALLASD )
 
 ![eg32](logonimages/eg32.JPG)
 
-This the edit screen for your input file.
-It contains a couple of SQL statements, each with the semi colon statement delimeter.
-You can edit the SQL queries here to practice running SQL. Press Enter to proceed
+Now, enter an SQL Query
 
 ![eg33](logonimages/eg33.JPG)
 
-SPUFI is now ready to submit your file. Press Enter to proceed
+Now disconnect
 
 ![eg34](logonimages/eg34.JPG)
 
-These are the results... TA DA !. Use F8 and F7 to scroll down and up. Press F3 when you are done.
+
+## 4. Jupyter Notebooks
 
 ![eg35](logonimages/eg35.JPG)
 
 Keep repeating this process until you are familiar with the process and running SQL in Db2 z/OS.
 
-## 2. Db2 Admin Tool
+
 
 
 Press F3 until you get back to the main panel. Then press m to get to more products again. Then press 16 to get to DB2 ADMIN TOOL.
