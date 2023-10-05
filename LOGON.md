@@ -172,26 +172,16 @@ If you know how to use Jupyter Notebooks, then you should be able to work throug
 
 Ignore the code page warning. Press enter to continue
 
-![eg37](logonimages/eg37.JPG)
+If you want to do the SQL Data Insights Lab Exercises, I attach the workbooks for you to use.
 
 
+## Summary
+
+These notes are purely to get you started connecting to DB2 in the ZVA image.
+
+Whilst I am away you can use this ZVA image as your own z/OS playground. There will be some limits on what you can do with it, but I would suggest scheduling a couple of webex sessions with Ben and John.
+
+John is Mr Db2
+Ben is Mr zOS
 
 
-## 3. DB2 CLP
-
-SQLDI is a standard SMPE installation, which will not be addressed in this document.
-
-There are several pre-requisites that you should resolve before ordering SQLDI. As always, you should refer to the current page in the Db2 z/OS knowledge centre to get the latest information. [link to SQLDI Pre-Requisites](https://www.ibm.com/docs/en/db2-for-zos/13?topic=di-preparing-sql-installation)
-
-* z/OS ( V2.4 or V2.5 ) requires several PTFs to be applied to provide the pre-requisite AI libraries.
-* Db2 needs the fix for APAR PH49781
-* z/OS OpenSSH and the IBM 64-bit JDK are also needed.
-
-
-## 4. Jupyter Notebooks
-
-When Planning for SQLDI deployment, it is very helpful to consider an architecture diagram of all the moving parts.
-
-![sqldi_arch](sqldiimages/sqldi_arch.JPG)
-
-SQLDI runs in USS ( z/OS Unix Systems Services ). It only needs to be running when you are training new models. Once the models are trained, and loaded into the model tables, SQLDI can be stopped, and Db2 z/OS will continue to serve AI-enabled queries.
