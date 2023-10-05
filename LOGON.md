@@ -78,11 +78,16 @@ These are the results... TA DA !. Use F8 and F7 to scroll down and up. Press F3 
 
 ![eg15](logonimages/eg15.JPG)
 
-This is the ISPF main menu
+Keep repeating this process until you are familiar with the process and running SQL in Db2 z/OS.
+
+## 2. Db2 Admin Tool
+
+
+Press F3 until you get back to the main panel. Then press m to get to more products again. Then press 16 to get to DB2 ADMIN TOOL.
 
 ![eg16](logonimages/eg16.JPG)
 
-Enter m ( more options )
+The Db2 Admin Tool is John McKinnon's favouritest tool in the world.
 
 ![eg17](logonimages/eg17.JPG)
 
