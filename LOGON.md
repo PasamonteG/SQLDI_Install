@@ -64,15 +64,17 @@ These are the default settings for interacting with Db2. Accept them. Press Ente
 
 ![eg12](logonimages/eg12.JPG)
 
-ddd
+This the edit screen for your input file.
+It contains a couple of SQL statements, each with the semi colon statement delimeter.
+You can edit the SQL queries here to practice running SQL. Press Enter to proceed
 
 ![eg13](logonimages/eg13.JPG)
 
-enter your password "SYS1"
+SPUFI is now ready to submit your file. Press Enter to proceed
 
 ![eg14](logonimages/eg14.JPG)
 
-wait for ISPF and *** to appear, then press enter
+These are the results... TA DA !. Use F8 and F7 to scroll down and up. Press F3 when you are done.
 
 ![eg15](logonimages/eg15.JPG)
 
