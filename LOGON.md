@@ -122,15 +122,15 @@ Scroll down, and select the option to perform a utility operation ( Full Copy )
 
 ![eg24](logonimages/eg24.JPG)
 
-It generates the JCL to submit a Full Copy database utility
+Enter S next to "u.c"
 
 ![eg25](logonimages/eg25.JPG)
 
-Keep repeating this process until you are familiar with the process and running SQL in Db2 z/OS.
+It generates the JCL to submit a Full Copy database utility
 
 ![eg26](logonimages/eg26.JPG)
 
-Ignore the code page warning. Press enter to continue
+You can just type "sub" to submit thiks job immediately. Or you can copy the JCL into an automated housekeeping suite. If you actuallu submit it, I think it may fail. You might want to get Ben to walk you through the steps to use SDSF to investigate why it failed, and then correct the problem to run it.
 
 ![eg27](logonimages/eg27.JPG)
 
