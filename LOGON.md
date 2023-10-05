@@ -141,33 +141,30 @@ Moving away from 3270 screens, Db2 has a number of clients and drivers that allo
 
 ![eg30](logonimages/eg30.JPG)
 
-Open it
+Open it. Type the command " db2 connect to DALLASD user IBM USER using SYS1 " in order to connect to the Db2 systems ( whose name is DALLASD )
 
 ![eg31](logonimages/eg31.JPG)
 
-Type the command " db2 connect to DALLASD user IBM USER using SYS1 " in order to connect to the Db2 systems ( whose name is DALLASD )
+Now, enter an SQL Query
 
 ![eg32](logonimages/eg32.JPG)
 
-Now, enter an SQL Query
+Now disconnect
 
 ![eg33](logonimages/eg33.JPG)
 
-Now disconnect
+## 4. Jupyter Notebooks
 
 ![eg34](logonimages/eg34.JPG)
 
 
-## 4. Jupyter Notebooks
+Locate the vscode icon. Open it.
 
 ![eg35](logonimages/eg35.JPG)
 
-Keep repeating this process until you are familiar with the process and running SQL in Db2 z/OS.
+This VSCODE instance has had the Jupyter Notebook plugins installed. That's another way to work with Db2.
 
-
-
-
-Press F3 until you get back to the main panel. Then press m to get to more products again. Then press 16 to get to DB2 ADMIN TOOL.
+After VSCODE initialises, Open the notebook
 
 ![eg36](logonimages/eg36.JPG)
 
