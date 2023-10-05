@@ -162,7 +162,7 @@ Locate the vscode icon. Open it.
 
 This VSCODE instance has had the Jupyter Notebook plugins installed. That's another way to work with Db2.
 
-After VSCODE initialises, Open the notebook
+After VSCODE initialises, Open the notebook SQL_Data_Insights.ipynb
 
 ![eg35](logonimages/eg35.JPG)
 
