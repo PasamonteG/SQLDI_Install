@@ -52,13 +52,47 @@ Enter 1 for SPUFI
 
 ![eg09](logonimages/eg09.JPG)
 
-The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options.
+The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options. Press Enter to proceed
 
 ![eg10](logonimages/eg10.JPG)
 
+Ignore the code page mismatch. Press Enter to proceed
+
 ![eg11](logonimages/eg11.JPG)
 
+These are the default settings for interacting with Db2. Accept them. Press Enter to proceed
+
 ![eg12](logonimages/eg12.JPG)
+
+ddd
+
+![eg13](logonimages/eg13.JPG)
+
+enter your password "SYS1"
+
+![eg14](logonimages/eg14.JPG)
+
+wait for ISPF and *** to appear, then press enter
+
+![eg15](logonimages/eg15.JPG)
+
+This is the ISPF main menu
+
+![eg16](logonimages/eg16.JPG)
+
+Enter m ( more options )
+
+![eg17](logonimages/eg17.JPG)
+
+Enter 15, for the Db2 sub menu
+
+![eg18](logonimages/eg18.JPG)
+
+Enter 1 for SPUFI
+
+![eg19](logonimages/eg19.JPG)
+
+The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options. Press Enter to proceed
 
 
 The model used by SQLDI is the Bag of Words model, which is described by many places on the web such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model)
