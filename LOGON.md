@@ -87,42 +87,61 @@ Press F3 until you get back to the main panel. Then press m to get to more produ
 
 ![eg16](logonimages/eg16.JPG)
 
-The Db2 Admin Tool is John McKinnon's favouritest tool in the world.
+Ignore the code page warning. Press enter to continue
 
 ![eg17](logonimages/eg17.JPG)
 
-Enter 15, for the Db2 sub menu
+The Db2 Admin Tool is John McKinnon's favouritest tool in the world. These note will show you how to start using it. But give John a call and ask him to give you the presidential tour. Press 1 to navigate the Db2 System Catalog.
 
 ![eg18](logonimages/eg18.JPG)
 
-Enter 1 for SPUFI
+Db2, like other RDBMS servers, stores data about tables it manages in.... a central set of tables called the catalog. ( SYSIBM.SYSTABLES, SYSIBM.SYSCOLUMNS, SYSIBM.SYSVIEWS etc... ). This little application just navigates the Catalog to show you what's stored in this Db2 system.
 
 ![eg19](logonimages/eg19.JPG)
 
+
 The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options. Press Enter to proceed
 
+![eg20](logonimages/eg20.JPG)
 
-The model used by SQLDI is the Bag of Words model, which is described by many places on the web such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model)
+Ignore the code page mismatch. Press Enter to proceed
 
-Using a simple SQL query, you can do things like
-- find and rank clients who are most similar to your most profitable clients. 
-- find clients who have similar patterns to previous clients who closed their accounts.
-- see which data items are most influential towards certain outcomes
+![eg21](logonimages/eg21.JPG)
 
-SQLDI can operate against Db2 views, or even external data sources like IMS and VSAM.
+These are the default settings for interacting with Db2. Accept them. Press Enter to proceed
 
-Two of the most likely use cases for SQLDI are
-1. Business Analytics Users.
-2. Data Scientists who are charged with developing more targetted machine learning scoring models.
+![eg22](logonimages/eg22.JPG)
+
+This the edit screen for your input file.
+
+![eg23](logonimages/eg23.JPG)
+
+SPUFI is now ready to submit your file. Press Enter to proceed
+
+![eg24](logonimages/eg24.JPG)
+
+These are the results... TA DA !. Use F8 and F7 to scroll down and up. Press F3 when you are done.
+
+![eg25](logonimages/eg25.JPG)
+
+Keep repeating this process until you are familiar with the process and running SQL in Db2 z/OS.
+
+![eg26](logonimages/eg26.JPG)
+
+Ignore the code page warning. Press enter to continue
+
+![eg27](logonimages/eg27.JPG)
+
+The Db2 Admin Tool is John McKinnon's favouritest tool in the world. These note will show you how to start using it. But give John a call and ask him to give you the presidential tour. Press 1 to navigate the Db2 System Catalog.
+
+![eg28](logonimages/eg28.JPG)
+
+Db2, like other RDBMS servers, stores data about tables it manages in.... a central set of tables called the catalog. ( SYSIBM.SYSTABLES, SYSIBM.SYSCOLUMNS, SYSIBM.SYSVIEWS etc... ). This little application just navigates the Catalog to show you what's stored in this Db2 system.
+
+![eg29](logonimages/eg29.JPG)
 
 
-## 2. Db2 Admin Tool
 
-SQLDI is a no charge feature of Db2 z/OS V13, but you do need to order this feature explicitly in order to get it. The screenshot below is from ShopZ, showing two separate items to order, each with the same Product ID.
-
-![sqldi_shopz](sqldiimages/sqldi_shopz.JPG)
-
-If you already have Db2 z/OS V13 installed, you can order SQL Data Insights as a CBPDO for it's own SMPE CSI, or to add to the Db2 SMPE CSI.
 
 ## 3. DB2 CLP
 
