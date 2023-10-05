@@ -97,17 +97,20 @@ The Db2 Admin Tool is John McKinnon's favouritest tool in the world. These note 
 
 Db2, like other RDBMS servers, stores data about tables it manages in.... a central set of tables called the catalog. ( SYSIBM.SYSTABLES, SYSIBM.SYSCOLUMNS, SYSIBM.SYSVIEWS etc... ). This little application just navigates the Catalog to show you what's stored in this Db2 system.
 
-![eg19](logonimages/eg19.JPG)
-
 The Db2 Catalog stores information about lots of different objects. Tables, Views and Columns are Obvious. Tablespaces are the physical datasets that the tables are stored in. packages are bound SQL statements. Lets start with Tables. Press T
 
-![eg20](logonimages/eg20.JPG)
+![eg19](logonimages/eg19.JPG)
 
 This are the tables in the system
 
-![eg21](logonimages/eg21.JPG)
+![eg20](logonimages/eg20.JPG)
+
 
 You can add masks to narrow what you see. Enter the mask "Q*" under schema to find all the tables in any schema starting with Q
+
+![eg21](logonimages/eg21.JPG)
+
+??
 
 ![eg22](logonimages/eg22.JPG)
 
