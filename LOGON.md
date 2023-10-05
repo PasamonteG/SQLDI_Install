@@ -20,9 +20,15 @@ Find the 3270 Emulator on the desktop and open it.
 
 ![eg01](logonimages/eg01.JPG)
 
+Enter "l tso" to logon to TSO
+
 ![eg02](logonimages/eg02.JPG)
 
+enter your username "ibmuser"
+
 ![eg03](logonimages/eg03.JPG)
+
+enter your password "SYS1"
 
 ![eg04](logonimages/eg04.JPG)
 
