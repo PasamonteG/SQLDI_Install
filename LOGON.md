@@ -155,16 +155,18 @@ Now disconnect
 
 ## 4. Jupyter Notebooks
 
-![eg34](logonimages/eg34.JPG)
-
 
 Locate the vscode icon. Open it.
 
-![eg35](logonimages/eg35.JPG)
+![eg34](logonimages/eg34.JPG)
 
 This VSCODE instance has had the Jupyter Notebook plugins installed. That's another way to work with Db2.
 
 After VSCODE initialises, Open the notebook
+
+![eg35](logonimages/eg35.JPG)
+
+If you know how to use Jupyter Notebooks, then you should be able to work through this notebook
 
 ![eg36](logonimages/eg36.JPG)
 
@@ -172,17 +174,6 @@ Ignore the code page warning. Press enter to continue
 
 ![eg37](logonimages/eg37.JPG)
 
-The Db2 Admin Tool is John McKinnon's favouritest tool in the world. These note will show you how to start using it. But give John a call and ask him to give you the presidential tour. Press 1 to navigate the Db2 System Catalog.
-
-![eg38](logonimages/eg38.JPG)
-
-Db2, like other RDBMS servers, stores data about tables it manages in.... a central set of tables called the catalog. ( SYSIBM.SYSTABLES, SYSIBM.SYSCOLUMNS, SYSIBM.SYSVIEWS etc... ). This little application just navigates the Catalog to show you what's stored in this Db2 system.
-
-The Db2 Catalog stores information about lots of different objects. Tables, Views and Columns are Obvious. Tablespaces are the physical datasets that the tables are stored in. packages are bound SQL statements. Lets start with Tables. Press T
-
-![eg39](logonimages/eg39.JPG)
-
-This are the tables in the system
 
 
 
