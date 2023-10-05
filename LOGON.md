@@ -32,10 +32,15 @@ enter your password "SYS1"
 
 ![eg04](logonimages/eg04.JPG)
 
+wait for ISPF and *** to appear, then press enter
+
 ![eg05](logonimages/eg05.JPG)
+
+This is the ISPF main menu
 
 ![eg06](logonimages/eg06.JPG)
 
+Enter 
 ![eg07](logonimages/eg07.JPG)
 
 ![eg08](logonimages/eg08.JPG)
