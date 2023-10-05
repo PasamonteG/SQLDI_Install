@@ -99,16 +99,15 @@ Db2, like other RDBMS servers, stores data about tables it manages in.... a cent
 
 ![eg19](logonimages/eg19.JPG)
 
-
-The panel allows you to specify an input dataset and and output dataset, and a bunch of execution options. Press Enter to proceed
+The Db2 Catalog stores information about lots of different objects. Tables, Views and Columns are Obvious. Tablespaces are the physical datasets that the tables are stored in. packages are bound SQL statements. Lets start with Tables. Press T
 
 ![eg20](logonimages/eg20.JPG)
 
-Ignore the code page mismatch. Press Enter to proceed
+This are the tables in the system
 
 ![eg21](logonimages/eg21.JPG)
 
-These are the default settings for interacting with Db2. Accept them. Press Enter to proceed
+You can add masks to narrow what you see. Enter the mask "Q*" under schema to find all the tables in any schema starting with Q
 
 ![eg22](logonimages/eg22.JPG)
 
