@@ -1,16 +1,20 @@
-# Colliding Worlds
+# IBM SQL Data Insights Installation Lab
 IBM z16 and also IBM z17brings together the worlds of Enterprise-Scale Transaction Workloads, with Machine Learning and AI.
 
-"Colliding Worlds" is a collection of practical examples of using a z/OS environment to deploy and use AI technologies with z/OS.
+Through this lab we will introduce you in the installation and setup of the IBM SQL Data Insights for Db2 v13 (SDI). It is a feature that you can download and install, and any other Db2 for z/OS feature, using its FMID. With SDI you will enable business analysts and data scientists to use a powerful AI tool that comes with your Db2 for z/OS, just by using SQL sentences.
 
-## IBM Z16 Context
-The IBM Z16 introduced the Telum processor, with the AIU processing unit to support AI workloads. IBM z17 has continued with enabling AI acceleration with Telum II and its enhanced AIU.
-z/OS has also provided a wide range of AI software support, both proprietary and open source, to enable AI workloads.
+## IBM Z Context
+The IBM z16 introduced the Telum processor, with the AIU processing unit to support AI workloads. IBM z17 has continued with enabling AI acceleration with Telum II and its enhanced AIU.
+z/OS has also provided a wide range of AI software support, both proprietary and open source, to enable AI workloads, that IBM is supporting and providing in several different packages: installable software, isolated containers, K8S in Openshift and others. 
 
 ... However, a low-cost emulated IBM Z environment is all you need to learn how to deploy and use AI on Z.
 
-## Colliding Worlds Environment
-The Colliding Worlds workshop makes use of ZD&T ( Z Development and Test ) to provide a z/OS environment for gaining practical experiences of various AI on Z deployment scenarios. This github repository contains the hands-on learning guides for a student to perform the exercises. It also contains an audit trail of all the work that was done to prepare the lab environment.
+## IBM's ZVA Environment
+In this workshop workshop we will make use of ZD&T ( Z Development and Test ) to provide a z/OS environment for gaining practical experiences of SDI. This github repository contains the hands-on learning guides for a student to perform the exercises. It also contains an audit trail of all the work that was done to prepare the lab environment.
+
+---
+
+**<TO BE REVIEWED**
 
 Hands-On Learning exercises are provided for two categories of experience.
 
@@ -40,3 +44,6 @@ The links below will take you to the exercise notebooks for the experiences you 
 6. Using CDC Solutions to replicate IMS, VSAM and Db2 data from z/OS to Kafka or Postgres
 7. Using SQL and REST APIs to Access Data in-situ on z/OS from Anywhere 
 
+**/TO BE REVIEWED>**
+
+---

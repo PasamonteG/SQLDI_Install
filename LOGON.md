@@ -8,13 +8,13 @@ These notes and screenshots are an aide-memoire for connecting to DB2 z/OS in th
 1. SPUFI
 2. Db2 Admin Tool
 3. DB2 CLP
-4. Jupytr Notebooks
+4. Jupyter Notebooks
 
 ## 1. SPUFI 
 
 SPUFI is an acronym. (SQL Processing Using File Input).
 
-It is a very old way of accessing Db2, that originated before Windows was born, and people had to use 3270 terminals
+It is a very old way of accessing Db2, that originated before laptops were born, and people had to use 3270 terminals
 
 Find the 3270 Emulator on the desktop and open it.
 
