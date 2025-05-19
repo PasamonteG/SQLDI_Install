@@ -1,13 +1,11 @@
 # Colliding Worlds
-IBM Z16 brings together the worlds of Enterprise-Scale Transaction Workloads, with Machine Learning and AI.
+IBM z16 and also IBM z17brings together the worlds of Enterprise-Scale Transaction Workloads, with Machine Learning and AI.
 
 "Colliding Worlds" is a collection of practical examples of using a z/OS environment to deploy and use AI technologies with z/OS.
 
 ## IBM Z16 Context
-The IBM Z16 introduced the Telum processor, with the AIU processing unit to support AI workloads.
+The IBM Z16 introduced the Telum processor, with the AIU processing unit to support AI workloads. IBM z17 has continued with enabling AI acceleration with Telum II and its enhanced AIU.
 z/OS has also provided a wide range of AI software support, both proprietary and open source, to enable AI workloads.
-A Z16-based infrastructure is required to realise the business benefits of AI at Scale.
-
 
 ... However, a low-cost emulated IBM Z environment is all you need to learn how to deploy and use AI on Z.
 
@@ -42,18 +40,3 @@ The links below will take you to the exercise notebooks for the experiences you 
 6. Using CDC Solutions to replicate IMS, VSAM and Db2 data from z/OS to Kafka or Postgres
 7. Using SQL and REST APIs to Access Data in-situ on z/OS from Anywhere 
 
-
-
-
-## Workplan  
-
-
-| HoLs  | Work to do |   Effort Estimate |
-|---------------|------------|---------|
-|SQLDI V12 * 2 | Re-work 2022 Labs | 1 day |
-|SQLDI V13 * 2 | Adapt 2022 Labs | 1 day |
-|ZCX Open Source AI Tools * 2 | New Work | 4 days |
-|WMLZ-CE * 2 | New Work | 2 days | 
-|WMLZ * 2 | New Work | 4 days |
-|CDC * 1 | Repeat 2022 work | 2 days |
-|DaaZ * 1 | New Work | 4 days |
