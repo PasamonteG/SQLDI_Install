@@ -124,10 +124,12 @@ This document breaks the SQLDI deployment process down into 10 steps, as follows
 All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
 ![sdisetup](sqldiimages/sdisetup.JPG)
 
+We need to include how to connect to environment here. 
 
 ![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
 You can use SMPE to check whether the following maintainance has been applied to the z/OS and Db2 CSI target zones.
+We are not going to cover this part here as it was already done for you. Keep this information as a reference if you need to use afterwards.
 
 ```
 IBM z/OS 2.5 or 2.4.
@@ -264,6 +266,9 @@ SETROPTS RACLIST(FACILITY) REFRESH
 ![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
 
 The SQLDI userid must have several USS environment variables correctly set, so that the binaries and libraries of SQLDI can be found at runtime. The .profile file for user AIDBADM has been edited ( from # SQLDI Setup onwards ) to set the correct paths and variables.
+There is a .profile file that you will need to copy using ibmuser to aidbadm root directory.
+
+cp /u/ibmuser/.profile.aidbadm /u/aidbadm/.profile
 
 ***/u/aidbadm/.profile***
 ```
@@ -484,7 +489,8 @@ In this worked example a ZFS called IBMUSER.SDI13.ZFS is created and mounted at 
 
 Once you have created and mounted the ZFS, there are a couple more things to do.
 
-Permenantly mount the ZFS in a PARMLIB member
+Permenantly mount the ZFS in a PARMLIB member. It was done for you already so you don't have to do it for real. 
+You can however navigate to PDS USER.Z25C.PARMLIB and review the BPXPRMZZ member. 
 
 ***USER.Z25C.PARMLIB(BPXPRMZZ)***
 ```
@@ -509,12 +515,12 @@ Grow the ZFS to ensure that it is over 4GB in size. This can be done from USS us
 IBMUSER:/u: >df -k /u/sqldi13
 
 Mounted on     Filesystem                Avail/Total    Files      Status
-/u/sqldi13     (SQLDI.V13.ZFS)           2488135/2880000 4294966001 Available
+/u/sqldi13     (IBMUSER.SDI13.ZFS)           2488135/2880000 4294966001 Available
 ```
 
 ***Command togrow the ZFS***
 ```
-zfsadm grow -aggregate SQLDI.V12.ZFS -size 5000000
+zfsadm grow -aggregate IBMUSER.SDI13.ZFS -size 5000000
 ```
 
 ***Command to verify the increased size of the ZFS (in KB)***
@@ -525,6 +531,11 @@ Mounted on     Filesystem                Avail/Total    Files      Status
 /u/sqldi13     (SQLDI.V13.ZFS)           4608239/5000400 4294966001 Available
 ```
 
+***Command to change ownership of the ZFS to AIDBADM user***
+```
+IBMUSER:/u: >chown AIDBADM /u/sqldi13
+IBMUSER:/u: >ls -altr /u/sqldi13
+```
 
 ![duck7](sqldiimages/duck7.JPG) **Create SQLDI Pseudo Catalog** 
 
