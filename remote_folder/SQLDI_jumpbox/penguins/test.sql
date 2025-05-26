@@ -1,0 +1,3 @@
+SELECT U.*, decimal(AI_SIMILARITY(ID,1),5,2) AS SIMILARITY       
+     FROM EXPLORE.PENGUINS_UNC U 
+     WHERE U.ID between 1 and 152 ;

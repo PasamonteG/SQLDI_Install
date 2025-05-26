@@ -1,0 +1,19 @@
+from sqlalchemy import create_engine, text
+
+db_url = "ibm_db_sa://IBMUSER:SYS1@wg31.washington.ibm.com:5045/DALLASD"
+engine = create_engine(db_url, pool_size=5, pool_recycle=3600)
+conn = engine.connect()
+
+sql_query = """
+  SELECT * FROM   
+  (SELECT C.*, AI_SIMILARITY(CUSTOMERID, '3668-QPYBK') AS SIMILARITY  
+  FROM DSNAIDB.CHURN C  WHERE CUSTOMERID <> '3668-QPYBK')  
+  WHERE SIMILARITY > 0.5 
+  ORDER BY SIMILARITY DESC 
+  FETCH FIRST 20 ROWS ONLY 
+"""
+
+with engine.connect() as conn:
+    result = conn.exec_driver_sql(sql_query)
+    for row in result:
+        print(row)
