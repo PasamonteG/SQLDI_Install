@@ -70,7 +70,7 @@ There are several pre-requisites that you should resolve before ordering SQLDI. 
 
 When Planning for SQLDI deployment, it is very helpful to consider an architecture diagram of all the moving parts.
 
-![sqldi_arch](sqldiimages/sqldi_arch.JPG)
+![sqldi_arch](/sqldiimages/sqldi_arch.JPG)
 
 SQLDI runs in USS ( z/OS Unix Systems Services ). It only needs to be running when you are training new models. Once the models are trained, and loaded into the model tables, SQLDI can be stopped, and Db2 z/OS will continue to serve AI-enabled queries.
 
@@ -122,11 +122,11 @@ This document breaks the SQLDI deployment process down into 10 steps, as follows
 
 
 All the jobs used for deployment of SDI in this worked example were saved to PDS ***IBMUSER.SDISETUP***
-![sdisetup](sqldiimages/sdisetup.JPG)
+![sdisetup](/sqldiimages/sdisetup.JPG)
 
 We need to include how to connect to environment here. 
 
-![duck1](sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
+![duck1](/sqldiimages/duck1.JPG) **Verify the AI libraries are mounted at the right path.**
 
 You can use SMPE to check whether the following maintainance has been applied to the z/OS and Db2 CSI target zones.
 We are not going to cover this part here as it was already done for you. Keep this information as a reference if you need to use afterwards.
@@ -169,7 +169,7 @@ drwxr-xr-x   4 OMVSKERN OMVSGRP     8192 Mar 15  2022 zdnn
 
 ```
 
-![duck2](sqldiimages/duck2.JPG) **Verify the SQLDI libraries are mounted at the right path.**
+![duck2](/sqldiimages/duck2.JPG) **Verify the SQLDI libraries are mounted at the right path.**
 
 Open an ssh session into USS, and navigate to /usr/lpp/IBM/db2sqldi/v1r1
 
@@ -196,7 +196,7 @@ drwxr-xr-x   3 OMVSKERN SYS1        8192 May 17  2022 tools
 * tools contains a copy of the bash shell, which you could copy to /bin/bash if you wanted.
 
 
-![duck3](sqldiimages/duck3.JPG)  **Setup RACF userid and group**
+![duck3](/sqldiimages/duck3.JPG)  **Setup RACF userid and group**
 
 A RACF userid is required to be the SQLDI instance owner.
 * It must have an omvs segment with minimum values for CPUTIMEMAX(86400), MEMLIMIT(32G) ASSIZEMAX(1200000000)
@@ -263,7 +263,7 @@ SETROPTS RACLIST(FACILITY) REFRESH
 /*                                                         
 ```
 
-![duck4](sqldiimages/duck4.JPG) **USS environment variables** 
+![duck4](/sqldiimages/duck4.JPG) **USS environment variables** 
 
 The SQLDI userid must have several USS environment variables correctly set, so that the binaries and libraries of SQLDI can be found at runtime. The .profile file for user AIDBADM has been edited ( from # SQLDI Setup onwards ) to set the correct paths and variables.
 There is a .profile file that you will need to copy using ibmuser to aidbadm root directory.
@@ -330,7 +330,7 @@ export PS1=' ${PWD} >'
 ```
 
 
-![duck5](sqldiimages/duck5.JPG) **RACF Certificate and Keyring** 
+![duck5](/sqldiimages/duck5.JPG) **RACF Certificate and Keyring** 
 
 A RACF certificate is required for SQLDI to authenticate with RACF when it interacts with Db2. 
 In this worked example we use a self-signed certificate and connect it to a keyring. 
@@ -432,10 +432,10 @@ RACDCERT LIST(LABEL('WMLZCert_WMLZID')) ID(AIDBADM)
 
 **Note** a Return code of 0 from this job does not necessarily mean that the objects were found as expected. You must explicitly check the job joutput, as in the screenshot below.
 
-![racfchk](sqldiimages/racfchk.JPG)
+![racfchk](/sqldiimages/racfchk.JPG)
 
 
-![duck6](sqldiimages/duck6.JPG) **Create a HUGE ZFS** 
+![duck6](/sqldiimages/duck6.JPG) **Create a HUGE ZFS** 
 
 SQLDI model training can take up a lot of disk space. You need to prepare a ZFS for the SQLDI instance which is at least 4GB in size, or the SQLDI instance creation will fail. In a real-world environment where you are training models on large volumes of data, the disk space may need to be much larger.
 
@@ -537,7 +537,7 @@ IBMUSER:/u: >chown AIDBADM /u/sqldi13
 IBMUSER:/u: >ls -altr /u/sqldi13
 ```
 
-![duck7](sqldiimages/duck7.JPG) **Create SQLDI Pseudo Catalog** 
+![duck7](/sqldiimages/duck7.JPG) **Create SQLDI Pseudo Catalog** 
 
 Db2 z/OS V13 provides job DSNTIJAI in SDSNSAMP to create the SQLDI Pseudo Catalog. For this worked example, DSNTIJAI was copied to IBMUSER.SDISETUP for customisation and execution. The job is too long to embed inline within this document, but the code snippet below provides the pseudo-code for the job.
 
@@ -586,7 +586,7 @@ SYSAIDB      SYSAITRAININGJOBS_MESSAGES_AUX      DSNAIDB1
 
   11 record(s) selected.
 ```
-![duck8](sqldiimages/duck8.JPG) **Create Sample CHURN Table** 
+![duck8](/sqldiimages/duck8.JPG) **Create Sample CHURN Table** 
 
 Db2 z/OS V13 provides job DSNTIJAV in SDSNSAMP to create the SQLDI Pseudo Catalog. For this worked example, DSNTIJAV was copied to IBMUSER.SDISETUP for customisation and execution. The job is too long to embed inline within this document, but the code snippet below provides the pseudo-code for the job.
 
@@ -653,22 +653,21 @@ COMMIT;
 GRANT SELECT ON DSNAIDB.CHURN TO PUBLIC;
                                         
 ```
-![duck9](sqldiimages/duck9.JPG) **TCPIP ports** 
+![duck9](/sqldiimages/duck9.JPG) **TCPIP ports** 
 
 SQLDI makes use of several TCPIP ports for communication between the various Spark and SQLDI components. You can control the values of all of these ports during the SQLDI instance create process if you need to. 
 The default ports (which can all be over-ridden) are documented [here](https://www.ibm.com/docs/en/db2-for-zos/13?topic=di-configuring-network-ports-sql).
 
 From TSO option 6 you can use the ***netstat portlist*** command to see what ports are already in use. If there are any clashes you need to decide which SQLDI ports need to be changed from their defaults, and enter that information when you run the ***sqldi.sh create*** script to create the SQLDI instance.
 
-![netstat](sqldiimages/netstat.JPG)  
+![netstat](/sqldiimages/netstat.JPG)  
 .
 
-
-![duck10](sqldiimages/duck10.JPG) **Create the SQLDI Instance** 
+![duck10](/sqldiimages/duck10.JPG) **Create the SQLDI Instance** 
 
 **Pause and Review:** Take a fresh look at the SQLDI architecture diagram. The architecture is fairly simple, but there is quite a bit of legwork to get right before you are ready to create an SQLDI instance. If you don't have ***all*** the steps above implemented correctly, the SQLDI instance creation will fail.
 
-![sqldi_arch](sqldiimages/sqldi_arch.JPG)
+![sqldi_arch](/sqldiimages/sqldi_arch.JPG)
 The SQLDI instance creation, and operation, is controlled by the **sqldi.sh** script located in /usr/lpp/IBM/db2sqldi/v1r1/sql-data-insights/bin 
 
 You need to be the intended instance owner (AIDBADM) to create the SQLDI instance, because the .profile and the RACF pre-requisites were created around this userid.
@@ -727,17 +726,17 @@ For this worked example, the data entry values that I need to have to hand are
 
 The screenshot below captures the execution of the ***sqldi.sh create*** command script. If everything works fine it even offers to start the SQLDI instance for you.
 
-![sqldicreate](sqldiimages/sqldicreate.JPG)
+![sqldicreate](/sqldiimages/sqldicreate.JPG)
 
 Once SQLDI is started, you will want to open a browser against the two SQLDI user interfaces.
 
 ***The Spark Web UI*** located at http://wg31.wqashington.ibm.com:8080
 
-![sparkui](sqldiimages/sparkui.JPG)
+![sparkui](/sqldiimages/sparkui.JPG)
 
-***The SQLDI UI*** located at https://wg31.wqashington.ibm.com:15001
+***The SQLDI UI*** located at `https://wg31.wqashington.ibm.com:15001`
 
-![spqldiui](sqldiimages/sqldiui.JPG)
+![spqldiui](/sqldiimages/sqldiui.JPG)
 
 ## 6. Installation Verification Test
 
@@ -747,75 +746,75 @@ SQLDI is running under user AIDBADM, which was prepared specifically for that pu
 
 ***Sign on to SQLDI.***
 
-![spqldi_signon](sqldiimages/sqldi01.JPG)
+![spqldi_signon](/sqldiimages/sqldi01.JPG)
 
 ***Click to Add a Connection***
 
-![spqldi_addconn](sqldiimages/sqldi02.JPG)
+![spqldi_addconn](/sqldiimages/sqldi02.JPG)
 
 ***Enter the connection details for Db2 V13***
 
-![spqldi_dallasd](sqldiimages/sqldi03.JPG)
+![spqldi_dallasd](/sqldiimages/sqldi03.JPG)
 
 ***List the existing AI-Enabled Objects***
 
-![spqldi_list](sqldiimages/sqldi04.JPG)
+![spqldi_list](/sqldiimages/sqldi04.JPG)
 
 ***Click on "Add Object"***
 
-![spqldi_addobj](sqldiimages/sqldi05.JPG)
+![spqldi_addobj](/sqldiimages/sqldi05.JPG)
 
 ***Filter by Schema (DSNAIDB) and Press the search icon***
 
-![spqldi_seacrh](sqldiimages/sqldi06.JPG)
+![spqldi_seacrh](/sqldiimages/sqldi06.JPG)
 
 ***Tick DSNAIDB.CHURN and Press the "Enable AI" Button***
 
-![spqldi_enable](sqldiimages/sqldi07.JPG)
+![spqldi_enable](/sqldiimages/sqldi07.JPG)
 
 ***Select all columns, change the column type of "CustomerID" to "Key", and press "Next".***
 
-![spqldi_columns](sqldiimages/sqldi08.JPG)
+![spqldi_columns](/sqldiimages/sqldi08.JPG)
 
 ***This time, don't apply any column filters. Push "Enable".***
 
-![spqldi_enable](sqldiimages/sqldi09.JPG)
+![spqldi_enable](/sqldiimages/sqldi09.JPG)
 
 ***See the status of the table change to "Enabling".***
 
-![spqldi_enabling](sqldiimages/sqldi10.JPG)
+![spqldi_enabling](/sqldiimages/sqldi10.JPG)
 
 ***Check the Spark Web UI to see the tasks in progress. It should take 3 - 5 minutes on this small demo system without a Telum processor.***
 
-![spqldi_sparkwebui](sqldiimages/sqldi11.JPG)
+![spqldi_sparkwebui](/sqldiimages/sqldi11.JPG)
 
 ***Check back to the SQLDI UI to check the model was trained. Then press "Run Query"***
 
-![spqldi_finished](sqldiimages/sqldi12.JPG)
+![spqldi_finished](/sqldiimages/sqldi12.JPG)
 
 ***Use the drop down to retrieve one of the template SQL queries. Choose "Semantic Similarity"***
 
-![spqldi_sqltemplate](sqldiimages/sqldi13.JPG)
+![spqldi_sqltemplate](/sqldiimages/sqldi13.JPG)
 
 ***The template SQL statements are just plain text based on the ICP table (DSNAIDB.CHURN). Review the Query and Press "Run".***
 
-![spqldi_run](sqldiimages/sqldi14.JPG)
+![spqldi_run](/sqldiimages/sqldi14.JPG)
 
 ***Let the query complete and review the results. This query lists the top 20 clients that are most similar to CUSTOMERID '3668-QPYBK'***
 
-![spqldi_results](sqldiimages/sqldi15.JPG)
+![spqldi_results](/sqldiimages/sqldi15.JPG)
 
 ***Analyze Data. Return to the AI Objects, select "Analyze Data"***
 
-![spqldi_analyze](sqldiimages/sqldi16.JPG)
+![spqldi_analyze](/sqldiimages/sqldi16.JPG)
 
 ***Check Out the Data Statistics***
 
-![spqldi_datastats](sqldiimages/sqldi17.JPG)
+![spqldi_datastats](/sqldiimages/sqldi17.JPG)
 
 ***Check Out the Column Influences***
 
-![spqldi_datastats](sqldiimages/sqldi17.JPG)
+![spqldi_datastats](/sqldiimages/sqldi17.JPG)
 
 That completes a basic installation verification test.
 
@@ -843,9 +842,9 @@ db2 connect to DALLASD user IBMUSER using SYS1
 db2 -tvf sqldi.sql
 ```
 
-![spqldi_db2clp](sqldiimages/db2clp.JPG)
+![spqldi_db2clp](/sqldiimages/db2clp.JPG)
 
-Paste your SQL queries into a file within C:\Program Files\IBM\SQLLIB\BIN> and submit them.
+Paste your SQL queries into a file within `C:\Program Files\IBM\SQLLIB\BIN>` and submit them.
 
 ### 7.2 Experiment with all four of the SQL AI template queries
 
