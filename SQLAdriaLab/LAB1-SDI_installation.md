@@ -61,5 +61,312 @@ You need
 * A new WLM environment for the UDFs to execute in, and create a PROCLIB member to invoke them.
 
 The notes above are a summary of the key pre-requisite considerations for SQLDI deployment. A comprehensive list of requiremnents is published 
-in the [SQLDI Knowledgecenter](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-preparing-sql-di-installation) for Db2 13.
+in the [SQLDI Knowledge Center](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-preparing-sql-di-installation) for Db2 13.
 
+### 1.2 The HOL Environment that will be used for the Setup Lab
+
+The Hands on Learning lab is hosted in a virtualised environment accessed via the Cloud using ZVA. Booking requests can be made by IBMers, so that the environment will not be freely ready after the labs you are running today.
+
+The diagram below illustrates the nature of ZVA, and how to access it. Documented here: [ZVA_System_Access.](ZVA_System_Access.md).
+
+![zva](/aizimages/access_zva.jpg)
+
+The rest of this document contains the instructions for you to install and configure SQLDI on the ZVA image. 
+
+**You will NEED to Know The following**
+
+### Userids and Passwords in z/OS.
+
+The z/OS userids and passwords that you will be using once you have accessed the ZVA or ZTrial system are
+
+* IBMUSER ( password SYS1 ) is a high privilege z/OS userid with Db2 Access
+* AIDBADM ( password aidbadm ) is the userid that will be used as the SQLDI instance owner.
+
+### TCPIP hostnames.
+Do **NOT** attempt to use TCPIP addresses during this HOL. The z/OS TCPIP stack has not been customised during the ZVA provisioning process.
+You must use hostnames, which have been setup.
+
+From **Windows** you should point the applications (PCOMM and putty) at the z/OS system using hostname wg31.
+
+![putty_wg31](/aizimages/putty_wg31.png)
+
+![pcomm_wg31](/aizimages/pcomm_wg31.jpg)
+
+From **USS** (where SQLDI runs) you should define your SQLDI and Spark instances to be located at hostname wg31.washington.ibm.com.
+
+---
+
+Let's check that all the components needed in USS are in place.
+
+You will ned to login as **ibmuser** into the PuTTY terminal.
+
+![Login using PuTTY](/aizimages/login_ibmuser.png)
+
+![List path with libraries](/aizimages/list_usrlpp.png)
+
+![Verify the SQLDI libraries are mounted](/aizimages/list_usrlpp_2.png)
+
+---
+
+## 2. Prepare the SQLDI Administration Userid and Group
+There are two parts to this task. The first pertaining to RACF profiles, the second pertaining to USS environment variables.
+
+In a nutshell, you need to setup the following:
+1. A RACF userid with an omvs segment to be the SQLDI instance owner.
+2. which has generous CPU and Memory limits to reflect the fact that model training might take some time.
+3. which is a member of a RACF group named SQLDIGRP. 
+4. and has USS environment settings that include PATH and LIBPATH values to link to all the Z AI libraries and the Deep Learning Compiler.
+
+**Note: Db2 permissions** The SQLDI instance owner itself does not need Db2 permissions. 
+The userid that logs onto SQLDI via the Web UI will need to be a member of SQLDIGRP **and** will also need Db2 privileges.
+
+We will use this logistical planning matter as a basis for problem determination later on on the HOL.
+
+### 2.1 RACF User Profiles
+ 
+Decide on a userid that will be the SQLDI owner within USS. 
+
+You will create **AIDBADM** user:
+
+---
+
+The JCL that was used to define RACF userid is found in `IBMUSER.SDISETUP(SDIUSCRT)` . It is standard RACF user profile, with a TSO signon and an omvs id.
+
+![IBMUSER.SDISETUP](/aizimages/RACF_JCL.png)
+
+Submit the JCL:
+
+![Submit member `SDIUSCRT`](/aizimages/RACF_JCL_sub.png)
+
+---
+
+If you want to make additional RACF userids able to operate SQLDI, those users would also need similar customisation as the following steps for AIDBADM.
+
+With the TSO command `tso lu iadbadm omvs` you can display the RACF user profile, or you can go using the panels:
+
+* ISPF main panel
+* m.3 ( for RACF )
+* 4 ( for user profiles )
+* D - AIDBADM ( to display the user profile for AIDBADM )
+* s - OMVS ( to include the omvs segment details 0
+
+If the lab has been reset correctly, AIDBADM will be a member of the RACF Group 'SYS1', and will have an omvs segment with various omvs properties set.
+
+![](/aizimages/racf_aidbadm.jpg)
+
+---
+
+Check the RACF profiles for user AIDBADM.
+
+---
+
+
+For each of the users, they need an OMVS segment with certain properties specified.
+We want to see the following values set for the SQLDI user.
+
+* CPUTIMEMAX 864000 (to avoid the risk of timeouts during long model training tasks)
+* MEMLIMIT 4GB minimum (because SQLDI and Spark need sufficient memory)
+* PROGRAM /bin/sh (or change it to /bin/bash if you prefer that as a default)
+* HOME /u/aidbadm (to follow the standard convention for the home directory of a user)
+
+If the OMVS properties needs to be amended, go to RACF User Profiles ( ISPF M.3.4 ) and select "2" to change the user profile of AIDBADM
+
+![](/aizimages/aidbadm02.jpg)
+
+Specify that you want to change optional features 
+
+![](/aizimages/aidbadm03.jpg)
+
+Select omvs
+
+![](/aizimages/aidbadm04.jpg)
+
+Edit CPUMAXTIME and MEMLIMIT to meet the crieria
+
+![](/aizimages/aidbadm05.jpg)
+
+And verify the changes 
+
+![](/aizimages/aidbadm06.jpg)
+
+
+### 2.2 RACF Group Profiles
+
+A RACF Group profile with the specific name "SQLDIGRP" is required for SQLDI, and userids that invoke SQLDI must be added into that group.
+You need to create the "SQLDIGRP" group and connect user "AIDBADM" to it.
+You can do this in any one of the following ways:
+
+1. using the RACF Panels ( ISPF M.3 ) 
+2. Using TSO commands below from ISPF Option 6.  
+3. Customising and Submitting the Job in `IBMUSER.SDISETUP(SDIRACFG)` illustrated below
+
+If you choose the third option, this is the JCL that you must customize and submit.
+
+```JCL
+//IBMUSERJ  JOB (FB3),'IBMUSER',NOTIFY=&SYSUID,    
+// MSGCLASS=H,CLASS=A,MSGLEVEL=(1,1),                        
+//         REGION=0M,COND=(4,LT)                 
+//S1       EXEC PGM=IKJEFT01                                 
+                                                             
+//SYSTSPRT DD SYSOUT=*                                       
+                                                             
+//SYSPRINT DD SYSOUT=*                                       
+                                                             
+//SYSTSIN  DD *                                              
+                                                             
+ADDGROUP SQLDIGRP OMVS(AUTOGID) OWNER(IBMUSER)                 
+                                                             
+CONNECT (AIDBADM) GROUP (SQLDIGRP) OWNER(IBMUSER)
+
+CONNECT (IBMUSER) GROUP (SQLDIGRP) OWNER(IBMUSER)
+                                                             
+SETROPTS RACLIST(FACILITY) REFRESH                           
+                                                             
+/*                                                                                                             
+```
+
+And verify that aidbadm is now a member of group SQLDIGRP
+
+![Command](/aizimages/aidbadm_group_command.png)
+
+![Command result](/aizimages/aidbadm_group_check.png)
+
+### 2.3 USS Environment Variables
+
+The RACF user profile for AIDBADM has been checked for having an omvs segment, and for the required properties to run SQLDI.
+
+The environment variables for a userid operating in USS are a mixture of environment variables set at a system level, and environment variables set for a specific useric using the `.profile`.
+
+The **aidbadm** user needs to define PATH and LIBPATH environment variables so that all the required executables can be invoked at runtime.
+
+Open a terminal session into USS (e.g. using putty) and **logon as aidbadm**. You should find yourself in the home directory for the aidbadm user.
+
+Now, list all the files in your home directory with the `ls -al` command. (Files beginning with `.` are hidden unless you specify `-al`.)
+
+![aidbadm user path in USS](/aizimages/aidbadm_uss_path.png)
+
+
+(**Note:** Contents may differ from your screen)
+
+```bash
+ /u/aidbadm >ls -al
+total 192
+drwxr-xr-x   3 AIDBADM  SYS1        8192 Jul 28 02:20 .
+drwxr-xr-x  40 OMVSKERN SYS1       16384 Jan 25  2022 ..
+-rw-------   1 AIDBADM  SYS1        6312 Jul 27 06:35 .bash_history
+-rwxr-xr-x   1 AIDBADM  SYS1        2891 Jul 26 23:58 .profile
+-rwxr-xr-x   1 AIDBADM  SYS1        2891 Jul 26 23:58 .profile.aidbadm
+-rw-------   1 AIDBADM  SYS1        1654 Jul 28 02:20 .sh_history
+
+```
+
+You can easily list the contents of the .profile with the `cat` command as follows:
+(**NOTE:** Contents in your profile may differ form this output)
+
+```bash
+ /u/aidbadm >cat .profile
+export HOST=$(uname -n)
+export PS1=' ${PWD} >'
+export NET_IP=`host $HOST | grep addresses | awk ' { print \$5 } ' `
+export LANG=En_US
+export TERM=xterm
+set -o vi
+export _BPXK_AUTOCVT=ON
+export _BPX_SHAREAS=NO
+_BPXK_AUTOCVT=ON
+
+# PATH -
+PATH=".:${HOME}/bin:/usr/sbin:/usr/bin:${PATH}:/usr/local/bin:/usr/lpp/ldap/sbin:/usr/lpp/NFS"
+
+# Add BASH to PATH
+export PATH=/u/user1/tools/bash-4.3.48-2/bin:${PATH}
+
+# use latest java version
+if [ -r /usr/lpp/java/J8.0_64 ]
+then
+  export JAVA_HOME=${JAVA_HOME:-/usr/lpp/java/J8.0_64}
+  export PATH="${PATH}:${JAVA_HOME}/bin"
+  #Needed by jaydebeapi to find libj9a2e.so
+  export LIBPATH=$LIBPATH:${JAVA_HOME}/lib/s390x:${JAVA_HOME}/lib/s390x/classic
+fi
+
+if [ -z "$IBM_JAVA_OPTIONS" ]; then
+  export IBM_JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+else
+  if [[ ! "$IBM_JAVA_OPTIONS" == *"-Dfile.encoding=UTF-8"* ]]; then
+      export IBM_JAVA_OPTIONS=$IBM_JAVA_OPTIONS:-Dfile.encoding=UTF-8
+  fi
+fi
+
+if [ -r .envfile ]
+then
+  echo "execute ENVIRONMENT .envfile "
+  . .envfile
+fi
+
+```
+
+Some required variables (like `JAVA_HOME`) are already specified, but none of the required SQLDI library paths are defined.
+
+Even though we haven't yet installed the AI libraries and the SQLDI libraries, this HOL is structured to keep all the user profile settings together, and we know exactly what the paths will be.
+
+If you are comfortable with the vi editor, then you can edit the .profile inside USS. Most of us would prefer to use the ISPF editor, as shown below.
+
+Open ISPF edit (Option 2) and open the **/u/aidbadm/.profile** USS file.
+
+```bash
+# JAVA
+export JAVA_HOME=/usr/lpp/java/J8.0_64
+export PATH=$PATH:/apps/zospt/bin:/usr/lpp/java/J8.0_64/bin
+# ZOAU REQUIREMENTS
+export _BPXK_AUTOCVT=ON
+export ZOAU_HOME=/usr/lpp/IBM/zoautil
+export PATH=${ZOAU_HOME}/bin:$PATH
+# ZOAU MAN PAGE REQS (OPTIONAL)
+export MANPATH=${ZOAU_HOME}/docs/%L:$MANPATH
+export CLASSPATH=${ZOAU_HOME}/lib/*:${CLASSPATH}
+export LIBPATH=${ZOAU_HOME}/lib:${LIBPATH}
+# IBM Python - Ansible supported
+export PATH=/usr/lpp/IBM/cyp/v3r9/pyz/bin:$PATH
+export PYTHONPATH=/usr/lpp/IBM/cyp/v3r9/pyz
+export PYTHONPATH=${PYTHONPATH}:${ZOAU_HOME}/lib
+# Rocket Ported Git
+export _CEE_RUNOPTS='FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)'
+export PATH=/usr/lpp/Rocket/rsusr/ported/bin:$PATH
+# SQLDI Setup
+export SQLDI_INSTALL_DIR=/usr/lpp/IBM/db2sqldi/v1r1
+export ZADE_INSTALL_DIR=/usr/lpp/IBM/aie/zade
+export ZAIE_INSTALL_DIR=/usr/lpp/IBM/aie
+export BLAS_INSTALL_DIR=/usr/lpp/cbclib
+export SPARK_HOME=$SQLDI_INSTALL_DIR/spark24x
+# SQLDI PATH
+PATH=/bin:$PATH
+PATH=$SQLDI_INSTALL_DIR/sql-data-insights/bin:$PATH
+PATH=$SQLDI_INSTALL_DIR/tools/bin:$PATH
+PATH=$ZADE_INSTALL_DIR/bin:$PATH
+PATH=$PATH:$JAVA_HOME/bin
+export PATH=$PATH
+# SQLDI LIBPATH
+LIBPATH=/lib:/usr/lib
+LIBPATH=$LIBPATH:$JAVA_HOME/bin/classic
+LIBPATH=$LIBPATH:$JAVA_HOME/bin/j9vm
+LIBPATH=$LIBPATH:$JAVA_HOME/lib/s390x
+LIBPATH=$LIBPATH:$SPARK_HOME/lib
+LIBPATH=$BLAS_INSTALL_DIR/lib:$LIBPATH
+LIBPATH=$ZAIE_INSTALL_DIR/zade/lib:$LIBPATH
+LIBPATH=$ZAIE_INSTALL_DIR/zdnn/lib:$LIBPATH
+LIBPATH=$ZAIE_INSTALL_DIR/zaio/lib:$LIBPATH
+export LIBPATH=$LIBPATH
+# SQLDI OTHER
+export IBM_JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+export _BPXK_AUTOCVT=ON
+export _BPX_SHAREAS=NO
+export _ENCODE_FILE_NEW=ISO8859-1
+export _ENCODE_FILE_EXISTING=UNTAGGED
+export _CEE_RUNOPTS="FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"
+export TERM=xterm
+alias vi1='vi -W filecodeset=utf-8'
+alias vi2='vi -W filecodeset=iso8859-1'
+alias ll='ls -ltcpa'
+export PS1=' ${PWD} >'
+```

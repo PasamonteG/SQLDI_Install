@@ -6,6 +6,7 @@
 .DS_Store
 .db2devextconfig.json
 clipboard.txt
+clipboard.md
 *.csv
 CreditCardFraud.code*
 Db2_stuff.md
