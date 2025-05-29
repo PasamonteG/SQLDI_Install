@@ -96,6 +96,8 @@ From **USS** (where SQLDI runs) you should define your SQLDI and Spark instances
 
 ---
 
+**TASK**
+
 Let's check that all the components needed in USS are in place.
 
 You will ned to login as **ibmuser** into the PuTTY terminal.
@@ -130,6 +132,8 @@ You will create **AIDBADM** user:
 
 ---
 
+**TASK**
+
 The JCL that was used to define RACF userid is found in `IBMUSER.SDISETUP(SDIUSCRT)` . It is standard RACF user profile, with a TSO signon and an omvs id.
 
 ![IBMUSER.SDISETUP](/aizimages/RACF_JCL.png)
@@ -139,6 +143,8 @@ Submit the JCL:
 ![Submit member `SDIUSCRT`](/aizimages/RACF_JCL_sub.png)
 
 ---
+
+**TASK**
 
 If you want to make additional RACF userids able to operate SQLDI, those users would also need similar customisation as the following steps for AIDBADM.
 
@@ -160,6 +166,7 @@ Check the RACF profiles for user AIDBADM.
 
 ---
 
+**TASK**
 
 For each of the users, they need an OMVS segment with certain properties specified.
 We want to see the following values set for the SQLDI user.
@@ -239,6 +246,10 @@ The environment variables for a userid operating in USS are a mixture of environ
 
 The **aidbadm** user needs to define PATH and LIBPATH environment variables so that all the required executables can be invoked at runtime.
 
+---
+
+**TASK**
+
 Open a terminal session into USS (e.g. using putty) and **logon as aidbadm**. You should find yourself in the home directory for the aidbadm user.
 
 Now, list all the files in your home directory with the `ls -al` command. (Files beginning with `.` are hidden unless you specify `-al`.)
@@ -310,9 +321,9 @@ Some required variables (like `JAVA_HOME`) are already specified, but none of th
 
 Even though we haven't yet installed the AI libraries and the SQLDI libraries, this HOL is structured to keep all the user profile settings together, and we know exactly what the paths will be.
 
-If you are comfortable with the vi editor, then you can edit the .profile inside USS. Most of us would prefer to use the ISPF editor, as shown below.
+If you are comfortable with the vi editor, then you can edit the `.profile` inside USS. Most of us would prefer to use the ISPF editor, as shown below.
 
-Open ISPF edit (Option 2) and open the **/u/aidbadm/.profile** USS file.
+Open ISPF edit (Option 2) and open the **`/u/aidbadm/.profile`** USS file.
 
 ```bash
 # JAVA
@@ -370,3 +381,142 @@ alias vi2='vi -W filecodeset=iso8859-1'
 alias ll='ls -ltcpa'
 export PS1=' ${PWD} >'
 ```
+
+Save the file. Then lets check whether the `.profile` is being invoked when the aidbadm user logs on.
+
+---
+
+**TASK**
+
+Open a new putty session, and logon as aidbadm. Then type the command **env** to see all the current environment variables.
+
+Logging on will invoke the `.profile` script. 
+Note that if you are already logged on within USS you need to invoke the `.profile` again to reflect your changes. 
+
+![env](/aizimages/env.jpg)
+
+You might find it easier to check individual environment settings with an **echo** command. For example
+
+![echo](/aizimages/echo.jpg)
+
+---
+
+**TASK**
+
+Some users with non-english keyboards at the Europe and AP Technical Academy had great difficulty in editing the .profile file using ISPF. 
+If you encounter similar difficulties, please don’t waste your time attempting to overcome such challenges. 
+Instead, you could replace the existing `.profile` file with a pre-customised file.
+
+1. Log on to putty as user **ibmuser**.
+
+2. `cd /u/ibmuser` and then list the files `ls -la`
+
+![ibmuser path](/aizimages/ready_profile.png)
+
+3. `cp .profile.aidbadm /u/aidbadm/.profile`
+
+![ibmuser path](/aizimages/copy_profile.png)
+
+4. `ls -al /u/aidbadm`
+
+**!!! Alternative Task : !!!** Edit the `.profile`  and check that the following environment variables are set correctly. Type them if needed.
+
+* PATH
+* LIBPATH
+* ZAIE_INSTALL_DIR
+* SQLDI_INSTALL_DIR
+* ZADE_INSTALL_DIR
+* BLAS_INSTALL_DIR 
+* JAVA_HOME
+* SPARK_HOME
+
+---
+
+## 3. Prepare a large ZFS for SQLDI_HOME
+
+The requirements for the zFS are that it will support an `SQLDI_HOME` path over over 100GB (for a realistic small system). The script to create the SQLDI instance checks the ZFS and fails in it is less than 4GB.
+
+---
+
+**TASK**
+
+You will need to go to your TSO session and search for `IBMUSER.SDISETUP(CRTZFS)`
+
+![IBMUSER.SDISETUP(CRTZFS)](/aizimages/zFs_create.png)
+
+And then submit the JCL.
+
+![JCL for zFS generation](/aizimages/CRTZFS_JCL.png)
+
+Wait for the correct execution and result for the JCL
+
+![Successful execution](/aizimages/return_00.png)
+
+
+You can check the size of the ZFS in KB with the following command in USS, it has been mounted from the creation JCL. Use the VT100 terminal connected to USS. Command `df -k /u/sqldi13`:
+
+![Check size of the zFS](/aizimages/df_test.png)
+
+Now grow the zFS to ensure that it is over 4GB in size, use the command `zfsadm grow -aggregate IBMUSER.SDI13.ZFS -size 5000000`:
+
+![Grow command for zFS](/aizimages/zfsadm.png)
+
+Change `/u/sqldi13` ownership to AIDBADM user. Command: `chown AIDBADM /u/sqldi13`.
+
+Check that it worked. Command: `ls -latr /u/sqldi13/`
+
+![Check ownership change](/aizimages/check_chown.png)
+
+---
+
+## 4. Create SQLDI Pseudo-catalog
+
+---
+
+**TASK**
+
+You will need to go to your TSO session and search for `IBMUSER.SDISETUP(DSNTIJAI)`, and execute the JCL.
+
+![Create pseudo-catalog](/aizimages/DSNTIJAI.png)
+
+and wait for the correct return code. 
+
+---
+
+## 5. Prepare a Certificate and Keyring for SQLDI
+
+Authentication for the SQLDI server is achieved by referencing a certificate in a RACF keyring during the SQLDI instance creation.
+
+Additionally, we could setup network encryption rules using RACF certificates and PAGENT rules. 
+z/OS uses Application-Transparent TLS (AT-TLS), so there would be no differnce in the SQLDI setup steps.
+Encryption is outside the scope of this HOL.
+
+A JCL job for creating a keyring containing a self-signed certificate is provided in `IBMUSER.SDISETUP(RACFKEYR)`.
+Logon to TSO, review and submit this job to create the RACF artefacts.
+The steps performed by this job are
+
+1. create a keyring 
+2. create a certificate authority (identified by label WMLZCACert)
+3. create a certificate (identified by label `WMLZCert_WMLZID`) and signed by the CA above
+4. connect both the user certificate and the CA certificate to the keyring
+5. grant permission to list the keyring to aidbadm (and any other user that might want to list it)
+6. perform a RACF refresh
+
+--- 
+
+**TASK** 
+
+Go to dataset `IBMUSER.SDISETUP(RACFKEYR)`
+
+![RACFKEYR member](/aizimages/RACFKAYR_member.png)
+
+And then submit the job:
+
+![RACFKEYR execution](/aizimages/RACFKAYR_sub.png)
+
+You can check the status of the RACF objects by submitting `IBMUSER.SDISETUP(RACFCHK)`:
+
+![RACFCHK member](/aizimages/RACFCHK_member.png)
+
+![RACFCHK member](/aizimages/RACFCHK_SUB.png)
+
