@@ -31,7 +31,7 @@ There are two documents covering SQL Data Insights V13
 
 The core concept of SQL Data Insights is to build and train a neural network model for a Db2 table or view, load it into a model table that is associated with the base table, so that a range of Db2 BIFs (built-in-functions) can used within SQL queries for find patterns in the data. For example, if you have a table containing a list of clients and their important characteristics, you can discover which clients are most similar to a chosen client or cluster of clients.
 
-![sqldi_concept](sqldiimages/sqldi_concept.JPG)
+![sqldi_concept](/sqldiimages/sqldi_concept.JPG)
 
 The model used by SQLDI is the Bag of Words model, which is described by many places on the web such as [wikipedia](https://en.wikipedia.org/wiki/Bag-of-words_model)
 
@@ -51,7 +51,7 @@ Two of the most likely use cases for SQLDI are
 
 SQLDI is a no charge feature of Db2 z/OS V13, but you do need to order this feature explicitly in order to get it. The screenshot below is from ShopZ, showing two separate items to order, each with the same Product ID.
 
-![sqldi_shopz](sqldiimages/sqldi_shopz.JPG)
+![sqldi_shopz](/sqldiimages/sqldi_shopz.JPG)
 
 If you already have Db2 z/OS V13 installed, you can order SQL Data Insights as a CBPDO for it's own SMPE CSI, or to add to the Db2 SMPE CSI.
 
