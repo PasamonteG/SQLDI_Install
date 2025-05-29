@@ -14,7 +14,7 @@ draft.md
 *.zip
 Working_*
 *.TEXT
-*jcl*
+*.jcl
 *Demo.txt
 addon*
 *.tex
