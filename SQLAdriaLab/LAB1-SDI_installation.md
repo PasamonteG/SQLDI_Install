@@ -520,3 +520,195 @@ You can check the status of the RACF objects by submitting `IBMUSER.SDISETUP(RAC
 
 ![RACFCHK member](/aizimages/RACFCHK_SUB.png)
 
+The output of the job should look like this:
+
+![RACFCHK output](/aizimages/RACFCHK_H.png)
+
+---
+
+## 6. Prepare network ports
+SQLDI makes use of several TCPIP ports for communication between the various Spark and SQLDI components. You can control the values of all of these ports during the SQLDI instance create process if you need to.
+
+For this HOL environment, all the default ports are free, meaning that you should not suffer port conflicts. However, in a customer environment you should communicate with the z/OS network administrator to check port availability. Commands like `NETSTAT` are available in USS and TSO to check reserved ports.
+
+---
+
+**TASK**
+
+Check whether any of the default ports are already assigned. If they are you will need to choose a different free port when you create the SQLDI Server.
+
+![Command to see the ports](/aizimages/ports01.jpg)
+
+![Ports](/aizimages/ports02.jpg)
+
+The default ports used by SQLDI are documented here [SQLDI Pre-Requisites](https://www.ibm.com/docs/en/db2-for-zos/13?topic=insights-preparing-sql-di-installation)
+
+* SQLDI Web UI on `15001` 
+* z/OS Spark Master on `7077`
+* z/OS Spark Master REST API on `6066`
+* z/OS Spark Master UI on `8080`
+* z/OS Spark Worker UI on `8081`
+* Other Spark ports can be system assigned or manually defined 
+
+---
+
+## 7. Create the SQLDI Server Instance
+
+The installation of SQLDI has placed a a script file (sqldi.sh) in `/u/aidbadm/sql-data-insights/bin`
+
+Assuming that you setup the `PATH` variable correctly (to include `/u/aidbadm/sql-data-insights/bin`) then `sqldi.sh` can be invoked from any path.
+
+Open a putty session to USS, logon as **aidbadm**, and just type command `sqldi.sh` in order to get the command parameters returned to you
+
+```bash
+ /u/aidbadm >sqldi.sh
+
+This script installs, starts, and stops SQL Data Insights. Before running the script, make sure
+that you allocate a minimum of 4GB disk space to your zFS file system and meet other system requirements.
+In case of an error, resolve the error and then rerun the script.
+
+Usage:
+  sqldi.sh [action] [-Xms <value>] [-Xmx <value>]
+
+Action:
+  create             Installs the SQL Data Insights application.
+  start              Starts the SQL Data Insights application.
+  stop               Stops the SQL Data Insights application.
+  start_spark        Starts the embedded Spark cluster.
+  stop_spark         Stops the embedded Spark cluster.
+
+JVM Options:
+  -Xms ''            Specifies the initial memory allocation for JVM in the format of [0-9]*[M,G],
+                            e.g. 512M (Optional).
+  -Xmx ''            Specifies the maximum memory allocation for JVM in the format of [0-9]*[M,G],
+                            e.g. 1G (Optional).
+
+Examples:
+  ./sqldi.sh create
+  ./sqldi.sh create -Xms 512M -Xmx 1024M
+  ./sqldi.sh start
+  ./sqldi.sh stop
+  ./sqldi.sh start_spark
+  ./sqldi.sh stop_spark
+
+ /u/aidbadm >
+
+```
+
+You should use the bash shell for SQLDI work. This was installed to /u/aidbadm/tools/ when you installed the SQLDI package, and was added to your path when you edited the **.profile** file, so you can enter the back shell by simply typing **bash** inside your putty USS shell.
+
+![bash](/aizimages/create_ins.jpg)
+
+You are now ready to create the SQLDI instance because
+
+1. you know the default ports are available
+2. you know the path where you want to install the instance ( /u/aidbadm/holinstance )
+3. you know the name of the RACF keyring and the certificate to reference
+
+---
+
+**TASK**
+
+##### Notes on TCPIP Addressing to Use.
+
+When running the `sqldi.sh` script to create the instance in this lab, you should **always** use the hostname **`wg31.washington.ibm.com`**, and never use the TCPIP Address.
+
+In a customer environment it would be fine to use the TCPIP Address. But the cloning process used to provision the z/OS images has not customised TCPIP address in the z/OS TCPIP stack. The hosts file in the Windows client image has been edited so that both `wg31` and `wg31.washington.ibm.com` point at the actual z/OS image.
+And within the z/OS USS environment `wg31.washington.ibm.com` points at the actual z/OS image.
+
+Do not be tempted to use the shortened hostname alias in windows (wg31) because this is not defined in USS.
+
+1. Use `wg31.washington.ibm.com` for the **sqldi.sh create** script.
+2. Use `wg31.washington.ibm.com` to access it from Windows later on in the HOL.
+
+Please also note that some of the screenshots in this workbook may point to an actual IP address. Please ignore this, and use `hostname wg31.washington.ibm.com` consistently.
+
+##### Invoke the `sqldi.sh` Script
+
+Execute the script, fill in the variables requested and wait until completion.
+
+When you invoke the **sqldi.sh create** script, the dialog should look like the screenshot below. 
+User prompts and responses have been highlighted with yellow arrows.
+
+![sqldicreate](/aizimages/sqldi_crt_ptr.jpg)
+
+Note, there are several examples of informational messages not being retrieved from a missing message catalog. 
+At time of writing this intrumentation problem has not been resolved, but the script still succeeds.
+
+You will be prompted for many decisions, as follows.
+
+```text
+
+Enter a directory where SQL Data Insights configuration files and logs can be stored: /u/aidbadm/holinstance
+>>> specify a path underneat /u/aidbadm ( the big ZFS mountpoint)
+
+Enter the IP address or hostname for SQL Data Insights or press <enter> to use 10.1.1.2:
+>>> We're using wg31.washington.ibm.com  !!!!!!!!!!!!!!!
+
+Enter the port number for SQL Data Insights or press <enter> to use 15001:
+>>> Accept the default port
+
+SQL Data Insights requires one of the following keystore types:
+1) JCERACFKS (for managing RACF certificates and keys)
+2) JCECCARACFKS (for managing RACF certificates and keys and exploiting hardware crypto)
+Select your keystore type: 1
+>>> The keystore type is 1
+
+Enter the keyring name: WMLZRING
+>>> Enter the name of the Keyring you created
+
+Enter the keyring owner: AIDBADM
+>>> Enter the name of the keyring owner
+
+Enter certificate label: WMLZCert_WMLZID
+>>> Enter the label of the Certificate you created. (The user certificate, NOT the CA certificate)
+
+Enter the IP address or host name of your Spark master or press <enter> to use the default 10.1.1.2:
+>>> Use wg31.washington.ibm.com !!!!!!!!!!!!!!!
+
+>>> And then specify your chosen ports.
+
+You have successfully configured and started Spark. Check the parameters used for Spark under /u/aidbadm/holinstance/spark/conf.
+>>> Remember this location
+
+Do you want to start 'SQL Data Insights' application? (y/N):
+>>> No
+```
+
+---
+
+**TASK**
+
+Run the `sqldi.sh create` from **AIDBADM** user (not IBMUSER). But when prompted enter **N** to avoid starting the server.
+
+![Create instance script](/aizimages/instance_create.png)
+
+This is the example output in our test system.
+
+![Example input/output](/aizimages/inst_create_out.jpg)
+
+---
+
+Take a moment to review some updates that the `sqldi.sh create` script added to .profile
+
+```
+000087 # Generated by SQL Data Insights installation script                    
+000088 export SQLDI_HOME=/u/aidbadm/holinstance                               
+000089                                                                         
+000090                                                                         
+000091 export SPARK_CONF_DIR=/u/aidbadm/holinstance/spark/conf                
+000092 export SPARK_LOCAL_IP=10.1.1.2                                          
+000093 export SPARK_MASTER_PORT=7077                                           
+000094                                                                         
+000095 # aliases for SQL DI lifecycle management.                              
+000096 alias start_sqldi="/u/aidbadm/sql-data-insights/bin/sqldi.sh start"    
+000097 alias stop_sqldi="/u/aidbadm/sql-data-insights/bin/sqldi.sh stop"      
+000098                                                                         
+000099 alias start_spark="/u/aidbadm/sql-data-insights/bin/sqldi.sh start_spark"
+000100 alias stop_spark="/u/aidbadm/sql-data-insights/bin/sqldi.sh stop_spark"
+000101                                                                         
+****** **************************** Bottom of Data ****************************
+```
+
+List the processes running under user AIDBADM, by using command ```ps -ef```. 
+You should see the spark Master and Worker nodes using the ports you specified. (Scrollable windows below, with the output of `ps -ef`)
