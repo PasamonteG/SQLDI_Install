@@ -711,4 +711,89 @@ Take a moment to review some updates that the `sqldi.sh create` script added to 
 ```
 
 List the processes running under user AIDBADM, by using command ```ps -ef```. 
-You should see the spark Master and Worker nodes using the ports you specified. (Scrollable windows below, with the output of `ps -ef`)
+
+You should see the spark Master and Worker nodes using the ports you specified.
+
+And Check the Spark Server by opening your browser on the Spark Web UI port ```http://wg31.washington.ibm.com:8080/```.
+You should see a display like the screenshot below.
+
+![Spark UI](/aizimages/spark_chk.jpg)
+
+At this point, no training jobs will be executing, but you will use this Web UI to check on Spark progress later on.
+
+The sqldi.sh script will automatically check whether spark is running, and start it if it is not running.
+As you get are gaining familiarity with SQLDI, it is good practice to start Spark and SQLDI separately.
+
+---
+
+**TASK**
+
+
+The procedure to start SQLDI would be
+
+1. `sqldi.sh start_spark`
+2. check spark is up and running
+3. `sqldi.sh start`
+
+Likewise, the procedure to stop SQLDI would be
+
+1. `sqldi.sh stop`
+2. `sqldi.sh stop_spark`
+
+Assuming spark is started, lets start SQLDI itself with the command `sqldi.sh start`
+
+And Check the SQLDI Server by opening your browser on the SQLDI listener port `https://wg31.washington.ibm.com:15001/`.
+
+Be sure to specify the URL exactly. Browsers will normally figure out whether an IP address is http or https , but this one doesn't.
+
+---
+
+**Security Notes:**
+
+1. the first time you open this port there will be a privacy error. 
+2. The browser indicates that the session is "not secure", which is expected because the browser does not know about the CA that signed the certificate.
+3. Just click proceed to accept the certificate.
+
+
+Now you could logon to to the SQLDI Server. You would need to use a RACF userid that
+
+1. has appropriate privileges to connect to Db2
+
+2. has access the Db2 tables that you wish to use for SQL Data Insights
+
+3. has access all the Db2 artefacts that support SQLDI
+
+4. is a member of RACF Group SQLDIGRP
+
+But you need to create the necessary Db2 artefacts first.
+
+## 8 Create some SQLDI artefacts
+
+The necessary functions required to run AI queries and to expploit SQLDI are installed with the **SQLDI FMID HDBDD18**. During this installation process there are just two steps to be run in order to complete SQLDI functions.
+
+One of them is the pseudo-catalog that was already created in [step 4](#4-create-sqldi-pseudo-catalog). 
+
+The other one is a table sample that you can use to test SQLDI.
+
+### 8.1 Create CHURN table for testing
+
+---
+
+**TASK**
+
+Create the `CHURN` table using JCL `IBMUSER.SDISETUP(DSNTIJAV)`. 
+
+![Member DSNTIJAV](/aizimages/dsntijav.png)
+
+![DSNTIJAV submit](/aizimages/dsntijav1.png)
+
+---
+
+The contents of the CHURN table can be viewed in Db2 Admin Tool (ISPF Option m.16).
+
+Access the System Catalog Browser, use a Database Mask of `DSNAI*` and use a `b` command to browse the table if you are curious.
+
+![Access to CHURN table](/aizimages/ivp02.jpg)
+
+![Browsing CHURN table](/aizimages/ivp03.jpg)
+
