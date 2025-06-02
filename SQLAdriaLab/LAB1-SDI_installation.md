@@ -100,7 +100,7 @@ From **USS** (where SQLDI runs) you should define your SQLDI and Spark instances
 
 Let's check that all the components needed in USS are in place.
 
-You will ned to login as **ibmuser** into the PuTTY terminal.
+You will need to login as **ibmuser** into the PuTTY terminal.
 
 ![Login using PuTTY](/aizimages/login_ibmuser.png)
 
@@ -148,7 +148,7 @@ Submit the JCL:
 
 If you want to make additional RACF userids able to operate SQLDI, those users would also need similar customisation as the following steps for AIDBADM.
 
-With the TSO command `tso lu iadbadm omvs` you can display the RACF user profile, or you can go using the panels:
+With the TSO command `tso lu aidbadm omvs` you can display the RACF user profile, or you can go using the panels:
 
 * ISPF main panel
 * m.3 ( for RACF )
@@ -250,9 +250,11 @@ The **aidbadm** user needs to define PATH and LIBPATH environment variables so t
 
 **TASK**
 
-Open a terminal session into USS (e.g. using putty) and **logon as aidbadm**. You should find yourself in the home directory for the aidbadm user.
+Open a terminal session into USS (e.g. using putty) and **logon as ibmuser**. You should find yourself in the home directory for the ibmuser user.
 
 Now, list all the files in your home directory with the `ls -al` command. (Files beginning with `.` are hidden unless you specify `-al`.)
+
+You first need to copy the .profile.aidbadm file prepared for you in the aidbadm user home directory. 
 
 ![aidbadm user path in USS](/aizimages/aidbadm_uss_path.png)
 
@@ -260,7 +262,7 @@ Now, list all the files in your home directory with the `ls -al` command. (Files
 (**Note:** Contents may differ from your screen)
 
 ```bash
- /u/aidbadm >ls -al
+ /u/ibmuser >ls -al
 total 192
 drwxr-xr-x   3 AIDBADM  SYS1        8192 Jul 28 02:20 .
 drwxr-xr-x  40 OMVSKERN SYS1       16384 Jan 25  2022 ..
@@ -271,10 +273,17 @@ drwxr-xr-x  40 OMVSKERN SYS1       16384 Jan 25  2022 ..
 
 ```
 
-You can easily list the contents of the .profile with the `cat` command as follows:
+You then copy the .profile.aidbadm as .profile in aidbadm user home directory and change ownership of the new file to aidbadm user.
+```bash
+ /u/ibmuser >cp .profile.aidbadm /u/aidbadm/.profile
+ /u/ibmuser >chown aidbadm /u/aidbadm/.profile
+```
+
+You can easily view the contents of the new .profile with the `cat` command as follows:
 (**NOTE:** Contents in your profile may differ form this output)
 
 ```bash
+ /u/ibmuser >cd /u/aidbadm
  /u/aidbadm >cat .profile
 export HOST=$(uname -n)
 export PS1=' ${PWD} >'
@@ -595,14 +604,14 @@ Examples:
 
 ```
 
-You should use the bash shell for SQLDI work. This was installed to /u/aidbadm/tools/ when you installed the SQLDI package, and was added to your path when you edited the **.profile** file, so you can enter the back shell by simply typing **bash** inside your putty USS shell.
+You should use the bash shell for SQLDI work. This was installed to /u/aidbadm/tools/ when you installed the SQLDI package, and was added to your path when you edited the **.profile** file, so you can enter the bash shell by simply typing **bash** inside your putty USS shell.
 
 ![bash](/aizimages/create_ins.jpg)
 
 You are now ready to create the SQLDI instance because
 
 1. you know the default ports are available
-2. you know the path where you want to install the instance ( /u/aidbadm/holinstance )
+2. you know the path where you want to install the instance ( /u/sqldi13 )
 3. you know the name of the RACF keyring and the certificate to reference
 
 ---
@@ -639,7 +648,7 @@ You will be prompted for many decisions, as follows.
 
 ```text
 
-Enter a directory where SQL Data Insights configuration files and logs can be stored: /u/aidbadm/holinstance
+Enter a directory where SQL Data Insights configuration files and logs can be stored: /u/sqldi13
 >>> specify a path underneat /u/aidbadm ( the big ZFS mountpoint)
 
 Enter the IP address or hostname for SQL Data Insights or press <enter> to use 10.1.1.2:
