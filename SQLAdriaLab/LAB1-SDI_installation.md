@@ -1,3 +1,16 @@
+---
+title: SQLAdria - Vodice, June 2025
+author: Guillaume Arnould / Diego Cardalliaguet
+fontsize: 12pt
+geometry: margin=2cm
+papersize: A4
+urlcolor: blue
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+---
+
 # IBM SQL Data Insights for Db2 v13 Installation Lab
 
 The purpose of this repository is to guide the participant though a worked example of how to setup and use SQL Data Insights. The hands on lab consists of a Windows Image (with 3270 emulator and putty) and a Linux on Z image running a z/OS guest. 
@@ -834,6 +847,7 @@ Check the SQLDI Server log for additional information
 In this case, we didn't get a lot more helpful diagnostic information, but it serves to illustrate the fact that much of the SQLDI diagnostic data will be surfaced in the USS environment. Section 11 provides guidance on how to increase the level of diagnostic information by editing the deploy.cfg file.
 
 For now, just accept that the missing authority was membership of the RACF Group SQLDIGRP.
+
 ---
 
 **TASK**
@@ -894,7 +908,7 @@ Note the caution that column selections cannot be changed after the model is bui
 
 ![Enable training](/aizimages/test10.jpg)
 
-### 10.4 Be patient during Model Training and Observe Progress
+### 9.4 Be patient during Model Training and Observe Progress
 
 Wait a few seconds to see the Browser showing the "**Enabling**" status.
 
