@@ -806,3 +806,369 @@ Access the System Catalog Browser, use a Database Mask of `DSNAI*` and use a `b`
 
 ![Browsing CHURN table](/aizimages/ivp03.jpg)
 
+## 9 Test the installation with the IVP
+
+Perform each of the tasks in the screenshot below to run an IVP test of SQLDI.
+
+### 9.1 Get Connected to the SQLDI Server
+
+Open the Chrome browser at ```https://wg31.washington.ibm.com:15001``` and logon with **IBMUSER/SYS1** (despite what you see in the image, YOUR USER IS NOT **USER1**).
+
+![SQLDI Console](/aizimages/test01.jpg)
+
+Oops ... did you get an error like the one below ?
+
+![signon_error01](/aizimages/signon_error01.jpg)
+
+
+We know that IBMUSER has access to Db2 because we used it to perform the setup of all the Db2 objects required for SQLDI.
+
+So we need to get a more detailed error message.
+
+SQLDI and Spark each write logfiles in USS.
+The SQLDI Server writes it's logs to the the logs directory in the instance.
+Check the SQLDI Server log for additional information
+
+![signon_error02](/aizimages/signon_error02.jpg)
+
+In this case, we didn't get a lot more helpful diagnostic information, but it serves to illustrate the fact that much of the SQLDI diagnostic data will be surfaced in the USS environment. Section 11 provides guidance on how to increase the level of diagnostic information by editing the deploy.cfg file.
+
+For now, just accept that the missing authority was membership of the RACF Group SQLDIGRP.
+---
+
+**TASK**
+
+Edit the RACF job from earlier, or issue the following command from TSO option 6 to rectify the problem.
+
+`CONNECT (IBMUSER) GROUP(SQLDIGRP) OWNER(IBMUSER)`
+
+Now you should be abble to logon to the SQLDI Web UI with IBMUSER.
+
+---
+
+### 9.2 Define a Db2 Subsystem Connection
+
+Observe there are currently no Db2 systems Connections. Press the "Add Connection" button.
+
+
+![Connections](/AIZimages/test02.jpg)
+
+Fill in the details for the DBDG subsystem
+
+* Name: `DBDG`
+* Hostname: `wg31.washington.ibm.com` 
+* Port: `5045` (secport: `5046`) 
+* Location Name: `DALLASD`
+* User/Password: `IBMUSER/SYS1`
+
+![Add connection](/aizimages/test03.jpg)
+
+See the newly defined connection, and Press the "**Connect**" button
+
+![Connections](/aizimages/test04.jpg)
+
+
+### 9.3 Work with "AI-Enabled" Tables
+
+Once connected, select "**List AI Objects**" and observe that there are no AI-Enbled objects. Press the "**Add Object**" button.
+
+![AI objects](/aizimages/test05.jpg)
+
+Select the Table Schema "**DSNNAIDB**" and press the **Search Icon** to the right hand side of the window.
+
+![Add object](/aizimages/test06.jpg)
+
+Select the Table `DSNAIDB.CHURN`
+
+![Add object](/aizimages/test07.jpg)
+
+Select all the columns. (Note that SQLDI allows you to overwrite it's default choice of whether a column is Categorical or Numeric.)
+
+![Enable AI query](/aizimages/test08.jpg)
+
+Push the "**Enable AI**" button.
+
+![Enable AI query](/aizimages/test09.jpg)
+
+Note the caution that column selections cannot be changed after the model is build, and Push "**Enable AI**"
+
+![Enable training](/aizimages/test10.jpg)
+
+### 10.4 Be patient during Model Training and Observe Progress
+
+Wait a few seconds to see the Browser showing the "**Enabling**" status.
+
+![AI Objects](/aizimages/test11.jpg)
+
+Select the **Expansion** button to the left to get a more detailed view. If the model training fails for any reason, the SQL Error code will be visible here.
+
+![AI Objects](/aizimages/test12.jpg)
+
+The image below is an example of a model training job that failed. 
+
+In this case a clear Db2 error code was returned, indicating that the WLM environment for DSNUTILU had not been correctly setup.
+
+Sometimes the error messages are less clear. 
+
+In such cases you need to look at the SQLDI and Spark execution logs to discover what went wrong.
+[Step 10](#10-problem-determination-steps) covers problem determination steps.
+
+![SQLDI_dropdown](/aizimages/SQLDI_dropdown.png)
+
+Training a model can take a while, especially if you are not running on a Z16 with a Telum AIU.
+
+Open a new browser tab and access `wg31.washington.ibm.com:8080` to see what the Spark environment is doing.
+
+![Spark master](/aizimages/test13wg31.jpg)
+
+Once the Running Application has finished, if you pop back to the SQLDI portal, you should see the Table "Enabled" for AI. Be aware that the automated refresh of this URL is several minutes, so you may choose to refresh the browser manually.
+
+![AI objects](/aizimages/test15.jpg)
+
+### 9.5 Use SQLDI Dashboards
+
+Note the available actions by pressing the elipses button on the right hand side. ( DISABLE, ANALYZE DATA etc... )
+
+
+![AI objects](/aizimages/test16.jpg)
+
+Select Analyze Data, and you will see the first of 3 tabs with information. This first tab shows the object details.
+
+
+
+![Analyze data](/aizimages/test17.jpg)
+
+The second tab shows data statistics. These are essential data points for a data scientist performing data wrangling.
+
+
+
+![Analyze data](/aizimages/test18.jpg)
+
+The third tab shows the column influence of the model that SQLDI has established. This immediately tells the data scientist which columns are likely to be required when building scoring models.
+
+**NOTE.** The column influence dashboard needs to be modified, because the influencing columns are dwarfed by the discriminator column (the unique key value). A future update should see changes to this chart.
+
+![Analyze Data](/aizimages/test19.jpg)
+
+### 9.6 Write AI queries
+
+The next thing to do in the IVP test is to run an AI Query. Select "**Run Query**" button for the selected AI-Enables Table. 
+
+Use the Query Type Pulldown to obtain an SQL template that you will need to edit. Lets start with a "**Semantic Similarity**" query.
+
+Note. These are static templates for the kind of query that SQLDI supports. they do not reflect the selected table at all. They are nothing more than a template for editing.
+
+
+![Run query](/aizimages/test20.jpg)
+
+This is the SQL template that is provided. It is based on the CHURN Table in a different schema. You need to edit the schema to make the query run.
+
+However, before editing the SQL, press "**Run**" to get a feel for what happens when an AI SQL query fails.
+
+![Run query](/aizimages/test21.jpg)
+
+`SQLCODE -443` with a return code of +100 against AIOBJECTS and AIMODEL seems strange at first. What this actually means is that the UDF could not find the model table in the pseudo catalog. No surprise really because the table has been incorrectly identified.
+
+![Run query](/aizimages/test22.jpg)
+
+Correct the error by overtyping the schema in the UDF call to "DSNAIDB". Run the Query.
+
+```sql
+SELECT * FROM
+   (SELECT C.*,
+       SYSFUN.AI_SIMILARITY('CUSTOMERID', CUSTOMERID,
+       'CUSTOMERID', '3668-QPYBK', 'DSNAIDB', 'CHURN') AS SIMILARITY
+    FROM DSNAIDB.CHURN C
+    WHERE CUSTOMERID <> '3668-QPYBK')
+  WHERE SIMILARITY > 0.5
+  ORDER BY SIMILARITY DESC
+  FETCH FIRST 20 ROWS ONLY;
+```
+
+Scroll down to see the results.
+
+![Run result](/aizimages/test23.jpg)
+
+Scroll to the right to retrieve the similarity score. This is the mode's similarity rating against customer_id `3668-QPYBK` for each row in the result set.
+
+![Run result](/aizimages/test24.jpg)
+
+You can experiment with the other SQL templates to get an understanding of the purpose of each of the AI functions. Then you will be ready to write your own AI queries.
+
+## 10. Problem Determination Steps
+
+Hopefully you completed your Hands on Learning workshop first time, before you had any reason to review this section on problem determination steps.
+Even if you did, please take a moment to review this section, so that you know where to look for execution logs in future.
+
+This section covers the followinng topics
+
+1. Where to find execution logs
+2. How to increase the amount of diagnostic information that is available
+3. An insight into the SQLDI workflow that happens after you press the blue "Enable AI" button
+
+### 10.1 Where to find execution logs.
+
+When you create an SQLDI instance (holinstance) at path /u/aidbadm/holinstance the following subdirectories are created.
+
+```
+ /u/aidbadm/holinstance >ls -al
+total 178
+drwxr-xr-x  10 AIDBADM  SYS1        8192 Aug  8 04:14 .
+drwxrwxrwx  10 990027   SYS1        8192 Aug  8 04:17 ..
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:37 conf
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  7 17:08 db
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  7 16:58 db2jcc.driver
+-rw-r--r--   1 AIDBADM  SYS1         442 Aug  9 21:32 deploy.cfg
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  7 16:58 diag
+-rw-r--r--   1 AIDBADM  SYS1           5 Aug  8 04:14 fred.cat
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:37 logs
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:37 pid
+drwxr-xr-x   7 AIDBADM  SYS1        8192 Aug  7 16:59 spark
+drwxr-xr-x   4 AIDBADM  SYS1        8192 Aug  7 16:58 temp
+
+```
+
+The `/u/aidbadm/holinstance/logs` path is where SQLDI logs are written.
+
+Inside that directory you will find a new SQLDI log file written every day. Each day's log will be appended until midnight passes, whereupon a new log file will be created for further messages.
+
+```
+ /u/aidbadm/holinstance/logs >ls -al
+total 80
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:37 .
+drwxr-xr-x  10 AIDBADM  SYS1        8192 Aug  8 04:14 ..
+-rw-r--r--   1 AIDBADM  SYS1           0 Aug  7 17:08 sql-data-insights_2022-08-07.0.log
+-rw-r--r--   1 AIDBADM  SYS1         663 Aug  8 05:26 sql-data-insights_2022-08-08.0.log
+-rw-r--r--   1 AIDBADM  SYS1       10420 Aug  9 21:40 sql-data-insights_2022-08-09.0.log
+```
+
+These log files might be quite small, because by default they only get written when errors occur. 
+The next section explains how to expand the level of logging if you need it.
+
+The bulk of the work performed by SQLDI is executed in the spark environment. The spark directory contains 5 further subdirectories.
+
+```
+ /u/aidbadm/holinstance/spark >ls -al
+total 112
+drwxr-xr-x   7 AIDBADM  SYS1        8192 Aug  7 16:59 .
+drwxr-xr-x  10 AIDBADM  SYS1        8192 Aug  8 04:14 ..
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  7 16:59 conf
+drwxrwxr-x   9 AIDBADM  SYS1        8192 Aug  9 21:42 local
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:33 log
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:33 pid
+drwxr-xr-x  16 AIDBADM  SYS1        8192 Aug  9 21:40 worker
+```
+
+The conf directory contains some configuration files, including the spark-env.sh script.
+Some of the parameters in this script were set directly during the instance creation dialog.
+
+Other parameters (memory, number of cores, paths etc...) are set automatically by the instance creation script.
+They include the directories 
+
+```
+ /u/aidbadm/holinstance/spark/conf >cat spark-env.sh
+
+SPARK_MASTER_HOST=10.1.1.2
+SPARK_LOCAL_IP=10.1.1.2
+SPARK_MASTER_PORT=7077
+SPARK_MASTER_WEBUI_PORT=8080
+SPARK_WORKER_WEBUI_PORT=8081
+SPARK_DAEMON_MEMORY=1G
+SPARK_WORKER_INSTANCES=1
+SPARK_LOG_DIR=/u/aidbadm/monday/spark/log
+SPARK_LOCAL_DIRS=/u/aidbadm/monday/spark/local
+SPARK_WORKER_DIR=/u/aidbadm/monday/spark/worker
+SPARK_PID_DIR=/u/aidbadm/monday/spark/pid
+SPARK_WORKER_MEMORY=32G
+SPARK_WORKER_CORES=4
+```
+
+The log subdirectory contains the most helpful spark output logs. 
+The worker logs are likely to be the most informative source of information about the work that has been performed.
+
+```
+ /u/aidbadm/holinstance/spark/log >ls -al
+total 352
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:33 .
+drwxr-xr-x   7 AIDBADM  SYS1        8192 Aug  7 16:59 ..
+-rw-r--r--   1 AIDBADM  SYS1        3911 Aug  9 21:42 spark-AIDBADM-org.apache.spark.deploy.master.Master-1-wg31.washington.ibm.com.out
+-rw-r--r--   1 AIDBADM  SYS1       12640 Aug  8 06:06 spark-AIDBADM-org.apache.spark.deploy.master.Master-1-wg31.washington.ibm.com.out.1
+-rw-r--r--   1 AIDBADM  SYS1       16464 Aug  9 21:42 spark-AIDBADM-org.apache.spark.deploy.worker.Worker-1-wg31.washington.ibm.com.out
+-rw-r--r--   1 AIDBADM  SYS1       87693 Aug  8 06:06 spark-AIDBADM-org.apache.spark.deploy.worker.Worker-1-wg31.washington.ibm.com.out.1
+-rw-r--r--   1 AIDBADM  SYS1         170 Aug  7 16:59 spark-configurator-master-stdout.log
+```
+
+### 10.2 How to increase the amount of diagnostic information that is available
+
+Review /u/aidbadm/holinstance/deploy.cfg 
+
+```log
+VERSION="1.0.0.0"                                          
+                                                           
+SERVICE_HOST=10.1.1.2                                      
+SERVICE_PORT=15001                                         
+                                                           
+# keyring path and label                                   
+KEYSTORE_TYPE=JCERACFKS                                    
+KEYSTORE_PATH=safkeyring://QUlEQkFETS9XTUxaUklORw==        
+CERTIFICATE_LABEL=WMLZCert_WMLZID                          
+                                                           
+# overall log level for SQL DI application and Spark job   
+log4j_level=ERROR                                           
+                                                           
+# minimum JVM heap size for SQL DI application             
+Xms=-Xms512M                                               
+# maximum JVM heap size for SQL DI application             
+Xmx=-Xmx2048M                                              
+                                                           
+# ALL, NONE, ON_FAILURE                                    
+KEEP_TRAINING_FILES=ON_FAILURE                                    
+```
+
+SQLDI uses log4j for logging (a current version of log4j that is not affected to the infamous security exposure).
+
+By default, SQLDI is configured to log ERRORS only.
+
+You can google the org.apache.log4j.Level levels and select a different level (such as OFF, INFO, DEBUG, TRACE etc..).
+
+### 10.3 An insight into the SQLDI workflow that happens after you press the blue "Enable AI" button
+
+Another interesting value in the deploy.cfg file is `KEEP_TRAINING_FILES=ON_FAILURE`.
+
+When you "Enable AI" for a table or view, the high-level sequence of steps performed by SQLDI is
+
+1. Connect to Db2 vis JDBC T4 driver.
+2. Gather Db2 catalog metadata about the object for which model training is to be performed.
+3. Perform a SELECT against all the in-scope columns to bring the result set down to USS.
+4. Start a Spark application to perform model training (initialize, pre-process data, train model).
+5. Save the outputs of the model training are written as temporary files to a temporary directory.
+6. Load the model table with these outputs (call a LOAD utility via SYSPROC.DSNUTILU)
+
+If the training succeeds, and the model table is loaded, all these temporary datasets are deleted. 
+This is a good default, because the load datasets can be quite large.
+
+if the training fails (or if you set KEEP_TRAINING_FILES=ALL), the temporary datasets will be left in a temporary USS directory as shown below.
+
+```shell
+ /u/aidbadm/holinstance/temp/training/DSNAIDB_AIDB_DSNAIDB_CHURN_1660099214960 >ls -al
+total 52448
+drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:42 .
+drwxr-xr-x   7 AIDBADM  SYS1        8192 Aug  9 21:40 ..
+-rw-r--r--   1 AIDBADM  SYS1     23350848 Aug  9 21:42 DSNAIDB_AIDB_DSNAIDB_CHURN-320-10-5-normal-db2zos_zload.bin
+-rw-r--r--   1 AIDBADM  SYS1     3034542 Aug  9 21:40 DSNAIDB_AIDB_DSNAIDB_CHURN.txt
+-rw-r--r--   1 AIDBADM  SYS1       62718 Aug  9 21:40 MONTHLYCHARGES.csv
+-rw-r--r--   1 AIDBADM  SYS1         125 Aug  9 21:40 MONTHLYCHARGES_output_minimums
+-rw-r--r--   1 AIDBADM  SYS1       33361 Aug  9 21:40 TENURE.csv
+-rw-r--r--   1 AIDBADM  SYS1         150 Aug  9 21:40 TENURE_output_minimums
+-rw-r--r--   1 AIDBADM  SYS1       67932 Aug  9 21:40 TOTALCHARGES.csv
+-rw-r--r--   1 AIDBADM  SYS1         125 Aug  9 21:40 TOTALCHARGES_output_minimums
+-rw-r--r--   1 AIDBADM  SYS1         592 Aug  9 21:42 load_emp_delim_ctl
+-rw-r--r--   1 AIDBADM  SYS1      177619 Aug  9 21:40 vocab.txt
+```
+
+Inspecting the contents of these datasets (where possible) gives further insight into the workings of SQLDI.
+
+The binary load dataset and the load control statement are fairly obvious.
+The .csv and minimums files contain additional information that is also stored in the model table, and is the source of some of the SQLDI analysis reports available in the SQLDI Web UI.
+
+**That concludes the Setup and Basic IVP.**
