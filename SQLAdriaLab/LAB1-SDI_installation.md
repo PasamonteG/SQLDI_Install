@@ -18,7 +18,11 @@ output:
 
 The purpose of this repository is to guide the participant though a worked example of how to setup and use SQL Data Insights. The hands on lab consists of a Windows Image (with 3270 emulator and putty) and a Linux on Z image running a z/OS guest. 
 
-The HOL was originally written in github using markdown. If you prefer to access these instructions in a web browser, open the repository at the link below. _TO-DO: PROVIDE LINK TO THE INSTALLATION GUIDE_
+The HOL was originally written in github using markdown. If you prefer to access these instructions in a web browser, open the repository at the link below.
+
+[LINK TO THE INSTALLATION GUIDE_](https://github.com/PasamonteG/SQLDI_Install/blob/main/SQLAdriaLab/LAB1-SDI_installation.md)
+
+From there you can download the PDF version of this guide.
 
 ## Contents
 The following ten steps cover what you need to do to get "Up and Running" with SQLDI Technology for Db2 V13. 
