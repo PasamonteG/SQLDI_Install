@@ -1,4 +1,7 @@
 ---
+header-includes:
+ - \usepackage{fvextra}
+ - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 title: SQLAdria - Vodice, June 2025
 author: Guillaume Arnould / Diego Cardalliaguet
 fontsize: 12pt
@@ -1046,7 +1049,7 @@ The `/u/aidbadm/holinstance/logs` path is where SQLDI logs are written.
 
 Inside that directory you will find a new SQLDI log file written every day. Each day's log will be appended until midnight passes, whereupon a new log file will be created for further messages.
 
-```
+```bash
  /u/aidbadm/holinstance/logs >ls -al
 total 80
 drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:37 .
@@ -1061,7 +1064,7 @@ The next section explains how to expand the level of logging if you need it.
 
 The bulk of the work performed by SQLDI is executed in the spark environment. The spark directory contains 5 further subdirectories.
 
-```
+```bash
  /u/aidbadm/holinstance/spark >ls -al
 total 112
 drwxr-xr-x   7 AIDBADM  SYS1        8192 Aug  7 16:59 .
@@ -1100,7 +1103,7 @@ SPARK_WORKER_CORES=4
 The log subdirectory contains the most helpful spark output logs. 
 The worker logs are likely to be the most informative source of information about the work that has been performed.
 
-```
+```bash
  /u/aidbadm/holinstance/spark/log >ls -al
 total 352
 drwxr-xr-x   2 AIDBADM  SYS1        8192 Aug  9 21:33 .
