@@ -20,25 +20,10 @@ The purpose of this repository is to guide the participant though a worked examp
 
 The HOL was originally written in github using markdown. If you prefer to access these instructions in a web browser, open the repository at the link below.
 
-[LINK TO THE INSTALLATION GUIDE_](https://github.com/PasamonteG/SQLDI_Install/blob/main/SQLAdriaLab/LAB1-SDI_installation.md)
+[LINK TO THE INSTALLATION GUIDE](https://github.com/PasamonteG/SQLDI_Install/blob/main/SQLAdriaLab/LAB1-SDI_installation.md)
 
 From there you can download the PDF version of this guide.
 
-## Contents
-The following ten steps cover what you need to do to get "Up and Running" with SQLDI Technology for Db2 V13. 
-Step 11 is added for problem determination steps just in case things don't work out perfectly.
-
-1. SQL DI Deployment Overview and Planning
-2. Prepare the SQLDI Administration Userid and Group
-3. Prepare a large ZFS for SQLDI_HOME
-4. Upload and Install the SQL DI Technology components
-5. Prepare a certificate and Keyring for user authentication
-6. Prepare network ports
-7. Create the SQLDI Server Instance
-8. Create Db2 Artefacts to support SQLDI (catalog tables, procs, udfs and packages)
-9. Create the sample table for IVP Testing
-10. Perform an IVP Test
-11. Problem Determination Steps
 
 ## 1. SQL DI Deployment Overview and Planning
 
